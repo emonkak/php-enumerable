@@ -8,6 +8,7 @@ use Emonkak\Enumerable\Iterator\MemoizeIterator;
 use Emonkak\Enumerable\Iterator\OuterJoinIterator;
 use Emonkak\Enumerable\Iterator\SelectIterator;
 use Emonkak\Enumerable\Iterator\WhereIterator;
+use Emonkak\Enumerable\Iterator\ConcatIterator;
 
 trait EnumerableExtensions
 {
@@ -18,6 +19,11 @@ trait EnumerableExtensions
             $result = $func($result, $element);
         }
         return $result;
+    }
+
+    public function concat($second)
+    {
+        return new ConcatIterator($this, $second);
     }
 
     public function first(callable $predicate = null)

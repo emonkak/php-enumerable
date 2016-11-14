@@ -6,6 +6,15 @@ use Emonkak\Enumerable\Enumerable;
 
 class EnumerableTest extends \PHPUnit_Framework_TestCase
 {
+    public function testConcat()
+    {
+        $xs = [1, 2];
+        $ys = [3, 4];
+
+        $this->assertSame([1, 2, 3, 4], (new Enumerable($xs))->concat($ys)->toArray());
+        $this->assertSame([], (new Enumerable([]))->concat([])->toArray());
+    }
+
     public function testFirst()
     {
         $xs = [1, 2, 3, 4];

@@ -5,7 +5,7 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
-class WhereIterator implements \IteratorAggregate, EnumerableInterface
+class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
@@ -17,27 +17,32 @@ class WhereIterator implements \IteratorAggregate, EnumerableInterface
     /**
      * @var callable
      */
-    private $predicate;
+    private $keySelector;
 
     /**
      * @param array|\Traversable $source
-     * @param callable           $predicate
+     * @param callable           $keySelector
      */
-    public function __construct($source, callable $predicate)
+    public function __construct($source, callable $keySelector)
     {
         $this->source = $source;
-        $this->predicate = $predicate;
+        $this->keySelector = $keySelector;
     }
 
-    /** 
+    /**
      * {@inheritDoc}
      */
     public function getIterator()
     {
-        $predicate = $this->predicate;
+        $hasCurrentKey = false;
+        $currentKey = null;
+        $keySelector = $this->keySelector;
 
         foreach ($this->source as $element) {
-            if ($predicate($element)) {
+            $key = $keySelector($element);
+            if (!$hasCurrentKey || $currentKey !== $key) {
+                $hasCurrentKey = true;
+                $currentKey = $key;
                 yield $element;
             }
         }

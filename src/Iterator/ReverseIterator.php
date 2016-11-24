@@ -4,8 +4,9 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
+use Emonkak\Enumerable\Internal\Converters;
 
-class SelectIterator implements \IteratorAggregate, EnumerableInterface
+class ReverseIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
@@ -15,18 +16,11 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
     private $source;
 
     /**
-     * @var callable
-     */
-    private $selector;
-
-    /**
      * @param array|\Traversable $source
-     * @param callable           $selector
      */
-    public function __construct($source, callable $selector)
+    public function __construct($source)
     {
         $this->source = $source;
-        $this->selector = $selector;
     }
 
     /**
@@ -34,9 +28,9 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        $selector = $this->selector;
-        foreach ($this->source as $element) {
-            yield $selector($element);
+        $array = Converters::toArray($this->source);
+        for ($i = count($array) - 1; $i >= 0; $i--) {
+            yield $array[$i];
         }
     }
 }

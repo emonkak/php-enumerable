@@ -5,7 +5,7 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
-class ConcatIterator implements \IteratorAggregate, EnumerableInterface
+class OnErrorResumeNextIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
@@ -28,8 +28,11 @@ class ConcatIterator implements \IteratorAggregate, EnumerableInterface
     public function getIterator()
     {
         foreach ($this->sources as $source) {
-            foreach ($source as $element) {
-                yield $element;
+            try {
+                foreach ($source as $element) {
+                    yield $element;
+                }
+            } catch (\Exception $e) {
             }
         }
     }

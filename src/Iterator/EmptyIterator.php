@@ -1,6 +1,6 @@
 <?php
 
-namespace Enumerable\Iterator;
+namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;

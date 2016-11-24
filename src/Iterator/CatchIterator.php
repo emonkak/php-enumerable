@@ -5,7 +5,7 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
-class WhereIterator implements \IteratorAggregate, EnumerableInterface
+class CatchIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
@@ -17,27 +17,30 @@ class WhereIterator implements \IteratorAggregate, EnumerableInterface
     /**
      * @var callable
      */
-    private $predicate;
+    private $handler;
 
     /**
      * @param array|\Traversable $source
-     * @param callable           $predicate
+     * @param callable           $handler
      */
-    public function __construct($source, callable $predicate)
+    public function __construct($source, callable $handler)
     {
         $this->source = $source;
-        $this->predicate = $predicate;
+        $this->handler = $handler;
     }
 
-    /** 
+    /**
      * {@inheritDoc}
      */
     public function getIterator()
     {
-        $predicate = $this->predicate;
-
-        foreach ($this->source as $element) {
-            if ($predicate($element)) {
+        try {
+            foreach ($this->source as $element) {
+                yield $element;
+            }
+        } catch (\Exception $e) {
+            $handler = $this->handler;
+            foreach ($handler($e) as $element) {
                 yield $element;
             }
         }

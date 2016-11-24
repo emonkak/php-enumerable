@@ -5,47 +5,51 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
-class MemoizeIterator extends \ArrayObject implements EnumerableInterface
+class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
-    private $source;
-
+    /**
+     * @var \Iterator|null
+     */
     private $iterator;
 
-    public function __construct($source)
-    {
-        parent::__construct();
+    /**
+     * @var mixed[]|null
+     */
+    private $cachedElements;
 
-        $this->source = $source;
+    /**
+     * @param \Iterator $iterator
+     */
+    public function __construct(\Iterator $iterator)
+    {
+        $this->iterator = $iterator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getIterator()
     {
-        if ($this->iterator === null) {
-            $this->iterator = $this->toIterator();
+        if ($this->cachedElements === null) {
+            $this->cachedElements = [];
             $this->iterator->rewind();
         }
 
-        foreach ($this->getArrayCopy() as $element) {
+        foreach ($this->cachedElements as $element) {
             yield $element;
         }
 
-        while ($this->iterator->valid()) {
-            $element = $this->iterator->current();
-            $this->append($element);
-            $this->iterator->next();
-            yield $element;
-        }
-    }
+        if ($this->iterator !== null) {
+            while ($this->iterator->valid()) {
+                $element = $this->iterator->current();
+                $this->cachedElements[] = $element;
+                $this->iterator->next();
+                yield $element;
+            }
 
-    private function toIterator()
-    {
-        if ($this->source instanceof \Iterator) {
-            return $this->source;
+            $this->iterator = null;
         }
-        return is_array($this->source)
-            ? new \ArrayIterator($this->source)
-            : new \IteratorIterator($this->source);
     }
 }

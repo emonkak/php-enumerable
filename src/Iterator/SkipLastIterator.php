@@ -5,7 +5,7 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
-class SelectIterator implements \IteratorAggregate, EnumerableInterface
+class SkipLastIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
@@ -15,18 +15,18 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
     private $source;
 
     /**
-     * @var callable
+     * @var integer
      */
-    private $selector;
+    private $count;
 
     /**
      * @param array|\Traversable $source
-     * @param callable           $selector
+     * @param integer            $count
      */
-    public function __construct($source, callable $selector)
+    public function __construct($source, $count)
     {
         $this->source = $source;
-        $this->selector = $selector;
+        $this->count = $count;
     }
 
     /**
@@ -34,9 +34,14 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        $selector = $this->selector;
+        $queue = new \SplQueue();
+        $length = 0;
+
         foreach ($this->source as $element) {
-            yield $selector($element);
+            $queue->enqueue($element);
+            if (++$length > $this->count) {
+                yield $queue->dequeue();
+            }
         }
     }
 }

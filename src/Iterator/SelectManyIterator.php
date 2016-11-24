@@ -5,7 +5,7 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
-class SelectIterator implements \IteratorAggregate, EnumerableInterface
+class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
@@ -17,16 +17,16 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
     /**
      * @var callable
      */
-    private $selector;
+    private $collectionSelector;
 
     /**
      * @param array|\Traversable $source
-     * @param callable           $selector
+     * @param callable           $collectionSelector
      */
-    public function __construct($source, callable $selector)
+    public function __construct($source, callable $collectionSelector)
     {
         $this->source = $source;
-        $this->selector = $selector;
+        $this->collectionSelector = $collectionSelector;
     }
 
     /**
@@ -34,9 +34,11 @@ class SelectIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        $selector = $this->selector;
+        $collectionSelector = $this->collectionSelector;
         foreach ($this->source as $element) {
-            yield $selector($element);
+            foreach ($collectionSelector($element) as $childElement) {
+                yield $childElement;
+            }
         }
     }
 }

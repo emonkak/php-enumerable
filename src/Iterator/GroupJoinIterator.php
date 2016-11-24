@@ -4,21 +4,44 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
+use Emonkak\Enumerable\Internal\Converters;
 
 class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
+    /**
+     * @var array|\Traversable
+     */
     private $outer;
 
+    /**
+     * @var array|\Traversable
+     */
     private $inner;
 
+    /**
+     * @var callable
+     */
     private $outerKeySelector;
 
+    /**
+     * @var callable
+     */
     private $innerKeySelector;
 
+    /**
+     * @var callable
+     */
     private $resultSelector;
 
+    /**
+     * @param array|\Traversable $outer
+     * @param array|\Traversable $inner
+     * @param callable           $outerKeySelector
+     * @param callable           $innerKeySelector
+     * @param callable           $resultSelector
+     */
     public function __construct($outer, $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
     {
         $this->outer = $outer;
@@ -28,22 +51,16 @@ class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
         $this->resultSelector = $resultSelector;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getIterator()
     {
         $outerKeySelector = $this->outerKeySelector;
         $innerKeySelector = $this->innerKeySelector;
         $resultSelector = $this->resultSelector;
 
-        $lookup = [];
-
-        foreach ($this->inner as $element) {
-            $key = $innerKeySelector($element);
-            if (isset($lookup[$key])) {
-                $lookup[$key][] = $element;
-            } else {
-                $lookup[$key] = [$element];
-            }
-        }
+        $lookup = Converters::toLookup($this->inner, $innerKeySelector, $this->identityFunction());
 
         foreach ($this->outer as $outerElement) {
             $key = $outerKeySelector($outerElement);

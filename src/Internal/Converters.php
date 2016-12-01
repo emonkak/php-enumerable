@@ -8,13 +8,6 @@ namespace Emonkak\Enumerable\Internal;
 final class Converters
 {
     /**
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
-    }
-
-    /**
      * @param array|\Traversable $source
      * @return mixed[]
      */
@@ -74,5 +67,12 @@ final class Converters
             return new \IteratorIterator($source);
         }
         return new \ArrayIterator($source);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
     }
 }

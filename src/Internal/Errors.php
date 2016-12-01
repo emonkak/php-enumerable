@@ -31,4 +31,11 @@ final class Errors
     {
         return new \RuntimeException('Sequence contains no elements.');
     }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
+    }
 }

@@ -16,16 +16,12 @@ class SetTest extends \PHPUnit_Framework_TestCase
         $longString = str_repeat('abracadabra', 100);
         $elements = ['foo', '123', 123, 123.0, true, null, $obj1, $obj2, ['foo' => 'bar'], $longString];
 
-        $this->assertEquals($elements, iterator_to_array(Set::from(array_merge($elements, $elements))));
-        $this->assertEquals($elements, Set::from(array_merge($elements, $elements))->toArray());
-    }
+        $set = Set::from(array_merge($elements, $elements));
 
-    /**
-     * @expectedException UnexpectedValueException
-     */
-    public function testFromThrowsUnexpectedValueException()
-    {
-        Set::from([STDIN]);
+        $this->assertSame(10, $set->count());
+        $this->assertSame(3, $set->count('is_string'));
+        $this->assertEquals($elements, iterator_to_array($set));
+        $this->assertEquals($elements, $set->toArray());
     }
 
     public function testAdd()
@@ -43,6 +39,8 @@ class SetTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($set->contains($element));
         }
 
+        $this->assertSame(10, $set->count());
+        $this->assertSame(3, $set->count('is_string'));
         $this->assertEquals($elements, iterator_to_array($set));
         $this->assertEquals($elements, $set->toArray());
     }
@@ -57,6 +55,8 @@ class SetTest extends \PHPUnit_Framework_TestCase
         $set = new Set();
         $set->addAll(array_merge($elements, $elements));
 
+        $this->assertSame(10, $set->count());
+        $this->assertSame(3, $set->count('is_string'));
         $this->assertEquals($elements, iterator_to_array($set));
         $this->assertEquals($elements, $set->toArray());
     }

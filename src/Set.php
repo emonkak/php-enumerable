@@ -2,6 +2,8 @@
 
 namespace Emonkak\Enumerable;
 
+use Emonkak\Enumerable\Internal\Hasher;
+
 class Set implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
@@ -33,16 +35,24 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getSource()
+    {
+        return $this->table;
+    }
+
+    /**
      * @param mixed $value
      * @return boolean
      */
     public function add($value)
     {
-        $key = $this->hashKey($value);
-        if (array_key_exists($key, $this->table)) {
+        $hash = Hasher::hash($value);
+        if (array_key_exists($hash, $this->table)) {
             return false;
         }
-        $this->table[$key] = $value;
+        $this->table[$hash] = $value;
         return true;
     }
 
@@ -52,11 +62,10 @@ class Set implements \IteratorAggregate, EnumerableInterface
     public function addAll($values)
     {
         foreach ($values as $value) {
-            $key = $this->hashKey($value);
-            if (array_key_exists($key, $this->table)) {
-                continue;
+            $hash = Hasher::hash($value);
+            if (!array_key_exists($hash, $this->table)) {
+                $this->table[$hash] = $value;
             }
-            $this->table[$key] = $value;
         }
     }
 
@@ -66,8 +75,8 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function contains($value)
     {
-        $key = $this->hashKey($value);
-        return array_key_exists($key, $this->table);
+        $hash = Hasher::hash($value);
+        return array_key_exists($hash, $this->table);
     }
 
     /**
@@ -76,11 +85,11 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function remove($value)
     {
-        $key = $this->hashKey($value);
-        if (!array_key_exists($key, $this->table)) {
+        $hash = Hasher::hash($value);
+        if (!array_key_exists($hash, $this->table)) {
             return false;
         }
-        unset($this->table[$key]);
+        unset($this->table[$hash]);
         return true;
     }
 
@@ -90,47 +99,5 @@ class Set implements \IteratorAggregate, EnumerableInterface
     public function toArray()
     {
         return array_values($this->table);
-    }
-
-    /**
-     * Calculates a hash key for a value.
-     *
-     * @param mixed $value
-     * @return string
-     */
-    protected function hashKey($value)
-    {
-        $type = gettype($value);
-        switch ($type) {
-            case 'boolean':
-                return 'b' . $value;
-
-            case 'integer':
-                return 'i' . $value;
-
-            case 'double':
-                return 'd' . $value;
-
-            case 'string':
-                $len = strlen($value);
-                if ($len < 256) {
-                    return 's' . $len . $value;
-                } else {
-                    return 's' . $len . sha1($value);
-                }
-
-            case 'array':
-                // XXX: A different hash is calculated if the order of the keys is different.
-                return 'a' . sha1(serialize($value));
-
-            case 'object':
-                return 'o' . spl_object_hash($value);
-
-            case 'NULL':
-                return 'n';
-
-            default:
-                throw new \UnexpectedValueException("The value does not be hashable. got '$type'");
-        }
     }
 }

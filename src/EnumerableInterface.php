@@ -61,11 +61,11 @@ interface EnumerableInterface extends \Traversable
     public function defaultIfEmpty($defaultValue);
 
     /**
-     * @param callable|null        $keySelector
-     * @param HasherInterface|null $hasher
+     * @param callable|null                   $keySelector
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function distinct(callable $keySelector = null, HasherInterface $hasher);
+    public function distinct(callable $keySelector = null, EqualityComparer $comparer);
 
     /**
      * @param callable|null $keySelector
@@ -99,11 +99,11 @@ interface EnumerableInterface extends \Traversable
     public function elementAtOrDefault($index, $defaultValue = null);
 
     /**
-     * @param array|\Traversable   $second
-     * @param HasherInterface|null $hasher
+     * @param array|\Traversable             $second
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function except($second, HasherInterface $hasher = null);
+    public function except($second, EqualityComparerInterface $comparer = null);
 
     /**
      * @param callable $finallyAction
@@ -152,11 +152,11 @@ interface EnumerableInterface extends \Traversable
     public function ignoreElements();
 
     /**
-     * @param array|\Traversable   $second
-     * @param HasherInterface|null $hasher
+     * @param array|\Traversable             $second
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function intersect($second, HasherInterface $hasher = null);
+    public function intersect($second, EqualityComparerInterface $comparer = null);
 
     /**
      * @return boolean
@@ -362,11 +362,11 @@ interface EnumerableInterface extends \Traversable
     public function toIterator();
 
     /**
-     * @param array|\Traversable   $second
-     * @param HasherInterface|null $hasher
+     * @param array|\Traversable             $second
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function union($second, HasherInterface $hasher = null);
+    public function union($second, EqualityComparerInterface $comparer = null);
 
     /**
      * @param callable $predicate

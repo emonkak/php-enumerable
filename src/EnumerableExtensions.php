@@ -176,15 +176,15 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null        $keySelector
-     * @param HasherInterface|null $hasher
+     * @param callable|null                  $keySelector
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function distinct(callable $keySelector = null, HasherInterface $hasher = null)
+    public function distinct(callable $keySelector = null, EqualityComparer $comparer = null)
     {
         $keySelector = $keySelector ?: $this->identityFunction();
-        $hasher = $hasher ?: Hasher::getInstance();
-        return new DistinctIterator($this->getSource(), $keySelector, $hasher);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new DistinctIterator($this->getSource(), $keySelector, $comparer);
     }
 
     /**
@@ -261,14 +261,14 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable   $second
-     * @param HasherInterface|null $hasher
+     * @param array|\Traversable             $second
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function except($second, HasherInterface $hasher = null)
+    public function except($second, EqualityComparerInterface $comparer = null)
     {
-        $hasher = $hasher ?: Hasher::getInstance();
-        return new ExceptIterator($this->getSource(), $second, $hasher);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new ExceptIterator($this->getSource(), $second, $comparer);
     }
 
     /**
@@ -367,14 +367,14 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable   $second
-     * @param HasherInterface|null $hasher
+     * @param array|\Traversable             $second
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function intersect($second, HasherInterface $hasher = null)
+    public function intersect($second, EqualityComparerInterface $comparer = null)
     {
-        $hasher = $hasher ?: Hasher::getInstance();
-        return new IntersectIterator($this->getSource(), $second, $hasher);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new IntersectIterator($this->getSource(), $second, $comparer);
     }
 
     /**
@@ -898,14 +898,14 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable   $second
-     * @param HasherInterface|null $hasher
+     * @param array|\Traversable             $second
+     * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function union($second, HasherInterface $hasher = null)
+    public function union($second, EqualityComparerInterface $comparer = null)
     {
-        $hasher = $hasher ?: Hasher::getInstance();
-        return new UnionIterator($this->getSource(), $second, $hasher);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new UnionIterator($this->getSource(), $second, $comparer);
     }
 
     /**

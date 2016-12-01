@@ -5,19 +5,19 @@ namespace Emonkak\Enumerable;
 /**
  * @internal
  */
-class Hasher implements HasherInterface
+class EqualityComparer implements EqualityComparerInterface
 {
     /**
      * @codeCoverageIgnore
      *
-     * @return Hasher
+     * @return EqualityComparer
      */
     public static function getInstance()
     {
         static $instance;
 
         if (!isset($instance)) {
-            $instance = new Hasher();
+            $instance = new EqualityComparer();
         }
 
         return $instance;
@@ -31,10 +31,15 @@ class Hasher implements HasherInterface
     }
 
     /**
-     * Calculates a hash for a value.
-     *
-     * @param mixed $value
-     * @return string
+     * {@inheritDoc}
+     */
+    public function equals($first, $second)
+    {
+        return $first === $second;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function hash($value)
     {

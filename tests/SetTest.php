@@ -2,6 +2,7 @@
 
 namespace Emonkak\Enumerable\Tests;
 
+use Emonkak\Enumerable\EqualityComparerInterface;
 use Emonkak\Enumerable\Set;
 
 /**
@@ -30,6 +31,28 @@ class SetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($elements, $set->toArray());
     }
 
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testAddWithHashCollision()
+    {
+        $comparer = $this->createMock(EqualityComparerInterface::class);
+        $comparer
+            ->expects($this->any())
+            ->method('hash')
+            ->willReturn(0);
+        $comparer
+            ->expects($this->any())
+            ->method('equals')
+            ->will($this->returnCallback(function($first, $second) {
+                return $first === $second;
+            }));
+
+        $set = new Set($comparer);
+        $set->add('foo');
+        $set->add('bar');
+    }
+
     public function testAddAll()
     {
         $obj1 = new \stdClass();
@@ -44,6 +67,27 @@ class SetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(3, $set->count('is_string'));
         $this->assertEquals($elements, iterator_to_array($set));
         $this->assertEquals($elements, $set->toArray());
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testAddAllWithHashCollision()
+    {
+        $comparer = $this->createMock(EqualityComparerInterface::class);
+        $comparer
+            ->expects($this->any())
+            ->method('hash')
+            ->willReturn(0);
+        $comparer
+            ->expects($this->any())
+            ->method('equals')
+            ->will($this->returnCallback(function($first, $second) {
+                return $first === $second;
+            }));
+
+        $set = new Set($comparer);
+        $set->addAll(['foo', 'bar']);
     }
 
     public function testRemove()

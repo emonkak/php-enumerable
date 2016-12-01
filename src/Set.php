@@ -7,9 +7,9 @@ class Set implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var HasherInterface
+     * @var EqualityComparerInterface
      */
-    private $hasher;
+    private $comparer;
 
     /**
      * @var array
@@ -21,15 +21,15 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public static function create()
     {
-        return new Set(Hasher::getInstance());
+        return new Set(EqualityComparer::getInstance());
     }
 
     /**
-     * @param HasherInterface $hasher
+     * @param EqualityComparerInterface $comparer
      */
-    public function __construct(HasherInterface $hasher)
+    public function __construct(EqualityComparerInterface $comparer)
     {
-        $this->hasher = $hasher;
+        $this->comparer = $comparer;
     }
 
     /**
@@ -56,8 +56,16 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function add($value)
     {
-        $hash = $this->hasher->hash($value);
+        $hash = $this->comparer->hash($value);
         if (array_key_exists($hash, $this->table)) {
+            $other = $this->table[$hash];
+            if (!$this->comparer->equals($value, $other)) {
+                throw new \RuntimeException(sprintf(
+                    'Hash collision detected, between %s and %s',
+                    json_encode($value),
+                    json_encode($other)
+                ));
+            }
             return false;
         }
         $this->table[$hash] = $value;
@@ -70,8 +78,17 @@ class Set implements \IteratorAggregate, EnumerableInterface
     public function addAll($values)
     {
         foreach ($values as $value) {
-            $hash = $this->hasher->hash($value);
-            if (!array_key_exists($hash, $this->table)) {
+            $hash = $this->comparer->hash($value);
+            if (array_key_exists($hash, $this->table)) {
+                $other = $this->table[$hash];
+                if (!$this->comparer->equals($value, $other)) {
+                    throw new \RuntimeException(sprintf(
+                        'Hash collision detected, between %s and %s',
+                        json_encode($value),
+                        json_encode($other)
+                    ));
+                }
+            } else {
                 $this->table[$hash] = $value;
             }
         }
@@ -83,7 +100,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function contains($value)
     {
-        $hash = $this->hasher->hash($value);
+        $hash = $this->comparer->hash($value);
         return array_key_exists($hash, $this->table);
     }
 
@@ -93,7 +110,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function remove($value)
     {
-        $hash = $this->hasher->hash($value);
+        $hash = $this->comparer->hash($value);
         if (!array_key_exists($hash, $this->table)) {
             return false;
         }

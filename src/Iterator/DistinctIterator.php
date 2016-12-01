@@ -4,7 +4,7 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
-use Emonkak\Enumerable\HasherInterface;
+use Emonkak\Enumerable\EqualityComparerInterface;
 use Emonkak\Enumerable\Set;
 
 class DistinctIterator implements \IteratorAggregate, EnumerableInterface
@@ -22,20 +22,20 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
     private $keySelector;
 
     /**
-     * @var HasherInterface
+     * @var EqualityComparerInterface
      */
-    private $hasher;
+    private $comparer;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $keySelector
-     * @param HasherInterface    $hasher
+     * @param array|\Traversable        $source
+     * @param callable                  $keySelector
+     * @param EqualityComparerInterface $comparer
      */
-    public function __construct($source, callable $keySelector, HasherInterface $hasher)
+    public function __construct($source, callable $keySelector, EqualityComparerInterface $comparer)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
-        $this->hasher = $hasher;
+        $this->comparer = $comparer;
     }
 
     /**
@@ -43,7 +43,7 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        $set = new Set($this->hasher);
+        $set = new Set($this->comparer);
         $keySelector = $this->keySelector;
 
         foreach ($this->source as $element) {

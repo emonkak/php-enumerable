@@ -4,7 +4,7 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
-use Emonkak\Enumerable\HasherInterface;
+use Emonkak\Enumerable\EqualityComparerInterface;
 use Emonkak\Enumerable\Set;
 
 class IntersectIterator implements \IteratorAggregate, EnumerableInterface
@@ -22,20 +22,20 @@ class IntersectIterator implements \IteratorAggregate, EnumerableInterface
     private $second;
 
     /**
-     * @var HasherInterface
+     * @var EqualityComparerInterface
      */
-    private $hasher;
+    private $comparer;
 
     /**
-     * @param array|\Traversable $first
-     * @param array|\Traversable $second
-     * @param HasherInterface    $hasher
+     * @param array|\Traversable        $first
+     * @param array|\Traversable        $second
+     * @param EqualityComparerInterface $comparer
      */
-    public function __construct($first, $second, HasherInterface $hasher)
+    public function __construct($first, $second, EqualityComparerInterface $comparer)
     {
         $this->first = $first;
         $this->second = $second;
-        $this->hasher = $hasher;
+        $this->comparer = $comparer;
     }
 
     /**
@@ -43,7 +43,7 @@ class IntersectIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        $set = new Set($this->hasher);
+        $set = new Set($this->comparer);
         $set->addAll($this->second);
         foreach ($this->first as $element) {
             if ($set->contains($element)) {

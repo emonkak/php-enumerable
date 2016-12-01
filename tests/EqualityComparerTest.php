@@ -2,16 +2,36 @@
 
 namespace Emonkak\Enumerable\Tests;
 
-use Emonkak\Enumerable\Hasher;
+use Emonkak\Enumerable\EqualityComparer;
 
-class HasherTest extends \PHPUnit_Framework_TestCase
+class EqualityComparerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @dataProvider providerEquals
+     */
+    public function testEquals($first, $second, $expected)
+    {
+        $this->assertSame($expected, EqualityComparer::getInstance()->equals($first, $second));
+    }
+
+    public function providerEquals()
+    {
+        return [
+            ['foo', 'foo', true],
+            ['foo', 'bar', false],
+            [123, 123, true],
+            [123, '123', false],
+            [new \stdClass(), new \stdClass(), false],
+            [['foo' => 123], ['foo' => 123], true],
+        ];
+    }
+
     /**
      * @dataProvider providerHash
      */
     public function testHash($value)
     {
-        $this->assertInternalType('string', Hasher::getInstance()->hash($value));
+        $this->assertInternalType('string', EqualityComparer::getInstance()->hash($value));
     }
 
     public function providerHash()
@@ -36,7 +56,7 @@ class HasherTest extends \PHPUnit_Framework_TestCase
      */
     public function testHashThrowsUnexpectedValueException($value)
     {
-        Hasher::getInstance()->hash($value);
+        EqualityComparer::getInstance()->hash($value);
     }
 
     public function providerHashThrowsUnexpectedValueException()

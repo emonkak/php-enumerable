@@ -24,7 +24,8 @@ final class Enumerable
     {
         if (!(is_array($source) || $source instanceof \Traversable)) {
             $type = gettype($source);
-            throw new \RuntimeException("The source must be an array or traversable object, got '$type'");
+            $typeOrClass = ($type === 'object' ? get_class($source) : $type);
+            throw new \RuntimeException("The source must be an array or traversable object, got '$typeOrClass'");
         }
         return new Sequence($source);
     }

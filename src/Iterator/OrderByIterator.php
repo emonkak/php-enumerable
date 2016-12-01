@@ -53,9 +53,8 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     {
         $array = Converters::toArray($this->source);
         $comparer = $this->getComparer();
-        $iterator = new \ArrayIterator($array);
-        $iterator->uasort($comparer);
-        return $iterator;
+        usort($array, $comparer);
+        return new \ArrayIterator($array);
     }
 
     /**

@@ -34,7 +34,7 @@ class SkipIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        if (is_array($this->source)) {
+        if (is_array($this->source) && isset($this->source[0])) {
             $count = $this->count;
             $length = count($this->source);
             $elements = array_values($this->source);

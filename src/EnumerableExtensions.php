@@ -220,7 +220,7 @@ trait EnumerableExtensions
     public function elementAt($index)
     {
         $source = $this->getSource();
-        if (is_array($source)) {
+        if (is_array($source) && isset($source[0])) {
             if ($index < count($source)) {
                 return $source[$index];
             }
@@ -243,7 +243,7 @@ trait EnumerableExtensions
     public function elementAtOrDefault($index, $defaultValue = null)
     {
         $source = $this->getSource();
-        if (is_array($source)) {
+        if (is_array($source) && isset($source[0])) {
             if ($index < count($source)) {
                 return $source[$index];
             }

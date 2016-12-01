@@ -4,6 +4,7 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
+use Emonkak\Enumerable\HasherInterface;
 use Emonkak\Enumerable\Set;
 
 class ExceptIterator implements \IteratorAggregate, EnumerableInterface
@@ -21,13 +22,20 @@ class ExceptIterator implements \IteratorAggregate, EnumerableInterface
     private $second;
 
     /**
+     * @var HasherInterface
+     */
+    private $hasher;
+
+    /**
      * @param array|\Traversable $first
      * @param array|\Traversable $second
+     * @param HasherInterface    $hasher
      */
-    public function __construct($first, $second)
+    public function __construct($first, $second, HasherInterface $hasher)
     {
         $this->first = $first;
         $this->second = $second;
+        $this->hasher = $hasher;
     }
 
     /**
@@ -35,7 +43,8 @@ class ExceptIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        $set = Set::from($this->second);
+        $set = new Set($this->hasher);
+        $set->addAll($this->second);
         foreach ($this->first as $element) {
             if (!$set->contains($element)) {
                 $set->add($element);

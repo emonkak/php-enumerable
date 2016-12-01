@@ -1,19 +1,42 @@
 <?php
 
-namespace Emonkak\Enumerable\Internal;
+namespace Emonkak\Enumerable;
 
 /**
  * @internal
  */
-final class Hasher
+class Hasher implements HasherInterface
 {
+    /**
+     * @codeCoverageIgnore
+     *
+     * @return Hasher
+     */
+    public static function getInstance()
+    {
+        static $instance;
+
+        if (!isset($instance)) {
+            $instance = new Hasher();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    private function __construct()
+    {
+    }
+
     /**
      * Calculates a hash for a value.
      *
      * @param mixed $value
      * @return string
      */
-    public static function hash($value)
+    public function hash($value)
     {
         $type = gettype($value);
         switch ($type) {
@@ -47,12 +70,5 @@ final class Hasher
             default:
                 throw new \UnexpectedValueException("The value does not be hashable. got '$type'");
         }
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
     }
 }

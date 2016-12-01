@@ -1,8 +1,8 @@
 <?php
 
-namespace Emonkak\Enumerable\Tests\Internal;
+namespace Emonkak\Enumerable\Tests;
 
-use Emonkak\Enumerable\Internal\Hasher;
+use Emonkak\Enumerable\Hasher;
 
 class HasherTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class HasherTest extends \PHPUnit_Framework_TestCase
      */
     public function testHash($value)
     {
-        Hasher::hash($value);
+        $this->assertInternalType('string', Hasher::getInstance()->hash($value));
     }
 
     public function providerHash()
@@ -36,7 +36,7 @@ class HasherTest extends \PHPUnit_Framework_TestCase
      */
     public function testHashThrowsUnexpectedValueException($value)
     {
-        Hasher::hash($value);
+        Hasher::getInstance()->hash($value);
     }
 
     public function providerHashThrowsUnexpectedValueException()

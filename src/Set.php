@@ -2,11 +2,14 @@
 
 namespace Emonkak\Enumerable;
 
-use Emonkak\Enumerable\Internal\Hasher;
-
 class Set implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
+
+    /**
+     * @var HasherInterface
+     */
+    private $hasher;
 
     /**
      * @var array
@@ -14,14 +17,19 @@ class Set implements \IteratorAggregate, EnumerableInterface
     private $table = [];
 
     /**
-     * @param array|\Traversable $values
      * @return Set
      */
-    public static function from($values)
+    public static function create()
     {
-        $set = new Set();
-        $set->addAll($values);
-        return $set;
+        return new Set(Hasher::getInstance());
+    }
+
+    /**
+     * @param HasherInterface $hasher
+     */
+    public function __construct(HasherInterface $hasher)
+    {
+        $this->hasher = $hasher;
     }
 
     /**
@@ -48,7 +56,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function add($value)
     {
-        $hash = Hasher::hash($value);
+        $hash = $this->hasher->hash($value);
         if (array_key_exists($hash, $this->table)) {
             return false;
         }
@@ -62,7 +70,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     public function addAll($values)
     {
         foreach ($values as $value) {
-            $hash = Hasher::hash($value);
+            $hash = $this->hasher->hash($value);
             if (!array_key_exists($hash, $this->table)) {
                 $this->table[$hash] = $value;
             }
@@ -75,7 +83,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function contains($value)
     {
-        $hash = Hasher::hash($value);
+        $hash = $this->hasher->hash($value);
         return array_key_exists($hash, $this->table);
     }
 
@@ -85,7 +93,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
      */
     public function remove($value)
     {
-        $hash = Hasher::hash($value);
+        $hash = $this->hasher->hash($value);
         if (!array_key_exists($hash, $this->table)) {
             return false;
         }

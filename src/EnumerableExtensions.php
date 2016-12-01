@@ -176,13 +176,15 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $keySelector
+     * @param callable|null        $keySelector
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function distinct(callable $keySelector = null)
+    public function distinct(callable $keySelector = null, HasherInterface $hasher = null)
     {
         $keySelector = $keySelector ?: $this->identityFunction();
-        return new DistinctIterator($this->getSource(), $keySelector);
+        $hasher = $hasher ?: Hasher::getInstance();
+        return new DistinctIterator($this->getSource(), $keySelector, $hasher);
     }
 
     /**
@@ -259,12 +261,14 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $second
+     * @param array|\Traversable   $second
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function except($second)
+    public function except($second, HasherInterface $hasher = null)
     {
-        return new ExceptIterator($this->getSource(), $second);
+        $hasher = $hasher ?: Hasher::getInstance();
+        return new ExceptIterator($this->getSource(), $second, $hasher);
     }
 
     /**
@@ -363,12 +367,14 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $second
+     * @param array|\Traversable   $second
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function intersect($second)
+    public function intersect($second, HasherInterface $hasher = null)
     {
-        return new IntersectIterator($this->getSource(), $second);
+        $hasher = $hasher ?: Hasher::getInstance();
+        return new IntersectIterator($this->getSource(), $second, $hasher);
     }
 
     /**
@@ -892,12 +898,14 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $second
+     * @param array|\Traversable   $second
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function union($second)
+    public function union($second, HasherInterface $hasher = null)
     {
-        return new UnionIterator($this->getSource(), $second);
+        $hasher = $hasher ?: Hasher::getInstance();
+        return new UnionIterator($this->getSource(), $second, $hasher);
     }
 
     /**

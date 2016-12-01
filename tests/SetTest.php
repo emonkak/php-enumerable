@@ -9,21 +9,6 @@ use Emonkak\Enumerable\Set;
  */
 class SetTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFrom()
-    {
-        $obj1 = new \stdClass();
-        $obj2 = new \stdClass();
-        $longString = str_repeat('abracadabra', 100);
-        $elements = ['foo', '123', 123, 123.0, true, null, $obj1, $obj2, ['foo' => 'bar'], $longString];
-
-        $set = Set::from(array_merge($elements, $elements));
-
-        $this->assertSame(10, $set->count());
-        $this->assertSame(3, $set->count('is_string'));
-        $this->assertEquals($elements, iterator_to_array($set));
-        $this->assertEquals($elements, $set->toArray());
-    }
-
     public function testAdd()
     {
         $obj1 = new \stdClass();
@@ -31,7 +16,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
         $longString = str_repeat('abracadabra', 100);
         $elements = ['foo', '123', 123, 123.0, true, null, $obj1, $obj2, ['foo' => 'bar'], $longString];
 
-        $set = new Set();
+        $set = Set::create();
         foreach ($elements as $element) {
             $this->assertFalse($set->contains($element));
             $this->assertTrue($set->add($element));
@@ -52,7 +37,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
         $longString = str_repeat('abracadabra', 100);
         $elements = ['foo', '123', 123, 123.0, true, null, $obj1, $obj2, ['foo' => 'bar'], $longString];
 
-        $set = new Set();
+        $set = Set::create();
         $set->addAll(array_merge($elements, $elements));
 
         $this->assertSame(10, $set->count());
@@ -68,7 +53,8 @@ class SetTest extends \PHPUnit_Framework_TestCase
         $longString = str_repeat('abracadabra', 100);
         $elements = ['foo', '123', 123, 123.0, true, null, $obj1, $obj2, ['foo' => 'bar'], $longString];
 
-        $set = Set::from($elements);
+        $set = Set::create();
+        $set->addAll($elements);
 
         $this->assertTrue($set->remove('foo'));
         $this->assertFalse($set->remove('foo'));

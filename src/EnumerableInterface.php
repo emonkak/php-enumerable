@@ -61,10 +61,11 @@ interface EnumerableInterface extends \Traversable
     public function defaultIfEmpty($defaultValue);
 
     /**
-     * @param callable|null $keySelector
+     * @param callable|null        $keySelector
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function distinct(callable $keySelector = null);
+    public function distinct(callable $keySelector = null, HasherInterface $hasher);
 
     /**
      * @param callable|null $keySelector
@@ -98,10 +99,11 @@ interface EnumerableInterface extends \Traversable
     public function elementAtOrDefault($index, $defaultValue = null);
 
     /**
-     * @param array|\Traversable $second
+     * @param array|\Traversable   $second
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function except($second);
+    public function except($second, HasherInterface $hasher = null);
 
     /**
      * @param callable $finallyAction
@@ -150,10 +152,11 @@ interface EnumerableInterface extends \Traversable
     public function ignoreElements();
 
     /**
-     * @param array|\Traversable $second
+     * @param array|\Traversable   $second
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function intersect($second);
+    public function intersect($second, HasherInterface $hasher = null);
 
     /**
      * @return boolean
@@ -359,10 +362,11 @@ interface EnumerableInterface extends \Traversable
     public function toIterator();
 
     /**
-     * @param array|\Traversable $second
+     * @param array|\Traversable   $second
+     * @param HasherInterface|null $hasher
      * @return EnumerableInterface
      */
-    public function union($second);
+    public function union($second, HasherInterface $hasher = null);
 
     /**
      * @param callable $predicate

@@ -65,8 +65,8 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
                 $other = $this->table[$hash][self::KEY];
                 throw new \RuntimeException(sprintf(
                     'Hash collision detected, between "%s" and "%s"',
-                    json_encode($value),
-                    json_encode($other)
+                    gettype($value),
+                    gettype($other)
                 ));
             }
             return false;

@@ -61,9 +61,9 @@ class Set implements \IteratorAggregate, EnumerableInterface
             $other = $this->table[$hash];
             if (!$this->comparer->equals($value, $other)) {
                 throw new \RuntimeException(sprintf(
-                    'Hash collision detected, between %s and %s',
-                    json_encode($value),
-                    json_encode($other)
+                    'Hash collision detected, between "%s" and "%s"',
+                    gettype($value),
+                    gettype($other)
                 ));
             }
             return false;
@@ -83,9 +83,9 @@ class Set implements \IteratorAggregate, EnumerableInterface
                 $other = $this->table[$hash];
                 if (!$this->comparer->equals($value, $other)) {
                     throw new \RuntimeException(sprintf(
-                        'Hash collision detected, between %s and %s',
-                        json_encode($value),
-                        json_encode($other)
+                        'Hash collision detected, between "%s" and "%s"',
+                        gettype($value),
+                        gettype($other)
                     ));
                 }
             } else {

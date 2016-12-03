@@ -2,6 +2,9 @@
 
 namespace Emonkak\Enumerable\Internal;
 
+use Emonkak\Enumerable\Exception\MoreThanOneElementException;
+use Emonkak\Enumerable\Exception\NoSuchElementException;
+
 /**
  * @internal
  */
@@ -17,25 +20,18 @@ final class Errors
     }
 
     /**
-     * @return \RuntimeException
+     * @return MoreThanOneElementException
      */
     public static function moreThanOneMatch()
     {
-        return new \RuntimeException('More than one match found.');
+        return new MoreThanOneElementException('Sequence contains more than one element');
     }
 
     /**
-     * @return \RuntimeException
+     * @return NoSuchElementException
      */
     public static function noElements()
     {
-        return new \RuntimeException('Sequence contains no elements.');
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
+        return new NoSuchElementException('Sequence contains no elements');
     }
 }

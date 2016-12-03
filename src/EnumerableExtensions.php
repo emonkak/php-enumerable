@@ -2,6 +2,8 @@
 
 namespace Emonkak\Enumerable;
 
+use Emonkak\Enumerable\Exception\MoreThanOneElementException;
+use Emonkak\Enumerable\Exception\NoSuchElementException;
 use Emonkak\Enumerable\Internal\Converters;
 use Emonkak\Enumerable\Internal\Errors;
 use Emonkak\Enumerable\Iterator\BufferIterator;
@@ -90,6 +92,7 @@ trait EnumerableExtensions
     /**
      * @param callable|null $selector
      * @return boolean
+     * @throws NoSuchElementException
      */
     public function average(callable $selector = null)
     {
@@ -218,6 +221,7 @@ trait EnumerableExtensions
     /**
      * @param integer $index
      * @return mixed
+     * @throws NoSuchElementException
      */
     public function elementAt($index)
     {
@@ -283,6 +287,7 @@ trait EnumerableExtensions
     /**
      * @param callable|null $predicate
      * @return mixed
+     * @throws NoSuchElementException
      */
     public function first(callable $predicate = null)
     {
@@ -403,6 +408,7 @@ trait EnumerableExtensions
     /**
      * @param callable|null $predicate
      * @return mixed
+     * @throws NoSuchElementException
      */
     public function last(callable $predicate = null)
     {
@@ -671,6 +677,8 @@ trait EnumerableExtensions
     /**
      * @param callable|null $predicate
      * @return mixed
+     * @throws NoSuchElementException
+     * @throws MoreThanOneElementException
      */
     public function single(callable $predicate = null)
     {

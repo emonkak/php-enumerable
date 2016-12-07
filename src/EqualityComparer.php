@@ -55,11 +55,10 @@ class EqualityComparer implements EqualityComparerInterface
                 return 'd' . $value;
 
             case 'string':
-                $len = strlen($value);
-                if ($len < 256) {
-                    return 's' . $len . $value;
+                if (strlen($value) <= 40) {
+                    return 's' . $value;
                 } else {
-                    return 's' . $len . sha1($value);
+                    return 'h' . sha1($value);
                 }
 
             case 'array':

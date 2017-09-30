@@ -78,19 +78,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     public function addAll($values)
     {
         foreach ($values as $value) {
-            $hash = $this->comparer->hash($value);
-            if (array_key_exists($hash, $this->table)) {
-                $other = $this->table[$hash];
-                if (!$this->comparer->equals($value, $other)) {
-                    throw new \RuntimeException(sprintf(
-                        'Hash collision detected, between "%s" and "%s"',
-                        gettype($value),
-                        gettype($other)
-                    ));
-                }
-            } else {
-                $this->table[$hash] = $value;
-            }
+            $this->add($value);
         }
     }
 

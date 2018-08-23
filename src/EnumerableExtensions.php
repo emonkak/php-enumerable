@@ -6,6 +6,7 @@ use Emonkak\Enumerable\Exception\MoreThanOneElementException;
 use Emonkak\Enumerable\Exception\NoSuchElementException;
 use Emonkak\Enumerable\Internal\Converters;
 use Emonkak\Enumerable\Internal\Errors;
+use Emonkak\Enumerable\Internal\IdentityFunction;
 use Emonkak\Enumerable\Iterator\BufferIterator;
 use Emonkak\Enumerable\Iterator\CatchIterator;
 use Emonkak\Enumerable\Iterator\ConcatIterator;
@@ -65,7 +66,7 @@ trait EnumerableExtensions
      */
     public function all(callable $predicate = null)
     {
-        $predicate = $predicate ?: $this->identityFunction();
+        $predicate = $predicate ?: [IdentityFunction::class, 'apply'];
         foreach ($this->getSource() as $element) {
             if (!$predicate($element)) {
                 return false;
@@ -80,7 +81,7 @@ trait EnumerableExtensions
      */
     public function any(callable $predicate = null)
     {
-        $predicate = $predicate ?: $this->identityFunction();
+        $predicate = $predicate ?: [IdentityFunction::class, 'apply'];
         foreach ($this->getSource() as $element) {
             if ($predicate($element)) {
                 return true;
@@ -96,7 +97,7 @@ trait EnumerableExtensions
      */
     public function average(callable $selector = null)
     {
-        $selector = $selector ?: $this->identityFunction();
+        $selector = $selector ?: [IdentityFunction::class, 'apply'];
         $sum = 0;
         $count = 0;
         foreach ($this->getSource() as $element) {
@@ -185,7 +186,7 @@ trait EnumerableExtensions
      */
     public function distinct(callable $keySelector = null, EqualityComparer $comparer = null)
     {
-        $keySelector = $keySelector ?: $this->identityFunction();
+        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $comparer ?: EqualityComparer::getInstance();
         return new DistinctIterator($this->getSource(), $keySelector, $comparer);
     }
@@ -196,7 +197,7 @@ trait EnumerableExtensions
      */
     public function distinctUntilChanged(callable $keySelector = null)
     {
-        $keySelector = $keySelector ?: $this->identityFunction();
+        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         return new DistinctUntilChangedIterator($this->getSource(), $keySelector);
     }
 
@@ -344,7 +345,7 @@ trait EnumerableExtensions
      */
     public function groupBy(callable $keySelector, callable $elementSelector = null, callable $resultSelector = null)
     {
-        $elementSelector = $elementSelector ?: $this->identityFunction();
+        $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
         $resultSelector = $resultSelector ?: function($k, $vs) {
             return [$k, $vs];
         };
@@ -477,7 +478,7 @@ trait EnumerableExtensions
      */
     public function max(callable $selector = null)
     {
-        $selector = $selector ?: $this->identityFunction();
+        $selector = $selector ?: [IdentityFunction::class, 'apply'];
         $max = -INF;
         foreach ($this->getSource() as $element) {
             $value = $selector($element);
@@ -535,7 +536,7 @@ trait EnumerableExtensions
      */
     public function min(callable $selector = null)
     {
-        $selector = $selector ?: $this->identityFunction();
+        $selector = $selector ?: [IdentityFunction::class, 'apply'];
         $max = INF;
         foreach ($this->getSource() as $element) {
             $value = $selector($element);
@@ -606,7 +607,7 @@ trait EnumerableExtensions
      */
     public function orderBy(callable $keySelector = null)
     {
-        $keySelector = $keySelector ?: $this->identityFunction();
+        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         return new OrderByIterator($this->getSource(), $keySelector, false);
     }
 
@@ -616,7 +617,7 @@ trait EnumerableExtensions
      */
     public function orderByDescending(callable $keySelector = null)
     {
-        $keySelector = $keySelector ?: $this->identityFunction();
+        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         return new OrderByIterator($this->getSource(), $keySelector, true);
     }
 
@@ -832,7 +833,7 @@ trait EnumerableExtensions
      */
     public function sum(callable $selector = null)
     {
-        $selector = $selector ?: $this->identityFunction();
+        $selector = $selector ?: [IdentityFunction::class, 'apply'];
         $sum = 0;
         foreach ($this->getSource() as $element) {
             $sum += $selector($element);
@@ -882,7 +883,7 @@ trait EnumerableExtensions
      */
     public function toDictionary(callable $keySelector, callable $elementSelector = null)
     {
-        $elementSelector = $elementSelector ?: $this->identityFunction();
+        $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
         return Converters::toDictionary($this->getSource(), $keySelector, $elementSelector);
     }
 
@@ -893,7 +894,7 @@ trait EnumerableExtensions
      */
     public function toLookup(callable $keySelector, callable $elementSelector = null)
     {
-        $elementSelector = $elementSelector ?: $this->identityFunction();
+        $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
         return Converters::toLookup($this->getSource(), $keySelector, $elementSelector);
     }
 
@@ -950,21 +951,5 @@ trait EnumerableExtensions
     public function getSource()
     {
         return $this;
-    }
-
-    /**
-     * @return callable
-     */
-    protected function identityFunction()
-    {
-        static $f;
-
-        if (!isset($f)) {
-            $f = function($x) {
-                return $x;
-            };
-        }
-
-        return $f;
     }
 }

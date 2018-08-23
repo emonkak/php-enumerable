@@ -5,6 +5,7 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 use Emonkak\Enumerable\Internal\Converters;
+use Emonkak\Enumerable\Internal\IdentityFunction;
 
 class OuterJoinIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -60,7 +61,7 @@ class OuterJoinIterator implements \IteratorAggregate, EnumerableInterface
         $innerKeySelector = $this->innerKeySelector;
         $resultSelector = $this->resultSelector;
 
-        $lookup = Converters::toLookup($this->inner, $innerKeySelector, $this->identityFunction());
+        $lookup = Converters::toLookup($this->inner, $innerKeySelector, [IdentityFunction::class, 'apply']);
 
         foreach ($this->outer as $outerElement) {
             $key = $outerKeySelector($outerElement);

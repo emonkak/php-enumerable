@@ -4,6 +4,7 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\Internal\Converters;
+use Emonkak\Enumerable\Internal\IdentityFunction;
 use Emonkak\Enumerable\OrderedEnumerableInterface;
 
 class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
@@ -62,7 +63,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
      */
     public function thenBy(callable $keySelector = null)
     {
-        $keySelector = $keySelector ?: $this->identityFunction();
+        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, false, $comparer);
     }
@@ -72,7 +73,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
      */
     public function thenByDescending(callable $keySelector = null)
     {
-        $keySelector = $keySelector ?: $this->identityFunction();
+        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, true, $comparer);
     }

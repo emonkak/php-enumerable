@@ -184,7 +184,7 @@ trait EnumerableExtensions
      * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function distinct(callable $keySelector = null, EqualityComparer $comparer = null)
+    public function distinct(callable $keySelector = null, EqualityComparerInterface $comparer = null)
     {
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $comparer ?: EqualityComparer::getInstance();

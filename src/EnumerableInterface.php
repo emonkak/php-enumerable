@@ -65,7 +65,7 @@ interface EnumerableInterface extends \Traversable
      * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function distinct(callable $keySelector = null, EqualityComparer $comparer);
+    public function distinct(callable $keySelector = null, EqualityComparerInterface $comparer);
 
     /**
      * @param callable|null $keySelector

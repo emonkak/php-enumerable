@@ -61,11 +61,11 @@ interface EnumerableInterface extends \Traversable
     public function defaultIfEmpty($defaultValue);
 
     /**
-     * @param callable|null                   $keySelector
+     * @param callable|null                  $keySelector
      * @param EqualityComparerInterface|null $comparer
      * @return EnumerableInterface
      */
-    public function distinct(callable $keySelector = null, EqualityComparerInterface $comparer);
+    public function distinct(callable $keySelector = null, EqualityComparerInterface $comparer = null);
 
     /**
      * @param callable|null $keySelector

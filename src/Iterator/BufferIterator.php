@@ -10,24 +10,24 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var integer
+     * @var int
      */
     private $count;
 
     /**
-     * @var integer
+     * @var int
      */
     private $skip;
 
     /**
-     * @param array|\Traversable $source
-     * @param integer            $count
-     * @param integer            $skip
+     * @param iterable $source
+     * @param int $count
+     * @param int $skip
      */
     public function __construct($source, $count, $skip)
     {

@@ -10,7 +10,7 @@ class FinallyIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class FinallyIterator implements \IteratorAggregate, EnumerableInterface
     private $finallyAction;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $finallyAction
+     * @param iterable $source
+     * @param callable $finallyAction
      */
     public function __construct($source, callable $finallyAction)
     {

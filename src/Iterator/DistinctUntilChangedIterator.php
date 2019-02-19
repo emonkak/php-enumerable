@@ -10,7 +10,7 @@ class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInte
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInte
     private $keySelector;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $keySelector
+     * @param iterable $source
+     * @param callable $keySelector
      */
     public function __construct($source, callable $keySelector)
     {

@@ -7,7 +7,7 @@ interface EqualityComparerInterface
     /**
      * @param mixed $first
      * @param mixed $second
-     * @return boolean
+     * @return bool
      */
     public function equals($first, $second);
 

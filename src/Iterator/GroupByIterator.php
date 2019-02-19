@@ -11,7 +11,7 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -31,10 +31,10 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     private $resultSelector;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $keySelector
-     * @param callable           $elementSelector
-     * @param callable           $resultSelector
+     * @param iterable $source
+     * @param callable $keySelector
+     * @param callable $elementSelector
+     * @param callable $resultSelector
      */
     public function __construct($source, callable $keySelector, callable $elementSelector, callable $resultSelector)
     {

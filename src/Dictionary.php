@@ -55,7 +55,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
 
     /**
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public function set($key, $value)
     {
@@ -77,7 +77,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
 
     /**
      * @param mixed $key
-     * @return boolean
+     * @return bool
      */
     public function has($key)
     {
@@ -102,7 +102,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
 
     /**
      * @param mixed $key
-     * @return boolean
+     * @return bool
      */
     public function remove($key)
     {

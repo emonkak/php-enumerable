@@ -12,7 +12,7 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -27,8 +27,8 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
     private $comparer;
 
     /**
-     * @param array|\Traversable        $source
-     * @param callable                  $keySelector
+     * @param iterable $source
+     * @param callable $keySelector
      * @param EqualityComparerInterface $comparer
      */
     public function __construct($source, callable $keySelector, EqualityComparerInterface $comparer)

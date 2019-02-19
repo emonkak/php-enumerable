@@ -47,7 +47,7 @@ use Emonkak\Enumerable\Iterator\ZipIterator;
 trait EnumerableExtensions
 {
     /**
-     * @param mixed    $seed
+     * @param mixed $seed
      * @param callable $func
      * @return mixed
      */
@@ -61,8 +61,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
-     * @return boolean
+     * @param ?callable $predicate
+     * @return bool
      */
     public function all(callable $predicate = null)
     {
@@ -76,8 +76,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
-     * @return boolean
+     * @param ?callable $predicate
+     * @return bool
      */
     public function any(callable $predicate = null)
     {
@@ -91,8 +91,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $selector
-     * @return boolean
+     * @param ?callable $selector
+     * @return bool
      * @throws NoSuchElementException
      */
     public function average(callable $selector = null)
@@ -111,8 +111,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer      $count
-     * @param integer|null $skip
+     * @param int $count
+     * @param ?int $skip
      * @return EnumerableInterface
      */
     public function buffer($count, $skip = null)
@@ -139,7 +139,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $second
+     * @param iterable $second
      * @return EnumerableInterface
      */
     public function concat($second)
@@ -149,7 +149,7 @@ trait EnumerableExtensions
 
     /**
      * @param callable $predicate
-     * @return integer
+     * @return int
      */
     public function count(callable $predicate = null)
     {
@@ -180,8 +180,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null                  $keySelector
-     * @param EqualityComparerInterface|null $comparer
+     * @param ?callable $keySelector
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
     public function distinct(callable $keySelector = null, EqualityComparerInterface $comparer = null)
@@ -192,7 +192,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $keySelector
+     * @param ?callable $keySelector
      * @return EnumerableInterface
      */
     public function distinctUntilChanged(callable $keySelector = null)
@@ -220,7 +220,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer $index
+     * @param int $index
      * @return mixed
      * @throws NoSuchElementException
      */
@@ -243,8 +243,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer $index
-     * @param mixed   $defaultValue
+     * @param int $index
+     * @param mixed $defaultValue
      * @return mixed
      */
     public function elementAtOrDefault($index, $defaultValue = null)
@@ -266,8 +266,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable             $second
-     * @param EqualityComparerInterface|null $comparer
+     * @param iterable $second
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
     public function except($second, EqualityComparerInterface $comparer = null)
@@ -286,7 +286,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
+     * @param ?callable $predicate
      * @return mixed
      * @throws NoSuchElementException
      */
@@ -307,8 +307,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
-     * @param mixed         $defaultValue
+     * @param ?callable $predicate
+     * @param mixed $defaultValue
      * @return mixed
      */
     public function firstOrDefault(callable $predicate = null, $defaultValue = null)
@@ -328,7 +328,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $action
+     * @param ?callable $action
      */
     public function _forEach(callable $action)
     {
@@ -353,10 +353,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $inner
-     * @param callable           $outerKeySelector
-     * @param callable           $innerKeySelector
-     * @param callable           $resultSelector
+     * @param iterable $inner
+     * @param callable $outerKeySelector
+     * @param callable $innerKeySelector
+     * @param callable $resultSelector
      * @return EnumerableInterface
      */
     public function groupJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
@@ -373,8 +373,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable             $second
-     * @param EqualityComparerInterface|null $comparer
+     * @param iterable $second
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
     public function intersect($second, EqualityComparerInterface $comparer = null)
@@ -384,7 +384,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {
@@ -395,10 +395,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $inner
-     * @param callable           $outerKeySelector
-     * @param callable           $innerKeySelector
-     * @param callable           $resultSelector
+     * @param iterable $inner
+     * @param callable $outerKeySelector
+     * @param callable $innerKeySelector
+     * @param callable $resultSelector
      * @return EnumerableInterface
      */
     public function join($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
@@ -407,7 +407,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
+     * @param ?callable $predicate
      * @return mixed
      * @throws NoSuchElementException
      */
@@ -440,8 +440,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
-     * @param mixed         $defaultValue
+     * @param ?callable $predicate
+     * @param mixed $defaultValue
      * @return mixed
      */
     public function lastOrDefault(callable $predicate = null, $defaultValue = null)
@@ -473,8 +473,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $selector
-     * @return integer
+     * @param ?callable $selector
+     * @return int
      */
     public function max(callable $selector = null)
     {
@@ -531,8 +531,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $selector
-     * @return integer
+     * @param ?callable $selector
+     * @return int
      */
     public function min(callable $selector = null)
     {
@@ -581,7 +581,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array[]|\Traversable[] $sources
+     * @param iterable[] $sources
      * @return EnumerableInterface
      */
     public function onErrorResumeNext($second)
@@ -590,10 +590,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $inner
-     * @param callable           $outerKeySelector
-     * @param callable           $innerKeySelector
-     * @param callable           $resultSelector
+     * @param iterable $inner
+     * @param callable $outerKeySelector
+     * @param callable $innerKeySelector
+     * @param callable $resultSelector
      * @return EnumerableInterface
      */
     public function outerJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
@@ -602,7 +602,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $keySelector
+     * @param ?callable $keySelector
      * @return OrderedEnumerableInterface
      */
     public function orderBy(callable $keySelector = null)
@@ -612,7 +612,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $keySelector
+     * @param ?callable $keySelector
      * @return OrderedEnumerableInterface
      */
     public function orderByDescending(callable $keySelector = null)
@@ -622,7 +622,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer|null $count
+     * @param ?int $count
      * @return EnumerableInterface
      */
     public function repeat($count = null)
@@ -631,7 +631,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer|null $retryCount
+     * @param ?int $retryCount
      * @return EnumerableInterface
      */
     public function retry($retryCount = null)
@@ -648,7 +648,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param mixed    $seed
+     * @param mixed $seed
      * @param callable $func
      * @return mixed
      */
@@ -676,7 +676,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
+     * @param ?callable $predicate
      * @return mixed
      * @throws NoSuchElementException
      * @throws MoreThanOneElementException
@@ -732,7 +732,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $predicate
+     * @param ?callable $predicate
      * @return mixed
      */
     public function singleOrDefault(callable $predicate = null, $defaultValue = null)
@@ -786,7 +786,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer $count
+     * @param int $count
      * @return EnumerableInterface
      */
     public function skip($count)
@@ -798,7 +798,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer $count
+     * @param int $count
      * @return EnumerableInterface
      */
     public function skipLast($count)
@@ -828,8 +828,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable|null $selector
-     * @return integer
+     * @param ?callable $selector
+     * @return int
      */
     public function sum(callable $selector = null)
     {
@@ -842,7 +842,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer $count
+     * @param int $count
      * @return EnumerableInterface
      */
     public function take($count)
@@ -851,7 +851,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param integer $count
+     * @param int $count
      * @return EnumerableInterface
      */
     public function takeLast($count)
@@ -877,8 +877,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable      $keySelector
-     * @param callable|null $elementSelector
+     * @param callable $keySelector
+     * @param ?callable $elementSelector
      * @return array
      */
     public function toDictionary(callable $keySelector, callable $elementSelector = null)
@@ -888,8 +888,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable      $keySelector
-     * @param callable|null $elementSelector
+     * @param callable $keySelector
+     * @param ?callable $elementSelector
      * @return array
      */
     public function toLookup(callable $keySelector, callable $elementSelector = null)
@@ -907,8 +907,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable             $second
-     * @param EqualityComparerInterface|null $comparer
+     * @param iterable $second
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
     public function union($second, EqualityComparerInterface $comparer = null)
@@ -936,8 +936,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param array|\Traversable $second
-     * @param callable           $resultSelector
+     * @param iterable $second
+     * @param callable $resultSelector
      * @return EnumerableInterface
      */
     public function zip($second, callable $resultSelector)
@@ -946,7 +946,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return array|\Traversable
+     * @return iterable
      */
     public function getSource()
     {

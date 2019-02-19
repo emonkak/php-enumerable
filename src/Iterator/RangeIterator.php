@@ -10,18 +10,18 @@ class RangeIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var integer
+     * @var int
      */
     private $start;
 
     /**
-     * @var integer
+     * @var int
      */
     private $count;
 
     /**
-     * @param integer $start
-     * @param integer $count
+     * @param int $start
+     * @param int $count
      */
     public function __construct($start, $count)
     {

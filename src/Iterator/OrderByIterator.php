@@ -12,7 +12,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -22,7 +22,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     private $keySelector;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $descending;
 
@@ -32,10 +32,10 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     private $parentComparer;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $keySelector
-     * @param boolean            $descending
-     * @param callable|null      $parentComparer
+     * @param iterable $source
+     * @param callable $keySelector
+     * @param bool $descending
+     * @param ?callable $parentComparer
      */
     public function __construct($source, callable $keySelector, $descending, callable $parentComparer = null)
     {

@@ -15,13 +15,13 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
     private $element;
 
     /**
-     * @var integer|null
+     * @var ?int
      */
     private $count;
 
     /**
-     * @param mixed        $element
-     * @param integer|null $count
+     * @param mixed $element
+     * @param ?int $count
      */
     public function __construct($element, $count)
     {

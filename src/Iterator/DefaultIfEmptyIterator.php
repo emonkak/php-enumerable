@@ -10,7 +10,7 @@ class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
     private $defaultValue;
 
     /**
-     * @param array|\Traversable $source
-     * @param mixed              $defaultValue
+     * @param iterable $source
+     * @param mixed $defaultValue
      */
     public function __construct($source, $defaultValue)
     {

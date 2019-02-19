@@ -7,12 +7,12 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
     /**
-     * @param array|\Traversable $source
+     * @param iterable $source
      */
     public function __construct($source)
     {

@@ -10,7 +10,7 @@ class ScanIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -25,9 +25,9 @@ class ScanIterator implements \IteratorAggregate, EnumerableInterface
     private $func;
 
     /**
-     * @param array|\Traversable $source
-     * @param mixed              $seed
-     * @param callable           $func
+     * @param iterable $source
+     * @param mixed $seed
+     * @param callable $func
      */
     public function __construct($source, $seed, callable $func)
     {

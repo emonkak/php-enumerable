@@ -30,7 +30,7 @@ class GenerateIterator implements \IteratorAggregate, EnumerableInterface
     private $resultSelector;
 
     /**
-     * @param mixed    $initialState
+     * @param mixed $initialState
      * @param callable $condition
      * @param callable $iterate
      * @param callable $resultSelector

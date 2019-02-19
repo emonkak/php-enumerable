@@ -10,18 +10,18 @@ class RetryIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var integer|null
+     * @var ?int
      */
     private $retryCount;
 
     /**
-     * @param array|\Traversable $source
-     * @param integer|null       $retryCount
+     * @param iterable $source
+     * @param ?int $retryCount
      */
     public function __construct($source, $retryCount)
     {

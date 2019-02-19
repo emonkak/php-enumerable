@@ -17,7 +17,7 @@ use Emonkak\Enumerable\Iterator\ZipIterator;
 final class Enumerable
 {
     /**
-     * @param array|\Traversable $source
+     * @param iterable $source
      * @return EnumerableInterface
      */
     public static function from($source)
@@ -31,7 +31,7 @@ final class Enumerable
     }
 
     /**
-     * @param array[]|\Traversable[] ...$sources
+     * @param iterable[] ...$sources
      * @return EnumerableInterface
      */
     public static function _catch(...$sources)
@@ -40,7 +40,7 @@ final class Enumerable
     }
 
     /**
-     * @param array[]|\Traversable[] ...$sources
+     * @param iterable[] ...$sources
      * @return EnumerableInterface
      */
     public static function concat(...$sources)
@@ -58,7 +58,7 @@ final class Enumerable
     }
 
     /**
-     * @param mixed    $initialState
+     * @param mixed $initialState
      * @param callable $condition
      * @param callable $iterate
      * @param callable $resultSelector
@@ -70,9 +70,9 @@ final class Enumerable
     }
 
     /**
-     * @param callable           $condition
-     * @param array|\Traversable $thenSource
-     * @param array|\Traversable $elseSource
+     * @param callable $condition
+     * @param iterable $thenSource
+     * @param iterable $elseSource
      * @return EnumerableInterface
      */
     public static function _if(callable $condition, $thenSource, $elseSource)
@@ -81,7 +81,7 @@ final class Enumerable
     }
 
     /**
-     * @param array[]|\Traversable[] ...$sources
+     * @param iterable[] ...$sources
      * @return EnumerableInterface
      */
     public static function onErrorResumeNext(...$sources)
@@ -90,8 +90,8 @@ final class Enumerable
     }
 
     /**
-     * @param integer $start
-     * @param integer $count
+     * @param int $start
+     * @param int $count
      * @return EnumerableInterface
      */
     public static function range($start, $count)
@@ -100,8 +100,8 @@ final class Enumerable
     }
 
     /**
-     * @param mixed   $element
-     * @param integer $count
+     * @param mixed $element
+     * @param int $count
      * @return EnumerableInterface
      */
     public static function repeat($element, $count = null)
@@ -122,8 +122,8 @@ final class Enumerable
     }
 
     /**
-     * @param array|\Traversable $first
-     * @param array|\Traversable $second
+     * @param iterable $first
+     * @param iterable $second
      * @return EnumerableInterface
      */
     public static function zip($first, $second, callable $resultSelector)

@@ -11,12 +11,12 @@ class ZipIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $first;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $second;
 
@@ -26,9 +26,9 @@ class ZipIterator implements \IteratorAggregate, EnumerableInterface
     private $resultSelector;
 
     /**
-     * @param array|\Traversable $first
-     * @param array|\Traversable $second
-     * @param callable           $resultSelector
+     * @param iterable $first
+     * @param iterable $second
+     * @param callable $resultSelector
      */
     public function __construct($first, $second, $resultSelector)
     {

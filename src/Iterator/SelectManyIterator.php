@@ -10,7 +10,7 @@ class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
     private $collectionSelector;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $collectionSelector
+     * @param iterable $source
+     * @param callable $collectionSelector
      */
     public function __construct($source, callable $collectionSelector)
     {

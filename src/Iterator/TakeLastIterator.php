@@ -10,18 +10,18 @@ class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var integer
+     * @var int
      */
     private $count;
 
     /**
-     * @param array|\Traversable $source
-     * @param integer            $count
+     * @param iterable $source
+     * @param int $count
      */
     public function __construct($source, $count)
     {

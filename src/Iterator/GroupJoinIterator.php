@@ -12,12 +12,12 @@ class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $outer;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $inner;
 
@@ -37,11 +37,11 @@ class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
     private $resultSelector;
 
     /**
-     * @param array|\Traversable $outer
-     * @param array|\Traversable $inner
-     * @param callable           $outerKeySelector
-     * @param callable           $innerKeySelector
-     * @param callable           $resultSelector
+     * @param iterable $outer
+     * @param iterable $inner
+     * @param callable $outerKeySelector
+     * @param callable $innerKeySelector
+     * @param callable $resultSelector
      */
     public function __construct($outer, $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
     {

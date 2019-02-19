@@ -10,7 +10,7 @@ class DoIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class DoIterator implements \IteratorAggregate, EnumerableInterface
     private $action;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $action
+     * @param iterable $source
+     * @param callable $action
      */
     public function __construct($source, callable $action)
     {

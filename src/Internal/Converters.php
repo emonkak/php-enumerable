@@ -8,7 +8,7 @@ namespace Emonkak\Enumerable\Internal;
 final class Converters
 {
     /**
-     * @param array|\Traversable $source
+     * @param iterable $source
      * @return mixed[]
      */
     public static function toArray($source)
@@ -17,9 +17,9 @@ final class Converters
     }
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $keySelector
-     * @param callable           $elementSelector
+     * @param iterable $source
+     * @param callable $keySelector
+     * @param callable $elementSelector
      * @return array
      */
     public static function toDictionary($source, callable $keySelector, callable $elementSelector)
@@ -32,9 +32,9 @@ final class Converters
     }
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $keySelector
-     * @param callable           $elementSelector
+     * @param iterable $source
+     * @param callable $keySelector
+     * @param callable $elementSelector
      * @return array
      */
     public static function toLookup($source, callable $keySelector, callable $elementSelector)
@@ -55,7 +55,7 @@ final class Converters
     }
 
     /**
-     * @param array|\Traversable $source
+     * @param iterable $source
      * @return \Iterator
      */
     public static function toIterator($source)

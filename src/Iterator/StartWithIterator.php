@@ -10,7 +10,7 @@ class StartWithIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,7 +20,7 @@ class StartWithIterator implements \IteratorAggregate, EnumerableInterface
     private $elements;
 
     /**
-     * @param array|\Traversable $source
+     * @param iterable $source
      * @param mixed[]            $elements
      */
     public function __construct($source, array $elements)

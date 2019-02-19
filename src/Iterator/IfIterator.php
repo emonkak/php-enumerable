@@ -15,19 +15,19 @@ class IfIterator implements \IteratorAggregate, EnumerableInterface
     private $condition;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $thenSource;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $elseSource;
 
     /**
-     * @param callable           $condition
-     * @param array|\Traversable $thenSource
-     * @param array|\Traversable $elseSource
+     * @param callable $condition
+     * @param iterable $thenSource
+     * @param iterable $elseSource
      */
     public function __construct(callable $condition, $thenSource, $elseSource)
     {

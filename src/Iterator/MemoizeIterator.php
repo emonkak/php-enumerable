@@ -10,7 +10,7 @@ class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var \Iterator|null
+     * @var \Iterator
      */
     private $iterator;
 

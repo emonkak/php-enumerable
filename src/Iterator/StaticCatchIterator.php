@@ -10,12 +10,12 @@ class StaticCatchIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array[]|\Traversable[]
+     * @var iterable[]
      */
     private $sources;
 
     /**
-     * @param array[]|\Traversable[] $sources
+     * @param iterable[] $sources
      */
     public function __construct(array $sources)
     {

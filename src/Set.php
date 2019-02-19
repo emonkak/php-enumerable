@@ -52,7 +52,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
 
     /**
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public function add($value)
     {
@@ -73,7 +73,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param array|\Traversable $values
+     * @param iterable $values
      */
     public function addAll($values)
     {
@@ -84,7 +84,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
 
     /**
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public function contains($value)
     {
@@ -94,7 +94,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
 
     /**
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     public function remove($value)
     {

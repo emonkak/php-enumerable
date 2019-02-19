@@ -10,7 +10,7 @@ class CatchIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class CatchIterator implements \IteratorAggregate, EnumerableInterface
     private $handler;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $handler
+     * @param iterable $source
+     * @param callable $handler
      */
     public function __construct($source, callable $handler)
     {

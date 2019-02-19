@@ -10,7 +10,7 @@ class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
     private $predicate;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $predicate
+     * @param iterable $source
+     * @param callable $predicate
      */
     public function __construct($source, callable $predicate)
     {

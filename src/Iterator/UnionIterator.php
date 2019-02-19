@@ -12,12 +12,12 @@ class UnionIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $first;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $second;
 
@@ -27,8 +27,8 @@ class UnionIterator implements \IteratorAggregate, EnumerableInterface
     private $comparer;
 
     /**
-     * @param array|\Traversable        $first
-     * @param array|\Traversable        $second
+     * @param iterable $first
+     * @param iterable $second
      * @param EqualityComparerInterface $comparer
      */
     public function __construct($first, $second, EqualityComparerInterface $comparer)

@@ -10,7 +10,7 @@ class WhileIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var array|\Traversable
+     * @var iterable
      */
     private $source;
 
@@ -20,8 +20,8 @@ class WhileIterator implements \IteratorAggregate, EnumerableInterface
     private $condition;
 
     /**
-     * @param array|\Traversable $source
-     * @param callable           $condition
+     * @param iterable $source
+     * @param callable $condition
      */
     public function __construct($source, callable $condition)
     {

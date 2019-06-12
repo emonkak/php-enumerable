@@ -15,9 +15,9 @@ class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
     private $iterator;
 
     /**
-     * @var mixed[]|null
+     * @var mixed[]
      */
-    private $cachedElements;
+    private $cachedElements = [];
 
     /**
      * @param \Iterator $iterator
@@ -32,16 +32,15 @@ class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
      */
     public function getIterator()
     {
-        if ($this->cachedElements === null) {
-            $this->cachedElements = [];
-            $this->iterator->rewind();
-        }
-
         foreach ($this->cachedElements as $element) {
             yield $element;
         }
 
         if ($this->iterator !== null) {
+            if (empty($this->cachedElements)) {
+                $this->iterator->rewind();
+            }
+
             while ($this->iterator->valid()) {
                 $element = $this->iterator->current();
                 $this->cachedElements[] = $element;

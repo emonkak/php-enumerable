@@ -148,7 +148,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable $predicate
+     * @param ?callable $predicate
      * @return int
      */
     public function count(callable $predicate = null)
@@ -328,7 +328,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param ?callable $action
+     * @param callable $action
      */
     public function _forEach(callable $action)
     {
@@ -339,8 +339,8 @@ trait EnumerableExtensions
 
     /**
      * @param callable $keySelector
-     * @param callable $elementSelector
-     * @param callable $resultSelector
+     * @param ?callable $elementSelector
+     * @param ?callable $resultSelector
      * @return EnumerableInterface
      */
     public function groupBy(callable $keySelector, callable $elementSelector = null, callable $resultSelector = null)
@@ -490,7 +490,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable $selector
+     * @param callable $keySelector
      * @return mixed[]
      */
     public function maxBy(callable $keySelector)
@@ -548,7 +548,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable $selector
+     * @param callable $keySelector
      * @return mixed[]
      */
     public function minBy(callable $keySelector)
@@ -581,7 +581,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable[] $sources
+     * @param iterable[] $second
      * @return EnumerableInterface
      */
     public function onErrorResumeNext($second)

@@ -2,9 +2,6 @@
 
 namespace Emonkak\Enumerable;
 
-/**
- * @internal
- */
 class EqualityComparer implements EqualityComparerInterface
 {
     /**

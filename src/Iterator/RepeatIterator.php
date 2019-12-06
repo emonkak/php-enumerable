@@ -15,7 +15,7 @@ class RepeatIterator implements \IteratorAggregate, EnumerableInterface
     private $source;
 
     /**
-     * @var int
+     * @var ?int
      */
     private $count;
 

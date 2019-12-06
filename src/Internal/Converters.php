@@ -2,9 +2,6 @@
 
 namespace Emonkak\Enumerable\Internal;
 
-/**
- * @internal
- */
 final class Converters
 {
     /**
@@ -63,10 +60,10 @@ final class Converters
         if ($source instanceof \Iterator) {
             return $source;
         }
-        if ($source instanceof \Traversable) {
-            return new \IteratorIterator($source);
+        if (is_array($source)) {
+            return new \ArrayIterator($source);
         }
-        return new \ArrayIterator($source);
+        return new \IteratorIterator($source);
     }
 
     /**

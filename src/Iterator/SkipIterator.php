@@ -5,12 +5,15 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template T
+ */
 class SkipIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<T>
      */
     private $source;
 
@@ -20,7 +23,7 @@ class SkipIterator implements \IteratorAggregate, EnumerableInterface
     private $count;
 
     /**
-     * @param iterable $source
+     * @param iterable<T> $source
      * @param int $count
      */
     public function __construct($source, $count)
@@ -30,10 +33,11 @@ class SkipIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @override
      */
     public function getIterator()
     {
+        // @phan-suppress-next-line PhanTypeArraySuspicious
         if (is_array($this->source) && isset($this->source[0])) {
             $count = $this->count;
             $length = count($this->source);

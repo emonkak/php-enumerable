@@ -5,9 +5,6 @@ namespace Emonkak\Enumerable\Internal;
 use Emonkak\Enumerable\Exception\MoreThanOneElementException;
 use Emonkak\Enumerable\Exception\NoSuchElementException;
 
-/**
- * @internal
- */
 final class Errors
 {
     /**

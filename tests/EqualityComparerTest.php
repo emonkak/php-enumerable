@@ -21,7 +21,7 @@ class EqualityComparerTest extends \PHPUnit_Framework_TestCase
             ['foo', 'bar', false],
             [123, 123, true],
             [123, '123', false],
-            [new \stdClass(), new \stdClass(), false],
+            [new \stdClass(), new \stdClass(), true],
             [['foo' => 123], ['foo' => 123], true],
         ];
     }

@@ -49,7 +49,7 @@ interface EnumerableInterface extends \Traversable
     public function concat($second);
 
     /**
-     * @param callable $predicate
+     * @param ?callable $predicate
      * @return int
      */
     public function count(callable $predicate = null);
@@ -125,14 +125,14 @@ interface EnumerableInterface extends \Traversable
     public function firstOrDefault(callable $predicate = null, $defaultValue = null);
 
     /**
-     * @param ?callable $action
+     * @param callable $action
      */
     public function _forEach(callable $action);
 
     /**
      * @param callable $keySelector
-     * @param callable $elementSelector
-     * @param callable $resultSelector
+     * @param ?callable $elementSelector
+     * @param ?callable $resultSelector
      * @return EnumerableInterface
      */
     public function groupBy(callable $keySelector, callable $elementSelector = null, callable $resultSelector = null);
@@ -192,7 +192,7 @@ interface EnumerableInterface extends \Traversable
     public function max(callable $selector = null);
 
     /**
-     * @param callable $selector
+     * @param callable $keySelector
      * @return mixed[]
      */
     public function maxBy(callable $keySelector);
@@ -209,13 +209,13 @@ interface EnumerableInterface extends \Traversable
     public function min(callable $selector = null);
 
     /**
-     * @param callable $selector
+     * @param callable $keySelector
      * @return mixed[]
      */
     public function minBy(callable $keySelector);
 
     /**
-     * @param iterable[] $sources
+     * @param iterable[] $second
      * @return EnumerableInterface
      */
     public function onErrorResumeNext($second);

@@ -2,9 +2,6 @@
 
 namespace Emonkak\Enumerable\Internal;
 
-/**
- * @internal
- */
 final class Converters
 {
     /**
@@ -44,11 +41,7 @@ final class Converters
         foreach ($source as $element) {
             $key = $keySelector($element);
             $element = $elementSelector($element);
-            if (isset($lookup[$key])) {
-                $lookup[$key][] = $element;
-            } else {
-                $lookup[$key] = [$element];
-            }
+            $lookup[$key][] = $element;
         }
 
         return $lookup;
@@ -63,10 +56,10 @@ final class Converters
         if ($source instanceof \Iterator) {
             return $source;
         }
-        if ($source instanceof \Traversable) {
-            return new \IteratorIterator($source);
+        if (is_array($source)) {
+            return new \ArrayIterator($source);
         }
-        return new \ArrayIterator($source);
+        return new \IteratorIterator($source);
     }
 
     /**

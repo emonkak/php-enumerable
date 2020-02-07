@@ -88,7 +88,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     /**
      * @param mixed $key
      * @param mixed &$value
-     * @return mixed
+     * @return bool
      */
     public function tryGet($key, &$value)
     {

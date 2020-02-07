@@ -2,9 +2,6 @@
 
 namespace Emonkak\Enumerable\Internal;
 
-/**
- * @internal
- */
 final class IdentityFunction
 {
     public static function apply($x)

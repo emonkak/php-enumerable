@@ -4,7 +4,7 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
-use Emonkak\Enumerable\Internal\Converters;
+use Emonkak\Enumerable\EqualityComparerInterface;
 
 class GroupByIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -31,17 +31,24 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     private $resultSelector;
 
     /**
+     * @var EqualityComparerInterface
+     */
+    private $comparer;
+
+    /**
      * @param iterable $source
      * @param callable $keySelector
      * @param callable $elementSelector
      * @param callable $resultSelector
+     * @param EqualityComparerInterface $comparer
      */
-    public function __construct($source, callable $keySelector, callable $elementSelector, callable $resultSelector)
+    public function __construct($source, callable $keySelector, callable $elementSelector, callable $resultSelector, EqualityComparerInterface $comparer)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
         $this->elementSelector = $elementSelector;
         $this->resultSelector = $resultSelector;
+        $this->comparer = $comparer;
     }
 
     /**
@@ -53,9 +60,21 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
         $elementSelector = $this->elementSelector;
         $resultSelector = $this->resultSelector;
 
-        $lookup = Converters::toLookup($this->source, $keySelector, $elementSelector);
+        $lookup = [];
 
-        foreach ($lookup as $key => $elements) {
+        foreach ($this->source as $element) {
+            $key = $keySelector($element);
+            $hash = $this->comparer->hash($key);
+            $element = $elementSelector($element);
+
+            if (isset($lookup[$hash])) {
+                $lookup[$hash][1][] = $element;
+            } else {
+                $lookup[$hash] = [$key, [$element]];
+            }
+        }
+
+        foreach ($lookup as list($key, $elements)) {
             yield $resultSelector($key, $elements);
         }
     }

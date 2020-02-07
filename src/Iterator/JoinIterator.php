@@ -4,8 +4,7 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
-use Emonkak\Enumerable\Internal\Converters;
-use Emonkak\Enumerable\Internal\IdentityFunction;
+use Emonkak\Enumerable\EqualityComparerInterface;
 
 class JoinIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -37,19 +36,26 @@ class JoinIterator implements \IteratorAggregate, EnumerableInterface
     private $resultSelector;
 
     /**
+     * @var EqualityComparerInterface
+     */
+    private $comparer;
+
+    /**
      * @param iterable $outer
      * @param iterable $inner
      * @param callable $outerKeySelector
      * @param callable $innerKeySelector
      * @param callable $resultSelector
+     * @param EqualityComparerInterface $comparer
      */
-    public function __construct($outer, $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
+    public function __construct($outer, $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, EqualityComparerInterface $comparer)
     {
         $this->outer = $outer;
         $this->inner = $inner;
         $this->outerKeySelector = $outerKeySelector;
         $this->innerKeySelector = $innerKeySelector;
         $this->resultSelector = $resultSelector;
+        $this->comparer = $comparer;
     }
 
     /**
@@ -61,12 +67,20 @@ class JoinIterator implements \IteratorAggregate, EnumerableInterface
         $innerKeySelector = $this->innerKeySelector;
         $resultSelector = $this->resultSelector;
 
-        $lookup = Converters::toLookup($this->inner, $innerKeySelector, [IdentityFunction::class, 'apply']);
+        $lookup = [];
+
+        foreach ($this->inner as $innerElement) {
+            $key = $innerKeySelector($innerElement);
+            $hash = $this->comparer->hash($key);
+            $lookup[$hash][] = $innerElement;
+        }
 
         foreach ($this->outer as $outerElement) {
             $key = $outerKeySelector($outerElement);
-            if (isset($lookup[$key])) {
-                foreach ($lookup[$key] as $innerElement) {
+            $hash = $this->comparer->hash($key);
+
+            if (isset($lookup[$hash])) {
+                foreach ($lookup[$hash] as $innerElement) {
                     yield $resultSelector($outerElement, $innerElement);
                 }
             }

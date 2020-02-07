@@ -41,11 +41,7 @@ final class Converters
         foreach ($source as $element) {
             $key = $keySelector($element);
             $element = $elementSelector($element);
-            if (isset($lookup[$key])) {
-                $lookup[$key][] = $element;
-            } else {
-                $lookup[$key] = [$element];
-            }
+            $lookup[$key][] = $element;
         }
 
         return $lookup;

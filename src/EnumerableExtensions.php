@@ -341,15 +341,17 @@ trait EnumerableExtensions
      * @param callable $keySelector
      * @param ?callable $elementSelector
      * @param ?callable $resultSelector
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
-    public function groupBy(callable $keySelector, callable $elementSelector = null, callable $resultSelector = null)
+    public function groupBy(callable $keySelector, callable $elementSelector = null, callable $resultSelector = null, EqualityComparerInterface $comparer = null)
     {
         $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
         $resultSelector = $resultSelector ?: function($k, $vs) {
             return [$k, $vs];
         };
-        return new GroupByIterator($this->getSource(), $keySelector, $elementSelector, $resultSelector);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new GroupByIterator($this->getSource(), $keySelector, $elementSelector, $resultSelector, $comparer);
     }
 
     /**
@@ -357,11 +359,13 @@ trait EnumerableExtensions
      * @param callable $outerKeySelector
      * @param callable $innerKeySelector
      * @param callable $resultSelector
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
-    public function groupJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
+    public function groupJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, EqualityComparerInterface $comparer = null)
     {
-        return new GroupJoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new GroupJoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
     }
 
     /**
@@ -399,11 +403,13 @@ trait EnumerableExtensions
      * @param callable $outerKeySelector
      * @param callable $innerKeySelector
      * @param callable $resultSelector
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
-    public function join($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
+    public function join($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, EqualityComparerInterface $comparer = null)
     {
-        return new JoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new JoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
     }
 
     /**
@@ -594,11 +600,13 @@ trait EnumerableExtensions
      * @param callable $outerKeySelector
      * @param callable $innerKeySelector
      * @param callable $resultSelector
+     * @param ?EqualityComparerInterface $comparer
      * @return EnumerableInterface
      */
-    public function outerJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector)
+    public function outerJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, EqualityComparerInterface $comparer = null)
     {
-        return new OuterJoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector);
+        $comparer = $comparer ?: EqualityComparer::getInstance();
+        return new OuterJoinIterator($this->getSource(), $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
     }
 
     /**

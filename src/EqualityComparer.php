@@ -32,7 +32,7 @@ class EqualityComparer implements EqualityComparerInterface
      */
     public function equals($first, $second)
     {
-        return $first === $second;
+        return is_scalar($first) ? $first === $second : $first == $second;
     }
 
     /**
@@ -63,7 +63,7 @@ class EqualityComparer implements EqualityComparerInterface
                 return 'a' . sha1(serialize($value));
 
             case 'object':
-                return 'o' . spl_object_hash($value);
+                return 'o' . sha1(serialize($value));
 
             case 'NULL':
                 return 'n';

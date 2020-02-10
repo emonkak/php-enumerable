@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
@@ -7,17 +9,21 @@ use Emonkak\Enumerable\Internal\Converters;
 use Emonkak\Enumerable\Internal\IdentityFunction;
 use Emonkak\Enumerable\OrderedEnumerableInterface;
 
+/**
+ * @template TElement
+ * @template TKey
+ */
 class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TElement>
      */
     private $source;
 
     /**
-     * @var callable
+     * @var callable(TElement):TKey
      */
     private $keySelector;
 
@@ -27,17 +33,16 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     private $descending;
 
     /**
-     * @var callable
+     * @var callable(TElement,TElement):int
      */
     private $parentComparer;
 
     /**
-     * @param iterable $source
-     * @param callable $keySelector
-     * @param bool $descending
-     * @param ?callable $parentComparer
+     * @param iterable<TElement> $source
+     * @param callable(TElement):TKey $keySelector
+     * @param ?callable(TElement,TElement):int $parentComparer
      */
-    public function __construct($source, callable $keySelector, $descending, callable $parentComparer = null)
+    public function __construct(iterable $source, callable $keySelector, bool $descending, ?callable $parentComparer = null)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
@@ -47,10 +52,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
         };
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $array = Converters::toArray($this->source);
         $comparer = $this->getComparer();
@@ -58,20 +60,14 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
         return new \ArrayIterator($array);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function thenBy(callable $keySelector = null)
+    public function thenBy(callable $keySelector = null): OrderedEnumerableInterface
     {
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, false, $comparer);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function thenByDescending(callable $keySelector = null)
+    public function thenByDescending(callable $keySelector = null): OrderedEnumerableInterface
     {
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
@@ -79,9 +75,9 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     }
 
     /**
-     * @return callable
+     * @return callable(TElement,TElement):int
      */
-    private function getComparer()
+    private function getComparer(): callable
     {
         $keySelector = $this->keySelector;
         $parentComparer = $this->parentComparer;

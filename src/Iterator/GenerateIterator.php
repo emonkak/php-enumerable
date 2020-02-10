@@ -1,39 +1,45 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TState
+ * @template TResult
+ */
 class GenerateIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var mixed
+     * @var TState
      */
     private $initialState;
 
     /**
-     * @var callable
+     * @var callable(TState):bool
      */
     private $condition;
 
     /**
-     * @var callable
+     * @var callable(TState):TState
      */
     private $iterate;
 
     /**
-     * @var callable
+     * @var callable(TState):TResult
      */
     private $resultSelector;
 
     /**
-     * @param mixed $initialState
-     * @param callable $condition
-     * @param callable $iterate
-     * @param callable $resultSelector
+     * @param TState $initialState
+     * @param callable(TState):bool $condition
+     * @param callable(TState):TState $iterate
+     * @param callable(TState):TResult $resultSelector
      */
     public function __construct($initialState, callable $condition, callable $iterate, callable $resultSelector)
     {
@@ -43,10 +49,7 @@ class GenerateIterator implements \IteratorAggregate, EnumerableInterface
         $this->resultSelector = $resultSelector;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $condition = $this->condition;
         $iterate = $this->iterate;

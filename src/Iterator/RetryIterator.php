@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class RetryIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
@@ -20,19 +25,16 @@ class RetryIterator implements \IteratorAggregate, EnumerableInterface
     private $retryCount;
 
     /**
-     * @param iterable $source
+     * @param iterable<TSource> $source
      * @param ?int $retryCount
      */
-    public function __construct($source, $retryCount)
+    public function __construct(iterable $source, ?int $retryCount)
     {
         $this->source = $source;
         $this->retryCount = $retryCount;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $retryCount = $this->retryCount !== null ? $this->retryCount : INF;
         $error = null;

@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\Dictionary;
 use Emonkak\Enumerable\EqualityComparerInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Emonkak\Enumerable\Dictionary
  */
-class DictionaryTest extends \PHPUnit_Framework_TestCase
+class DictionaryTest extends TestCase
 {
     public function testCreate()
     {

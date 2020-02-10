@@ -1,48 +1,56 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 use Emonkak\Enumerable\EqualityComparerInterface;
 
+/**
+ * @template TSource
+ * @template TKey
+ * @template TElement
+ * @template TResult
+ */
 class GroupByIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var callable
+     * @var callable(TSource):TKey
      */
     private $keySelector;
 
     /**
-     * @var callable
+     * @var callable(TSource):TElement
      */
     private $elementSelector;
 
     /**
-     * @var callable
+     * @var callable(TKey,TElement[]):TResult
      */
     private $resultSelector;
 
     /**
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TKey>
      */
     private $comparer;
 
     /**
-     * @param iterable $source
-     * @param callable $keySelector
-     * @param callable $elementSelector
-     * @param callable $resultSelector
-     * @param EqualityComparerInterface $comparer
+     * @param iterable<TSource> $source
+     * @param callable(TSource):TKey $keySelector
+     * @param callable(TSource):TElement $elementSelector
+     * @param callable(TKey,TElement[]):TResult $resultSelector
+     * @param EqualityComparerInterface<TKey> $comparer
      */
-    public function __construct($source, callable $keySelector, callable $elementSelector, callable $resultSelector, EqualityComparerInterface $comparer)
+    public function __construct(iterable $source, callable $keySelector, callable $elementSelector, callable $resultSelector, EqualityComparerInterface $comparer)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
@@ -51,10 +59,7 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $keySelector = $this->keySelector;
         $elementSelector = $this->elementSelector;

@@ -1,38 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class SkipWhileIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var callable
+     * @var callable(TSource):bool
      */
     private $predicate;
 
     /**
-     * @param iterable $source
-     * @param callable $predicate
+     * @param iterable<TSource> $source
+     * @param callable(TSource):bool $predicate
      */
-    public function __construct($source, callable $predicate)
+    public function __construct(iterable $source, callable $predicate)
     {
         $this->source = $source;
         $this->predicate = $predicate;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $predicate = $this->predicate;
         $skipped = false;

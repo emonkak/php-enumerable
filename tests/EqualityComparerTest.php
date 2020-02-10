@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\EqualityComparer;
+use PHPUnit\Framework\TestCase;
 
-class EqualityComparerTest extends \PHPUnit_Framework_TestCase
+class EqualityComparerTest extends TestCase
 {
     /**
      * @dataProvider providerEquals
@@ -26,27 +29,23 @@ class EqualityComparerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerHash
-     */
-    public function testHash($value)
+    public function testHash()
     {
-        $this->assertInternalType('string', EqualityComparer::getInstance()->hash($value));
-    }
+        $comparer = EqualityComparer::getInstance();
 
-    public function providerHash()
-    {
-        return [
-            ['foo'],
-            ['123'],
-            [123],
-            [123.0],
-            [true],
-            [null],
-            [new \stdClass()],
-            [['foo' => 'bar']],
-            [str_repeat('abracadabra', 100)],
+        $hashes = [
+            $comparer->hash('foo'),
+            $comparer->hash('123'),
+            $comparer->hash(123),
+            $comparer->hash(123.0),
+            $comparer->hash(true),
+            $comparer->hash(null),
+            $comparer->hash(new \stdClass()),
+            $comparer->hash(['foo' => 'bar']),
+            $comparer->hash(str_repeat('abracadabra', 100)),
         ];
+
+        $this->assertEquals($hashes, array_unique($hashes));
     }
 
     /**

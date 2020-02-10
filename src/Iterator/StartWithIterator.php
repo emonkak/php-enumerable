@@ -1,38 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class StartWithIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var mixed[]
+     * @var TSource[]
      */
     private $elements;
 
     /**
-     * @param iterable $source
-     * @param mixed[]            $elements
+     * @param iterable<TSource> $source
+     * @param TSource[] $elements
      */
-    public function __construct($source, array $elements)
+    public function __construct(iterable $source, array $elements)
     {
         $this->source = $source;
         $this->elements = $elements;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         foreach ($this->elements as $element) {
             yield $element;

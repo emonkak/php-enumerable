@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class BufferIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
@@ -25,21 +30,18 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
     private $skip;
 
     /**
-     * @param iterable $source
+     * @param iterable<TSource> $source
      * @param int $count
      * @param int $skip
      */
-    public function __construct($source, $count, $skip)
+    public function __construct(iterable $source, int $count, int $skip)
     {
         $this->source = $source;
         $this->count = $count;
         $this->skip = $skip;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $buffer = [];
         $skipped = 0;

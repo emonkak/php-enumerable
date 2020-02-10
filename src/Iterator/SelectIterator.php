@@ -1,38 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ * @template TResult
+ */
 class SelectIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var callable
+     * @var callable(TSource):TResult
      */
     private $selector;
 
     /**
-     * @param iterable $source
-     * @param callable $selector
+     * @param iterable<TSource> $source
+     * @param callable(TSource):TResult $selector
      */
-    public function __construct($source, callable $selector)
+    public function __construct(iterable $source, callable $selector)
     {
         $this->source = $source;
         $this->selector = $selector;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $selector = $this->selector;
         foreach ($this->source as $element) {

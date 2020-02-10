@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Internal;
 
 use Emonkak\Enumerable\Exception\MoreThanOneElementException;
@@ -7,27 +9,17 @@ use Emonkak\Enumerable\Exception\NoSuchElementException;
 
 final class Errors
 {
-    /**
-     * @param string $s
-     * @return \OutOfRangeException
-     */
-    public static function argumentOutOfRange($s)
+    public static function argumentOutOfRange(string $parameterName): \Exception
     {
-        return new \OutOfRangeException("Index was out of range must be nonnegative and less than the size of the collection Parameter name: $s");
+        return new \OutOfRangeException("Index was out of range must be nonnegative and less than the size of the collection Parameter name: $parameterName");
     }
 
-    /**
-     * @return MoreThanOneElementException
-     */
-    public static function moreThanOneMatch()
+    public static function moreThanOneMatch(): \Exception
     {
         return new MoreThanOneElementException('Sequence contains more than one element');
     }
 
-    /**
-     * @return NoSuchElementException
-     */
-    public static function noElements()
+    public static function noElements(): \Exception
     {
         return new NoSuchElementException('Sequence contains no elements');
     }

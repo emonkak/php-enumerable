@@ -1,389 +1,426 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable;
 
+use Emonkak\Enumerable\Exception\MoreThanOneElementException;
+use Emonkak\Enumerable\Exception\NoSuchElementException;
+
+/**
+ * @template TSource
+ */
 interface EnumerableInterface extends \Traversable
 {
     /**
-     * @param mixed $seed
-     * @param callable $func
-     * @return mixed
+     * @template TResult
+     * @param TResult $seed
+     * @param callable(TResult,TSource):TResult $func
+     * @return TResult
      */
     public function aggregate($seed, callable $func);
 
     /**
-     * @param ?callable $predicate
+     * @param ?callable(TSource):bool $predicate
+     */
+    public function all(?callable $predicate = null): bool;
+
+    /**
+     * @param ?callable(TSource):bool $predicate
      * @return bool
      */
-    public function all(callable $predicate = null);
+    public function any(?callable $predicate = null): bool;
 
     /**
-     * @param ?callable $predicate
-     * @return bool
+     * @param ?callable(TSource):(int|float) $selector
+     * @return int|float
+     * @throws NoSuchElementException
      */
-    public function any(callable $predicate = null);
+    public function average(?callable $selector = null);
 
     /**
-     * @param ?callable $selector
-     * @return bool
+     * @return EnumerableInterface<TSource>
      */
-    public function average(callable $selector = null);
+    public function buffer(int $count, ?int $skip = null): EnumerableInterface;
 
     /**
-     * @param int $count
-     * @param ?int $skip
-     * @return EnumerableInterface
+     * @param callable(\Exception):(iterable<TSource>) $handler
+     * @return EnumerableInterface<TSource>
      */
-    public function buffer($count, $skip = null);
+    public function catch(callable $handler): EnumerableInterface;
 
     /**
-     * @param callable $handler
-     * @return EnumerableInterface
+     * @param iterable<TSource> ...$sources
+     * @return EnumerableInterface<TSource>
      */
-    public function _catch(callable $handler);
+    public function concat(iterable ...$sources): EnumerableInterface;
 
     /**
-     * @param iterable $second
-     * @return EnumerableInterface
-     */
-    public function concat($second);
-
-    /**
-     * @param ?callable $predicate
+     * @param ?callable(TSource):bool $predicate
      * @return int
      */
-    public function count(callable $predicate = null);
+    public function count(?callable $predicate = null): int;
 
     /**
-     * @param mixed $defaultValue
-     * @return EnumerableInterface
+     * @param TSource $defaultValue
+     * @return EnumerableInterface<TSource>
      */
-    public function defaultIfEmpty($defaultValue);
+    public function defaultIfEmpty($defaultValue): EnumerableInterface;
 
     /**
-     * @param ?callable $keySelector
-     * @param ?EqualityComparerInterface $comparer
-     * @return EnumerableInterface
+     * @template TKey
+     * @param ?callable(TSource):TKey $keySelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TSource>
      */
-    public function distinct(callable $keySelector = null, EqualityComparerInterface $comparer = null);
+    public function distinct(?callable $keySelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @param ?callable $keySelector
-     * @return EnumerableInterface
+     * @template TKey
+     * @param ?callable(TSource):TKey $keySelector
+     * @return EnumerableInterface<TSource>
      */
-    public function distinctUntilChanged(callable $keySelector = null);
+    public function distinctUntilChanged(?callable $keySelector = null): EnumerableInterface;
 
     /**
-     * @param callable $action
-     * @return EnumerableInterface
+     * @param callable(TSource):void $action
+     * @return EnumerableInterface<TSource>
      */
-    public function _do(callable $action);
+    public function do(callable $action): EnumerableInterface;
 
     /**
-     * @param callable $condition
-     * @return EnumerableInterface
+     * @param callable():bool $condition
+     * @return EnumerableInterface<TSource>
      */
-    public function doWhile(callable $condition);
+    public function doWhile(callable $condition): EnumerableInterface;
 
     /**
-     * @param int $index
-     * @return mixed
+     * @return TSource
+     * @throws NoSuchElementException
      */
-    public function elementAt($index);
+    public function elementAt(int $index);
 
     /**
-     * @param int $index
-     * @param mixed $defaultValue
-     * @return mixed
+     * @template TDefault
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
-    public function elementAtOrDefault($index, $defaultValue = null);
+    public function elementAtOrDefault(int $index, $defaultValue = null);
 
     /**
-     * @param iterable $second
-     * @param ?EqualityComparerInterface $comparer
-     * @return EnumerableInterface
+     * @param iterable<TSource> $second
+     * @param ?EqualityComparerInterface<TSource> $comparer
+     * @return EnumerableInterface<TSource>
      */
-    public function except($second, EqualityComparerInterface $comparer = null);
+    public function except(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @param callable $finallyAction
-     * @return EnumerableInterface
+     * @param callable():void $finallyAction
+     * @return EnumerableInterface<TSource>
      */
-    public function _finally(callable $finallyAction);
+    public function finally(callable $finallyAction): EnumerableInterface;
 
     /**
-     * @param ?callable $predicate
-     * @return mixed
+     * @param ?callable(TSource):bool $predicate
+     * @return TSource
+     * @throws NoSuchElementException
      */
-    public function first(callable $predicate = null);
+    public function first(?callable $predicate = null);
 
     /**
-     * @param ?callable $predicate
-     * @param mixed $defaultValue
-     * @return mixed
+     * @template TDefault
+     * @param ?callable(TSource):bool $predicate
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
-    public function firstOrDefault(callable $predicate = null, $defaultValue = null);
+    public function firstOrDefault(?callable $predicate = null, $defaultValue = null);
 
     /**
-     * @param callable $action
+     * @param callable(TSource):void $action
      */
-    public function _forEach(callable $action);
+    public function forEach(callable $action): void;
 
     /**
-     * @param callable $keySelector
-     * @param ?callable $elementSelector
-     * @param ?callable $resultSelector
-     * @return EnumerableInterface
+     * @template TKey
+     * @template TElement
+     * @template TResult
+     * @param callable(TSource):TKey $keySelector
+     * @param ?callable(TSource):TElement $elementSelector
+     * @param ?callable(TKey,TElement[]):TResult $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
-    public function groupBy(callable $keySelector, callable $elementSelector = null, callable $resultSelector = null);
+    public function groupBy(callable $keySelector, ?callable $elementSelector = null, ?callable $resultSelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @param iterable $inner
-     * @param callable $outerKeySelector
-     * @param callable $innerKeySelector
-     * @param callable $resultSelector
-     * @return EnumerableInterface
+     * @template TInner
+     * @template TKey
+     * @template TResult
+     * @param iterable<TInner> $inner
+     * @param callable(TSource):TKey $outerKeySelector
+     * @param callable(TInner):TKey $innerKeySelector
+     * @param callable(TSource,TInner[]):TResult $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
-    public function groupJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector);
+    public function groupJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function ignoreElements();
+    public function ignoreElements(): EnumerableInterface;
 
     /**
-     * @param iterable $second
-     * @param ?EqualityComparerInterface $comparer
-     * @return EnumerableInterface
+     * @param iterable<TSource> $second
+     * @param ?EqualityComparerInterface<TSource> $comparer
+     * @return EnumerableInterface<TSource>
      */
-    public function intersect($second, EqualityComparerInterface $comparer = null);
+    public function intersect(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
+
+    public function isEmpty(): bool;
 
     /**
-     * @return bool
+     * @template TInner
+     * @template TKey
+     * @template TResult
+     * @param iterable<TInner> $inner
+     * @param callable(TSource):TKey $outerKeySelector
+     * @param callable(TInner):TKey $innerKeySelector
+     * @param callable(TSource,TInner):TResult $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
-    public function isEmpty();
+    public function join(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @param iterable $inner
-     * @param callable $outerKeySelector
-     * @param callable $innerKeySelector
-     * @param callable $resultSelector
-     * @return EnumerableInterface
+     * @param ?callable(TSource):bool $predicate
+     * @return TSource
+     * @throws NoSuchElementException
      */
-    public function join($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector);
+    public function last(?callable $predicate = null);
 
     /**
-     * @param ?callable $predicate
-     * @return mixed
+     * @param ?callable(TSource):bool $predicate
+     * @return TSource
      */
-    public function last(callable $predicate = null);
+    public function lastOrDefault(?callable $predicate = null, $defaultValue = null);
 
     /**
-     * @param ?callable $predicate
-     * @param mixed $defaultValue
-     * @return mixed
+     * @param ?callable(TSource):(int|float) $selector
+     * @return int|float
      */
-    public function lastOrDefault(callable $predicate = null, $defaultValue = null);
+    public function max(?callable $selector = null);
 
     /**
-     * @param ?callable $selector
-     * @return int
+     * @template TKey
+     * @param callable(TSource):TKey $keySelector
+     * @return TSource[]
      */
-    public function max(callable $selector = null);
+    public function maxBy(callable $keySelector): array;
 
     /**
-     * @param callable $keySelector
-     * @return mixed[]
+     * @return EnumerableInterface<TSource>
      */
-    public function maxBy(callable $keySelector);
+    public function memoize(): EnumerableInterface;
 
     /**
-     * @return EnumerableInterface
+     * @param ?callable(TSource):(int|float) $selector
+     * @return int|float
      */
-    public function memoize();
+    public function min(?callable $selector = null);
 
     /**
-     * @param ?callable $selector
-     * @return int
+     * @template TKey
+     * @param callable(TSource):TKey $keySelector
+     * @return TSource[]
      */
-    public function min(callable $selector = null);
+    public function minBy(callable $keySelector): array;
 
     /**
-     * @param callable $keySelector
-     * @return mixed[]
+     * @param iterable<TSource> ...$sources
+     * @return EnumerableInterface<TSource>
      */
-    public function minBy(callable $keySelector);
+    public function onErrorResumeNext(iterable ...$sources): EnumerableInterface;
 
     /**
-     * @param iterable[] $second
-     * @return EnumerableInterface
+     * @template TInner
+     * @template TKey
+     * @template TResult
+     * @param iterable<TInner> $inner
+     * @param callable(TSource):TKey $outerKeySelector
+     * @param callable(TInner):TKey $innerKeySelector
+     * @param callable(TSource,TInner|null):TResult $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
-    public function onErrorResumeNext($second);
+    public function outerJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @param iterable $inner
-     * @param callable $outerKeySelector
-     * @param callable $innerKeySelector
-     * @param callable $resultSelector
-     * @return EnumerableInterface
+     * @template TKey
+     * @param ?callable(TSource):TKey $keySelector
+     * @return OrderedEnumerableInterface<TSource,TKey>
      */
-    public function outerJoin($inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector);
+    public function orderBy(?callable $keySelector = null): OrderedEnumerableInterface;
 
     /**
-     * @param ?callable $keySelector
-     * @return OrderedEnumerableInterface
+     * @template TKey
+     * @param ?callable(TSource):TKey $keySelector
+     * @return OrderedEnumerableInterface<TSource,TKey>
      */
-    public function orderBy(callable $keySelector = null);
-
-    /**
-     * @param ?callable $keySelector
-     * @return OrderedEnumerableInterface
-     */
-    public function orderByDescending(callable $keySelector = null);
+    public function orderByDescending(?callable $keySelector = null): OrderedEnumerableInterface;
 
     /**
      * @param ?int $count
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function repeat($count = null);
+    public function repeat(?int $count = null): EnumerableInterface;
 
     /**
      * @param ?int $retryCount
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function retry($retryCount = null);
+    public function retry(?int $retryCount = null): EnumerableInterface;
 
     /**
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function reverse();
+    public function reverse(): EnumerableInterface;
 
     /**
-     * @param mixed $seed
-     * @param callable $func
-     * @return mixed
+     * @template TAccumulate
+     * @param TAccumulate $seed
+     * @param callable(TAccumulate,TSource):TAccumulate $func
+     * @return TAccumulate
      */
     public function scan($seed, callable $func);
 
     /**
-     * @param callable $selector
-     * @return EnumerableInterface
+     * @template TResult
+     * @param callable(TSource):TResult $selector
+     * @return EnumerableInterface<TResult>
      */
-    public function select(callable $selector);
+    public function select(callable $selector): EnumerableInterface;
 
     /**
-     * @param callable $collectionSelector
-     * @return EnumerableInterface
+     * @template TResult
+     * @param callable(TSource):(iterable<TResult>) $collectionSelector
+     * @return EnumerableInterface<TResult>
      */
-    public function selectMany(callable $collectionSelector);
+    public function selectMany(callable $collectionSelector): EnumerableInterface;
 
     /**
-     * @param ?callable $predicate
-     * @return mixed
+     * @param ?callable(TSource):bool $predicate
+     * @return TSource
+     * @throws NoSuchElementException
+     * @throws MoreThanOneElementException
      */
-    public function single(callable $predicate = null);
+    public function single(?callable $predicate = null);
 
     /**
-     * @param ?callable $predicate
-     * @return mixed
+     * @template TDefault
+     * @param ?callable(TSource):bool $predicate
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
-    public function singleOrDefault(callable $predicate = null, $defaultValue = null);
+    public function singleOrDefault(?callable $predicate = null, $defaultValue = null);
 
     /**
-     * @param int $count
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function skip($count);
+    public function skip(int $count): EnumerableInterface;
 
     /**
-     * @param int $count
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function skipLast($count);
+    public function skipLast(int $count): EnumerableInterface;
 
     /**
-     * @param callable $predicate
-     * @return EnumerableInterface
+     * @param callable(TSource):bool $predicate
+     * @return EnumerableInterface<TSource>
      */
-    public function skipWhile(callable $predicate);
+    public function skipWhile(callable $predicate): EnumerableInterface;
 
     /**
-     * @param mixed[] ...$elements
-     * @return EnumerableInterface
+     * @param TSource ...$elements
+     * @return EnumerableInterface<TSource>
      */
-    public function startWith(...$elements);
+    public function startWith(...$elements): EnumerableInterface;
 
     /**
-     * @param ?callable $selector
-     * @return int
+     * @param ?callable(TSource):(int|float) $selector
+     * @return int|float
      */
-    public function sum(callable $selector = null);
+    public function sum(?callable $selector = null);
 
     /**
-     * @param int $count
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function take($count);
+    public function take(int $count): EnumerableInterface;
 
     /**
-     * @param int $count
-     * @return EnumerableInterface
+     * @return EnumerableInterface<TSource>
      */
-    public function takeLast($count);
+    public function takeLast(int $count): EnumerableInterface;
 
     /**
-     * @param callable $predicate
-     * @return EnumerableInterface
+     * @param callable(TSource):bool $predicate
+     * @return EnumerableInterface<TSource>
      */
-    public function takeWhile(callable $predicate);
+    public function takeWhile(callable $predicate): EnumerableInterface;
 
     /**
-     * @return mixed[]
+     * @return TSource[]
      */
-    public function toArray();
+    public function toArray(): array;
 
     /**
-     * @param callable $keySelector
-     * @param ?callable $elementSelector
-     * @return array
+     * @template TKey
+     * @template TElement
+     * @param callable(TSource):TKey $keySelector
+     * @param ?callable(TSource):TElement $elementSelector
+     * @return array<TKey,TElement>
      */
-    public function toDictionary(callable $keySelector, callable $elementSelector = null);
+    public function toDictionary(callable $keySelector, ?callable $elementSelector = null): array;
 
     /**
-     * @param callable $keySelector
-     * @param ?callable $elementSelector
-     * @return array
+     * @template TKey
+     * @template TElement
+     * @param callable(TSource):TKey $keySelector
+     * @param ?callable(TSource):TElement $elementSelector
+     * @return array<TKey,TElement[]>
      */
-    public function toLookup(callable $keySelector, callable $elementSelector = null);
+    public function toLookup(callable $keySelector, ?callable $elementSelector = null): array;
 
     /**
-     * @return \Iterator
+     * @return \Iterator<TSource>
      */
-    public function toIterator();
+    public function toIterator(): \Iterator;
 
     /**
-     * @param iterable $second
-     * @param ?EqualityComparerInterface $comparer
-     * @return EnumerableInterface
+     * @param iterable<TSource> $second
+     * @param ?EqualityComparerInterface<TSource> $comparer
+     * @return EnumerableInterface<TSource>
      */
-    public function union($second, EqualityComparerInterface $comparer = null);
+    public function union(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @param callable $predicate
-     * @return EnumerableInterface
+     * @param callable(TSource):bool $predicate
+     * @return EnumerableInterface<TSource>
      */
-    public function where(callable $predicate);
+    public function where(callable $predicate): EnumerableInterface;
 
     /**
-     * @param callable $condition
-     * @return EnumerableInterface
+     * @param callable(TSource):bool $condition
+     * @return EnumerableInterface<TSource>
      */
-    public function _while(callable $condition);
+    public function while(callable $condition): EnumerableInterface;
 
     /**
-     * @param iterable $second
-     * @param callable $resultSelector
-     * @return EnumerableInterface
+     * @template TSecond
+     * @template TResult
+     * @param iterable<TSecond> $second
+     * @param callable(TSource,TSecond):TResult $resultSelector
+     * @return EnumerableInterface<TResult>
      */
-    public function zip($second, callable $resultSelector);
+    public function zip(iterable $second, callable $resultSelector): EnumerableInterface;
 }

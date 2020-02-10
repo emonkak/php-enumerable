@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\Sequence;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Emonkak\Enumerable\Sequence
  */
-class SequenceTest extends \PHPUnit_Framework_TestCase
+class SequenceTest extends TestCase
 {
     public function testGetIterator()
     {

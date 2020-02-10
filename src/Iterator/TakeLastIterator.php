@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
@@ -20,19 +25,16 @@ class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
     private $count;
 
     /**
-     * @param iterable $source
+     * @param iterable<TSource> $source
      * @param int $count
      */
-    public function __construct($source, $count)
+    public function __construct(iterable $source, int $count)
     {
         $this->source = $source;
         $this->count = $count;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $queue = new \SplQueue();
         $length = 0;

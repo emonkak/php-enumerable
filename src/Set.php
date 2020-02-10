@@ -76,16 +76,6 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param iterable<TSource> $values
-     */
-    public function addAll(iterable $values): void
-    {
-        foreach ($values as $value) {
-            $this->add($value);
-        }
-    }
-
-    /**
      * @param TSource $value
      */
     public function contains($value): bool

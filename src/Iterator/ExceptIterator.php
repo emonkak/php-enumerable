@@ -46,7 +46,9 @@ class ExceptIterator implements \IteratorAggregate, EnumerableInterface
     public function getIterator(): \Traversable
     {
         $set = new Set($this->comparer);
-        $set->addAll($this->second);
+        foreach ($this->second as $element) {
+            $set->add($element);
+        }
         foreach ($this->first as $element) {
             if (!$set->contains($element)) {
                 $set->add($element);

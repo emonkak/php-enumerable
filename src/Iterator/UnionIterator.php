@@ -46,7 +46,9 @@ class UnionIterator implements \IteratorAggregate, EnumerableInterface
     public function getIterator(): \Traversable
     {
         $set = new Set($this->comparer);
-        $set->addAll($this->first);
+        foreach ($this->first as $element) {
+            $set->add($element);
+        }
         foreach ($this->second as $element) {
             if ($set->contains($element)) {
                 yield $element;

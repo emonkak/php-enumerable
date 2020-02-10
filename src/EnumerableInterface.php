@@ -47,7 +47,7 @@ interface EnumerableInterface extends \Traversable
      * @param callable(\Exception):(iterable<TSource>) $handler
      * @return EnumerableInterface<TSource>
      */
-    public function _catch(callable $handler): EnumerableInterface;
+    public function catch(callable $handler): EnumerableInterface;
 
     /**
      * @param iterable<TSource> ...$sources
@@ -86,7 +86,7 @@ interface EnumerableInterface extends \Traversable
      * @param callable(TSource):void $action
      * @return EnumerableInterface<TSource>
      */
-    public function _do(callable $action): EnumerableInterface;
+    public function do(callable $action): EnumerableInterface;
 
     /**
      * @param callable():bool $condition
@@ -118,7 +118,7 @@ interface EnumerableInterface extends \Traversable
      * @param callable():void $finallyAction
      * @return EnumerableInterface<TSource>
      */
-    public function _finally(callable $finallyAction): EnumerableInterface;
+    public function finally(callable $finallyAction): EnumerableInterface;
 
     /**
      * @param ?callable(TSource):bool $predicate
@@ -138,7 +138,7 @@ interface EnumerableInterface extends \Traversable
     /**
      * @param callable(TSource):void $action
      */
-    public function _forEach(callable $action): void;
+    public function forEach(callable $action): void;
 
     /**
      * @template TKey
@@ -413,7 +413,7 @@ interface EnumerableInterface extends \Traversable
      * @param callable(TSource):bool $condition
      * @return EnumerableInterface<TSource>
      */
-    public function _while(callable $condition): EnumerableInterface;
+    public function while(callable $condition): EnumerableInterface;
 
     /**
      * @template TSecond

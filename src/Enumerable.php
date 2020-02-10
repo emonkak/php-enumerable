@@ -33,7 +33,7 @@ final class Enumerable
      * @param iterable<TSource> $sources
      * @return EnumerableInterface<TSource>
      */
-    public static function _catch(iterable ...$sources): EnumerableInterface
+    public static function catch(iterable ...$sources): EnumerableInterface
     {
         return new StaticCatchIterator($sources);
     }
@@ -79,7 +79,7 @@ final class Enumerable
      * @param iterable<TResult> $elseSource
      * @return EnumerableInterface<TResult>
      */
-    public static function _if(callable $condition, iterable $thenSource, iterable $elseSource): EnumerableInterface
+    public static function if(callable $condition, iterable $thenSource, iterable $elseSource): EnumerableInterface
     {
         return new IfIterator($condition, $thenSource, $elseSource);
     }
@@ -120,7 +120,7 @@ final class Enumerable
      * @param TSource $element
      * @return EnumerableInterface<TSource>
      */
-    public static function _return($element): EnumerableInterface
+    public static function return($element): EnumerableInterface
     {
         return new Sequence([$element]);
     }
@@ -142,7 +142,7 @@ final class Enumerable
     /**
      * @return EnumerableInterface<mixed>
      */
-    public static function _empty(): EnumerableInterface
+    public static function empty(): EnumerableInterface
     {
         return new EmptyIterator();
     }

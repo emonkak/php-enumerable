@@ -136,7 +136,7 @@ trait EnumerableExtensions
      * @param callable(\Exception):(iterable<TSource>) $handler
      * @return EnumerableInterface<TSource>
      */
-    public function _catch(callable $handler): EnumerableInterface
+    public function catch(callable $handler): EnumerableInterface
     {
         return new CatchIterator($this->getSource(), $handler);
     }
@@ -213,7 +213,7 @@ trait EnumerableExtensions
      * @param callable(TSource):void $action
      * @return EnumerableInterface<TSource>
      */
-    public function _do(callable $action): EnumerableInterface
+    public function do(callable $action): EnumerableInterface
     {
         return new DoIterator($this->getSource(), $action);
     }
@@ -287,7 +287,7 @@ trait EnumerableExtensions
      * @param callable():void $finallyAction
      * @return EnumerableInterface<TSource>
      */
-    public function _finally(callable $finallyAction): EnumerableInterface
+    public function finally(callable $finallyAction): EnumerableInterface
     {
         return new FinallyIterator($this->getSource(), $finallyAction);
     }
@@ -338,7 +338,7 @@ trait EnumerableExtensions
     /**
      * @param callable(TSource):void $action
      */
-    public function _forEach(callable $action): void
+    public function forEach(callable $action): void
     {
         foreach ($this->getSource() as $element) {
             $action($element);
@@ -963,7 +963,7 @@ trait EnumerableExtensions
      * @param callable():bool $condition
      * @return EnumerableInterface<TSource>
      */
-    public function _while(callable $condition): EnumerableInterface
+    public function while(callable $condition): EnumerableInterface
     {
         return new WhileIterator($this->getSource(), $condition);
     }

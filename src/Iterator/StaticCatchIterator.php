@@ -1,31 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class StaticCatchIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable[]
+     * @var iterable<TSource>[]
      */
     private $sources;
 
     /**
-     * @param iterable[] $sources
+     * @param iterable<TSource>[] $sources
      */
     public function __construct(array $sources)
     {
         $this->sources = $sources;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $error = null;
         foreach ($this->sources as $source) {

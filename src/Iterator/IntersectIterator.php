@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
@@ -7,41 +9,41 @@ use Emonkak\Enumerable\EnumerableInterface;
 use Emonkak\Enumerable\EqualityComparerInterface;
 use Emonkak\Enumerable\Set;
 
+/**
+ * @template TSource
+ */
 class IntersectIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $first;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $second;
 
     /**
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TSource>
      */
     private $comparer;
 
     /**
-     * @param iterable $first
-     * @param iterable $second
-     * @param EqualityComparerInterface $comparer
+     * @param iterable<TSource> $first
+     * @param iterable<TSource> $second
+     * @param EqualityComparerInterface<TSource> $comparer
      */
-    public function __construct($first, $second, EqualityComparerInterface $comparer)
+    public function __construct(iterable $first, iterable $second, EqualityComparerInterface $comparer)
     {
         $this->first = $first;
         $this->second = $second;
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $set = new Set($this->comparer);
         $set->addAll($this->second);

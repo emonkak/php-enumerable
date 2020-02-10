@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\EqualityComparerInterface;
 use Emonkak\Enumerable\Set;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Emonkak\Enumerable\Set
  */
-class SetTest extends \PHPUnit_Framework_TestCase
+class SetTest extends TestCase
 {
     public function testAdd()
     {

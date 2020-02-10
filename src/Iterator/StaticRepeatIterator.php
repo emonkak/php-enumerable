@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var mixed
+     * @var TSource
      */
     private $element;
 
@@ -20,19 +25,16 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
     private $count;
 
     /**
-     * @param mixed $element
+     * @param TSource $element
      * @param ?int $count
      */
-    public function __construct($element, $count)
+    public function __construct($element, ?int $count)
     {
         $this->element = $element;
         $this->count = $count;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         if ($this->count !== null)  {
             for ($i = $this->count; $i > 0; $i--) {

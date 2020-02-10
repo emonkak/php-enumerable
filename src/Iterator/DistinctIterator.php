@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
@@ -7,41 +9,42 @@ use Emonkak\Enumerable\EnumerableInterface;
 use Emonkak\Enumerable\EqualityComparerInterface;
 use Emonkak\Enumerable\Set;
 
+/**
+ * @template TSource
+ * @template TKey
+ */
 class DistinctIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var callable
+     * @var callable(TSource):TKey
      */
     private $keySelector;
 
     /**
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TKey>
      */
     private $comparer;
 
     /**
-     * @param iterable $source
-     * @param callable $keySelector
-     * @param EqualityComparerInterface $comparer
+     * @param iterable<TSource> $source
+     * @param callable(TSource):TKey $keySelector
+     * @param EqualityComparerInterface<TKey> $comparer
      */
-    public function __construct($source, callable $keySelector, EqualityComparerInterface $comparer)
+    public function __construct(iterable $source, callable $keySelector, EqualityComparerInterface $comparer)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $set = new Set($this->comparer);
         $keySelector = $this->keySelector;

@@ -1,38 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class DoWhileIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var callable
+     * @var callable():bool
      */
     private $condition;
 
     /**
-     * @param iterable $source
-     * @param callable $condition
+     * @param iterable<TSource> $source
+     * @param callable():bool $condition
      */
-    public function __construct($source, callable $condition)
+    public function __construct(iterable $source, callable $condition)
     {
         $this->source = $source;
         $this->condition = $condition;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $condition = $this->condition;
         do {

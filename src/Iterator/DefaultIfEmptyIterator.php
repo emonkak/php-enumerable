@@ -1,38 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var mixed
+     * @var TSource
      */
     private $defaultValue;
 
     /**
-     * @param iterable $source
-     * @param mixed $defaultValue
+     * @param iterable<TSource> $source
+     * @param TSource $defaultValue
      */
-    public function __construct($source, $defaultValue)
+    public function __construct(iterable $source, $defaultValue)
     {
         $this->source = $source;
         $this->defaultValue = $defaultValue;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $hasValue = false;
 

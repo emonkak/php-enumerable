@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable;
 
 class EqualityComparer implements EqualityComparerInterface
 {
     /**
      * @codeCoverageIgnore
-     *
-     * @return EqualityComparer
+     * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         static $instance;
 
@@ -21,6 +22,7 @@ class EqualityComparer implements EqualityComparerInterface
     }
 
     /**
+     * @suppress PhanGenericConstructorTypes
      * @codeCoverageIgnore
      */
     private function __construct()
@@ -28,17 +30,18 @@ class EqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $first
+     * @param mixed $second
      */
-    public function equals($first, $second)
+    public function equals($first, $second): bool
     {
         return is_scalar($first) ? $first === $second : $first == $second;
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed $value
      */
-    public function hash($value)
+    public function hash($value): string
     {
         $type = gettype($value);
         switch ($type) {

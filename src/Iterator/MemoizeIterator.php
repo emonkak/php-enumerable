@@ -1,36 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TSource
+ */
 class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var ?\Iterator
+     * @var ?\Iterator<TSource>
      */
     private $iterator;
 
     /**
-     * @var mixed[]
+     * @var TSource[]
      */
     private $cachedElements = [];
 
     /**
-     * @param \Iterator $iterator
+     * @param \Iterator<TSource> $iterator
      */
     public function __construct(\Iterator $iterator)
     {
         $this->iterator = $iterator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         foreach ($this->cachedElements as $element) {
             yield $element;

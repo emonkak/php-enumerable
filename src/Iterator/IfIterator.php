@@ -1,45 +1,47 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @template TResult
+ */
 class IfIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var callable
+     * @var callable():bool
      */
     private $condition;
 
     /**
-     * @var iterable
+     * @var iterable<TResult>
      */
     private $thenSource;
 
     /**
-     * @var iterable
+     * @var iterable<TResult>
      */
     private $elseSource;
 
     /**
-     * @param callable $condition
-     * @param iterable $thenSource
-     * @param iterable $elseSource
+     * @param callable():bool $condition
+     * @param iterable<TResult> $thenSource
+     * @param iterable<TResult> $elseSource
      */
-    public function __construct(callable $condition, $thenSource, $elseSource)
+    public function __construct(callable $condition, iterable $thenSource, iterable $elseSource)
     {
         $this->condition = $condition;
         $this->thenSource = $thenSource;
         $this->elseSource = $elseSource;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $condition = $this->condition;
         if ($condition()) {

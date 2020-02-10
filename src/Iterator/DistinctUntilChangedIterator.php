@@ -1,48 +1,61 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
+use Emonkak\Enumerable\EqualityComparerInterface;
 
+/**
+ * @template TSource
+ * @template TKey
+ */
 class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TSource>
      */
     private $source;
 
     /**
-     * @var callable
+     * @var callable(TSource):TKey
      */
     private $keySelector;
 
     /**
-     * @param iterable $source
-     * @param callable $keySelector
+     * @var EqualityComparerInterface<TKey>
      */
-    public function __construct($source, callable $keySelector)
+    private $comparer;
+
+    /**
+     * @param iterable<TSource> $source
+     * @param callable(TSource):TKey $keySelector
+     * @param EqualityComparerInterface<TKey> $comparer
+     */
+    public function __construct(iterable $source, callable $keySelector, EqualityComparerInterface $comparer)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
+        $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
-        $hasCurrentKey = false;
-        $currentKey = null;
+        $hasCurrentHash = false;
+        $currentHash = null;
         $keySelector = $this->keySelector;
+        $comparer = $this->comparer;
 
         foreach ($this->source as $element) {
             $key = $keySelector($element);
-            if (!$hasCurrentKey || $currentKey !== $key) {
-                $hasCurrentKey = true;
-                $currentKey = $key;
+            $hash = $comparer->hash($key);
+            if (!$hasCurrentHash || $currentHash !== $hash) {
+                $hasCurrentHash = true;
+                $currentHash = $hash;
                 yield $element;
             }
         }

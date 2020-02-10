@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable;
 
 use Emonkak\Enumerable\Internal\Errors;
@@ -17,94 +19,95 @@ use Emonkak\Enumerable\Iterator\ZipIterator;
 final class Enumerable
 {
     /**
-     * @param iterable $source
-     * @return EnumerableInterface
+     * @template TSource extends object
+     * @param iterable<TSource> $source
+     * @return EnumerableInterface<TSource>
      */
-    public static function from($source)
+    public static function from(iterable $source): EnumerableInterface
     {
-        if (!(is_array($source) || $source instanceof \Traversable)) {
-            $type = gettype($source);
-            $typeOrClass = ($type === 'object' ? get_class($source) : $type);
-            throw new \RuntimeException("The source must be an array or traversable object, got '$typeOrClass'");
-        }
         return new Sequence($source);
     }
 
     /**
-     * @param iterable[] ...$sources
-     * @return EnumerableInterface
+     * @template TSource
+     * @param iterable<TSource> $sources
+     * @return EnumerableInterface<TSource>
      */
-    public static function _catch(...$sources)
+    public static function _catch(iterable ...$sources): EnumerableInterface
     {
         return new StaticCatchIterator($sources);
     }
 
     /**
-     * @param iterable[] ...$sources
-     * @return EnumerableInterface
+     * @template TSource
+     * @param iterable<TSource> $sources
+     * @return EnumerableInterface<TSource>
      */
-    public static function concat(...$sources)
+    public static function concat(iterable ...$sources): EnumerableInterface
     {
         return new ConcatIterator($sources);
     }
 
     /**
-     * @param callable $traversableFactory
-     * @return EnumerableInterface
+     * @template TSource
+     * @param callable():(iterable<TSource>) $traversableFactory
+     * @return EnumerableInterface<TSource>
      */
-    public static function defer(callable $traversableFactory)
+    public static function defer(callable $traversableFactory): EnumerableInterface
     {
         return new DeferIterator($traversableFactory);
     }
 
     /**
-     * @param mixed $initialState
-     * @param callable $condition
-     * @param callable $iterate
-     * @param callable $resultSelector
-     * @return EnumerableInterface
+     * @template TState
+     * @template TResult
+     * @param TState $initialState
+     * @param callable(TState):bool $condition
+     * @param callable(TState):TState $iterate
+     * @param callable(TState):TResult $resultSelector
+     * @return EnumerableInterface<TResult>
      */
-    public static function generate($initialState, callable $condition, callable $iterate, callable $resultSelector)
+    public static function generate($initialState, callable $condition, callable $iterate, callable $resultSelector): EnumerableInterface
     {
         return new GenerateIterator($initialState, $condition, $iterate, $resultSelector);
     }
 
     /**
-     * @param callable $condition
-     * @param iterable $thenSource
-     * @param iterable $elseSource
-     * @return EnumerableInterface
+     * @template TResult
+     * @param callable():bool $condition
+     * @param iterable<TResult> $thenSource
+     * @param iterable<TResult> $elseSource
+     * @return EnumerableInterface<TResult>
      */
-    public static function _if(callable $condition, $thenSource, $elseSource)
+    public static function _if(callable $condition, iterable $thenSource, iterable $elseSource): EnumerableInterface
     {
         return new IfIterator($condition, $thenSource, $elseSource);
     }
 
     /**
-     * @param iterable[] ...$sources
-     * @return EnumerableInterface
+     * @template TSource
+     * @param iterable<TSource> $sources
+     * @return EnumerableInterface<TSource>
      */
-    public static function onErrorResumeNext(...$sources)
+    public static function onErrorResumeNext(iterable ...$sources): EnumerableInterface
     {
         return new OnErrorResumeNextIterator($sources);
     }
 
     /**
-     * @param int $start
-     * @param int $count
-     * @return EnumerableInterface
+     * @return EnumerableInterface<int>
      */
-    public static function range($start, $count)
+    public static function range(int $start, int $count): EnumerableInterface
     {
         return new RangeIterator($start, $count);
     }
 
     /**
-     * @param mixed $element
-     * @param int $count
-     * @return EnumerableInterface
+     * @template TSource
+     * @param TSource $element
+     * @return EnumerableInterface<TSource>
      */
-    public static function repeat($element, $count = null)
+    public static function repeat($element, ?int $count = null): EnumerableInterface
     {
         if ($count < 0) {
             throw Errors::argumentOutOfRange('count');
@@ -113,28 +116,33 @@ final class Enumerable
     }
 
     /**
-     * @param mixed $element
-     * @return EnumerableInterface
+     * @template TSource
+     * @param TSource $element
+     * @return EnumerableInterface<TSource>
      */
-    public static function _return($element)
+    public static function _return($element): EnumerableInterface
     {
         return new Sequence([$element]);
     }
 
     /**
-     * @param iterable $first
-     * @param iterable $second
-     * @return EnumerableInterface
+     * @template TFirst
+     * @template TSecond
+     * @template TResult
+     * @param iterable<TFirst> $first
+     * @param iterable<TSecond> $second
+     * @param callable(TFirst,TSecond):TResult $resultSelector
+     * @return EnumerableInterface<TResult>
      */
-    public static function zip($first, $second, callable $resultSelector)
+    public static function zip(iterable $first, iterable $second, callable $resultSelector): EnumerableInterface
     {
         return new ZipIterator($first, $second, $resultSelector);
     }
 
     /**
-     * @return EnumerableInterface
+     * @return EnumerableInterface<mixed>
      */
-    public static function _empty()
+    public static function _empty(): EnumerableInterface
     {
         return new EmptyIterator();
     }

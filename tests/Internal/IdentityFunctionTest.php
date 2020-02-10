@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Tests\Enumerable\Internal;
 
 use Emonkak\Enumerable\Internal\IdentityFunction;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Emonkak\Enumerable\Internal\IdentityFunction
  */
-class IdentityFunctionTest extends \PHPUnit_Framework_TestCase
+class IdentityFunctionTest extends TestCase
 {
     public function testApply()
     {

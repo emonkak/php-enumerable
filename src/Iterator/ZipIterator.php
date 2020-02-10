@@ -1,46 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 use Emonkak\Enumerable\Internal\Converters;
 
+/**
+ * @template TFirst
+ * @template TSecond
+ * @template TResult
+ */
 class ZipIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var iterable
+     * @var iterable<TFirst>
      */
     private $first;
 
     /**
-     * @var iterable
+     * @var iterable<TSecond>
      */
     private $second;
 
     /**
-     * @var callable
+     * @var callable(TFirst,TSecond):TResult
      */
     private $resultSelector;
 
     /**
-     * @param iterable $first
-     * @param iterable $second
-     * @param callable $resultSelector
+     * @param iterable<TFirst> $first
+     * @param iterable<TSecond> $second
+     * @param callable(TFirst,TSecond):TResult $resultSelector
      */
-    public function __construct($first, $second, $resultSelector)
+    public function __construct(iterable $first, iterable $second, callable $resultSelector)
     {
         $this->first = $first;
         $this->second = $second;
         $this->resultSelector = $resultSelector;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         $resultSelector = $this->resultSelector;
         $first = Converters::toIterator($this->first);

@@ -8,7 +8,8 @@ return [
         'vendor/',
     ],
     'suppress_issue_types' => [
-        'PhanTemplateTypeNotUsedInFunctionReturn',
+        'PhanTemplateTypeNotDeclaredInFunctionParams',
+        'PhanTemplateTypeNotUsedInFunctionReturn'
     ],
     'analyze_signature_compatibility' => false,
 ];

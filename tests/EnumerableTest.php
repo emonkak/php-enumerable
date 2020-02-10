@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\Enumerable;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Exception as PHPUnitException;
 
 /**
  * @covers Emonkak\Enumerable\Enumerable
@@ -56,11 +60,12 @@ use Emonkak\Enumerable\Enumerable;
  * @covers Emonkak\Enumerable\Iterator\ZipIterator
  * @covers Emonkak\Enumerable\Iterator\ZipIterator
  */
-class EnumerableTest extends \PHPUnit_Framework_TestCase
+class EnumerableTest extends TestCase
 {
     public function testStaticFrom()
     {
-        $this->assertThrows(function() { Enumerable::from(null); });
+        $xs = [1, 2, 3];
+        $this->assertEquals($xs, Enumerable::from($xs)->toArray());
     }
 
     public function testStaticCatch()
@@ -816,7 +821,7 @@ class EnumerableTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $action();
-        } catch (\PHPUnit_Framework_Exception $e) {
+        } catch (PHPUnitException $e) {
             throw $e;
         } catch (\Exception $e) {
             $this->assertInstanceOf($expectedException, $e);

@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class SkipIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -34,10 +37,12 @@ class SkipIterator implements \IteratorAggregate, EnumerableInterface
         $this->count = $count;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
-        // @phan-suppress-next-line PhanTypeArraySuspicious
-        if (is_array($this->source) && isset($this->source[0])) {
+        if (is_array($this->source)) {
             $count = $this->count;
             $length = count($this->source);
             $elements = array_values($this->source);

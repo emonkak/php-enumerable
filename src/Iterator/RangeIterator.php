@@ -7,6 +7,11 @@ namespace Emonkak\Enumerable\Iterator;
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
+/**
+ * @implements \IteratorAggregate<int>
+ * @implements EnumerableInterface<int>
+ * @use EnumerableExtensions<int>
+ */
 class RangeIterator implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
@@ -31,6 +36,9 @@ class RangeIterator implements \IteratorAggregate, EnumerableInterface
         $this->count = $count;
     }
 
+    /**
+     * @return \Traversable<int>
+     */
     public function getIterator(): \Traversable
     {
         $current = $this->start;

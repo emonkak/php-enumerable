@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Emonkak\Tests\Enumerable\Internal;
+namespace Emonkak\Enumerable\Tests\Internal;
 
 use Emonkak\Enumerable\Internal\IdentityFunction;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IdentityFunctionTest extends TestCase
 {
-    public function testApply()
+    public function testApply(): void
     {
         $this->assertSame(123, IdentityFunction::apply(123));
     }

@@ -6,9 +6,13 @@ namespace Emonkak\Enumerable\Iterator;
 
 use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
+use Emonkak\Enumerable\Internal\Converters;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class DeferIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -17,19 +21,22 @@ class DeferIterator implements \IteratorAggregate, EnumerableInterface
     /**
      * @var callable():(iterable<TSource>)
      */
-    private $traversableFactory;
+    private $iterableFactory;
 
     /**
-     * @param callable():(iterable<TSource>) $traversableFactory
+     * @param callable():(iterable<TSource>) $iterableFactory
      */
-    public function __construct(callable $traversableFactory)
+    public function __construct(callable $iterableFactory)
     {
-        $this->traversableFactory = $traversableFactory;
+        $this->iterableFactory = $iterableFactory;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
-        $traversableFactory = $this->traversableFactory;
-        return $traversableFactory();
+        $iterableFactory = $this->iterableFactory;
+        return Converters::toIterator($iterableFactory());
     }
 }

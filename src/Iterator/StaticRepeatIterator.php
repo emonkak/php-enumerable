@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -34,6 +37,9 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
         $this->count = $count;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         if ($this->count !== null)  {

@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -32,6 +35,9 @@ class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
         $this->iterator = $iterator;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         foreach ($this->cachedElements as $element) {

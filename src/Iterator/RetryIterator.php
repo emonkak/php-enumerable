@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class RetryIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -34,6 +37,9 @@ class RetryIterator implements \IteratorAggregate, EnumerableInterface
         $this->retryCount = $retryCount;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         $retryCount = $this->retryCount !== null ? $this->retryCount : INF;

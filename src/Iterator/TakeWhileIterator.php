@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -34,6 +37,9 @@ class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
         $this->predicate = $predicate;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         $predicate = $this->predicate;

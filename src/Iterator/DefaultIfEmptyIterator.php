@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -34,6 +37,9 @@ class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
         $this->defaultValue = $defaultValue;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         $hasValue = false;

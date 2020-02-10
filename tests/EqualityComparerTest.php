@@ -11,13 +11,19 @@ class EqualityComparerTest extends TestCase
 {
     /**
      * @dataProvider providerEquals
+     * @param mixed $first
+     * @param mixed $second
+     * @param mixed $expected
      */
-    public function testEquals($first, $second, $expected)
+    public function testEquals($first, $second, $expected): void
     {
         $this->assertSame($expected, EqualityComparer::getInstance()->equals($first, $second));
     }
 
-    public function providerEquals()
+    /**
+     * @return array<mixed[]>
+     */
+    public function providerEquals(): array
     {
         return [
             ['foo', 'foo', true],
@@ -29,7 +35,7 @@ class EqualityComparerTest extends TestCase
         ];
     }
 
-    public function testHash()
+    public function testHash(): void
     {
         $comparer = EqualityComparer::getInstance();
 
@@ -49,16 +55,20 @@ class EqualityComparerTest extends TestCase
     }
 
     /**
-     * @expectedException UnexpectedValueException
-     * 
      * @dataProvider providerHashThrowsUnexpectedValueException
+     * @param mixed $value
      */
-    public function testHashThrowsUnexpectedValueException($value)
+    public function testHashThrowsUnexpectedValueException($value): void
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         EqualityComparer::getInstance()->hash($value);
     }
 
-    public function providerHashThrowsUnexpectedValueException()
+    /**
+     * @return array<mixed[]>
+     */
+    public function providerHashThrowsUnexpectedValueException(): array
     {
         return [
             [STDIN],

@@ -30,7 +30,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @param iterable<TSource> $sources
+     * @param iterable<TSource>[] ...$sources
      * @return EnumerableInterface<TSource>
      */
     public static function catch(iterable ...$sources): EnumerableInterface
@@ -40,7 +40,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @param iterable<TSource> $sources
+     * @param iterable<TSource>[] ...$sources
      * @return EnumerableInterface<TSource>
      */
     public static function concat(iterable ...$sources): EnumerableInterface
@@ -50,12 +50,12 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @param callable():(iterable<TSource>) $traversableFactory
+     * @param callable():(iterable<TSource>) $iterableFactory
      * @return EnumerableInterface<TSource>
      */
-    public static function defer(callable $traversableFactory): EnumerableInterface
+    public static function defer(callable $iterableFactory): EnumerableInterface
     {
-        return new DeferIterator($traversableFactory);
+        return new DeferIterator($iterableFactory);
     }
 
     /**
@@ -86,7 +86,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @param iterable<TSource> $sources
+     * @param iterable<TSource>[] ...$sources
      * @return EnumerableInterface<TSource>
      */
     public static function onErrorResumeNext(iterable ...$sources): EnumerableInterface

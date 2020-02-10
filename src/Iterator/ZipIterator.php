@@ -12,6 +12,9 @@ use Emonkak\Enumerable\Internal\Converters;
  * @template TFirst
  * @template TSecond
  * @template TResult
+ * @implements \IteratorAggregate<TResult>
+ * @implements EnumerableInterface<TResult>
+ * @use EnumerableExtensions<TResult>
  */
 class ZipIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -44,6 +47,9 @@ class ZipIterator implements \IteratorAggregate, EnumerableInterface
         $this->resultSelector = $resultSelector;
     }
 
+    /**
+     * @return \Traversable<TResult>
+     */
     public function getIterator(): \Traversable
     {
         $resultSelector = $this->resultSelector;

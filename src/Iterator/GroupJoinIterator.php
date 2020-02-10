@@ -13,6 +13,9 @@ use Emonkak\Enumerable\EqualityComparerInterface;
  * @template TInner
  * @template TKey
  * @template TResult
+ * @implements \IteratorAggregate<TResult>
+ * @implements EnumerableInterface<TResult>
+ * @use EnumerableExtensions<TResult>
  */
 class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -66,6 +69,9 @@ class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
+    /**
+     * @return \Traversable<TResult>
+     */
     public function getIterator(): \Traversable
     {
         $outerKeySelector = $this->outerKeySelector;

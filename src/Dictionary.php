@@ -7,6 +7,9 @@ namespace Emonkak\Enumerable;
 /**
  * @template TKey
  * @template TValue
+ * @implements \IteratorAggregate<array{0:TKey,1:TValue}>
+ * @implements EnumerableInterface<array{0:TKey,1:TValue}>
+ * @use EnumerableExtensions<array{0:TKey,1:TValue}>
  */
 class Dictionary implements \IteratorAggregate, EnumerableInterface
 {
@@ -26,8 +29,6 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     private $hashTable = [];
 
     /**
-     * @template TKey
-     * @template TValue
      * @return self<TKey,TValue>
      */
     public static function create(): self
@@ -36,7 +37,6 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @suppress PhanGenericConstructorTypes
      * @param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(EqualityComparerInterface $comparer)
@@ -44,6 +44,9 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
+    /**
+     * @return \Traversable<array{0:TKey,1:TValue}>
+     */
     public function getIterator(): \Traversable
     {
         foreach ($this->hashTable as $entry) {
@@ -56,7 +59,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
      */
     public function getSource(): iterable
     {
-        return $this->hashTable;
+        return array_values($this->hashTable);
     }
 
     /**
@@ -92,7 +95,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
 
     /**
      * @param TKey $key
-     * @param TValue &$value
+     * @param TValue $value
      * @return bool
      */
     public function tryGet($key, &$value): bool

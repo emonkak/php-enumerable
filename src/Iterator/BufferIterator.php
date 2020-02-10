@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource[]>
+ * @implements EnumerableInterface<TSource[]>
+ * @use EnumerableExtensions<TSource[]>
  */
 class BufferIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -41,6 +44,9 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
         $this->skip = $skip;
     }
 
+    /**
+     * @return \Traversable<TSource[]>
+     */
     public function getIterator(): \Traversable
     {
         $buffer = [];

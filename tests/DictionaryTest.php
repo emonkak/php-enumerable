@@ -13,10 +13,11 @@ use PHPUnit\Framework\TestCase;
  */
 class DictionaryTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $obj = new \stdClass();
 
+        /** @var Dictionary<mixed,mixed> */
         $dict = Dictionary::create();
 
         $this->assertTrue($dict->set('foo', 123));
@@ -61,16 +62,15 @@ class DictionaryTest extends TestCase
         $this->assertEquals($expectedValues, iterator_to_array($dict));
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testAddWithHashCollision()
+    public function testAddWithHashCollision(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $comparer = $this->createMock(EqualityComparerInterface::class);
         $comparer
             ->expects($this->any())
             ->method('hash')
-            ->willReturn(0);
+            ->willReturn('0');
         $comparer
             ->expects($this->any())
             ->method('equals')

@@ -9,6 +9,7 @@ use Emonkak\Enumerable\Exception\NoSuchElementException;
 
 /**
  * @template TSource
+ * @extends \Traversable<TSource>
  */
 interface EnumerableInterface extends \Traversable
 {
@@ -21,25 +22,25 @@ interface EnumerableInterface extends \Traversable
     public function aggregate($seed, callable $func);
 
     /**
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      */
     public function all(?callable $predicate = null): bool;
 
     /**
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      * @return bool
      */
     public function any(?callable $predicate = null): bool;
 
     /**
-     * @param ?callable(TSource):(int|float) $selector
+     * @param callable(TSource):(int|float)|null $selector
      * @return int|float
      * @throws NoSuchElementException
      */
     public function average(?callable $selector = null);
 
     /**
-     * @return EnumerableInterface<TSource>
+     * @return EnumerableInterface<TSource[]>
      */
     public function buffer(int $count, ?int $skip = null): EnumerableInterface;
 
@@ -56,7 +57,7 @@ interface EnumerableInterface extends \Traversable
     public function concat(iterable ...$sources): EnumerableInterface;
 
     /**
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      * @return int
      */
     public function count(?callable $predicate = null): int;
@@ -69,7 +70,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TKey
-     * @param ?callable(TSource):TKey $keySelector
+     * @param callable(TSource):TKey|null $keySelector
      * @param ?EqualityComparerInterface<TKey> $comparer
      * @return EnumerableInterface<TSource>
      */
@@ -77,7 +78,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TKey
-     * @param ?callable(TSource):TKey $keySelector
+     * @param callable(TSource):TKey|null $keySelector
      * @return EnumerableInterface<TSource>
      */
     public function distinctUntilChanged(?callable $keySelector = null): EnumerableInterface;
@@ -121,7 +122,7 @@ interface EnumerableInterface extends \Traversable
     public function finally(callable $finallyAction): EnumerableInterface;
 
     /**
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      * @return TSource
      * @throws NoSuchElementException
      */
@@ -129,7 +130,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TDefault
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      * @param TDefault $defaultValue
      * @return TSource|TDefault
      */
@@ -145,8 +146,8 @@ interface EnumerableInterface extends \Traversable
      * @template TElement
      * @template TResult
      * @param callable(TSource):TKey $keySelector
-     * @param ?callable(TSource):TElement $elementSelector
-     * @param ?callable(TKey,TElement[]):TResult $resultSelector
+     * @param callable(TSource):TElement|null $elementSelector
+     * @param callable(TKey,TElement[]):TResult|null $resultSelector
      * @param ?EqualityComparerInterface<TKey> $comparer
      * @return EnumerableInterface<TResult>
      */
@@ -193,21 +194,24 @@ interface EnumerableInterface extends \Traversable
     public function join(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      * @return TSource
      * @throws NoSuchElementException
      */
     public function last(?callable $predicate = null);
 
     /**
-     * @param ?callable(TSource):bool $predicate
-     * @return TSource
+     * @template TDefault
+     * @param callable(TSource):bool|null $predicate
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
     public function lastOrDefault(?callable $predicate = null, $defaultValue = null);
 
     /**
-     * @param ?callable(TSource):(int|float) $selector
-     * @return int|float
+     * @template TKey
+     * @param callable(TSource):TKey $selector
+     * @return TKey|null
      */
     public function max(?callable $selector = null);
 
@@ -224,8 +228,9 @@ interface EnumerableInterface extends \Traversable
     public function memoize(): EnumerableInterface;
 
     /**
-     * @param ?callable(TSource):(int|float) $selector
-     * @return int|float
+     * @template TKey
+     * @param callable(TSource):TKey|null $selector
+     * @return TKey|null
      */
     public function min(?callable $selector = null);
 
@@ -257,14 +262,14 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TKey
-     * @param ?callable(TSource):TKey $keySelector
+     * @param callable(TSource):TKey|null $keySelector
      * @return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderBy(?callable $keySelector = null): OrderedEnumerableInterface;
 
     /**
      * @template TKey
-     * @param ?callable(TSource):TKey $keySelector
+     * @param callable(TSource):TKey|null $keySelector
      * @return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderByDescending(?callable $keySelector = null): OrderedEnumerableInterface;
@@ -290,7 +295,7 @@ interface EnumerableInterface extends \Traversable
      * @template TAccumulate
      * @param TAccumulate $seed
      * @param callable(TAccumulate,TSource):TAccumulate $func
-     * @return TAccumulate
+     * @return EnumerableInterface<TAccumulate>
      */
     public function scan($seed, callable $func);
 
@@ -309,7 +314,7 @@ interface EnumerableInterface extends \Traversable
     public function selectMany(callable $collectionSelector): EnumerableInterface;
 
     /**
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      * @return TSource
      * @throws NoSuchElementException
      * @throws MoreThanOneElementException
@@ -318,7 +323,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TDefault
-     * @param ?callable(TSource):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      * @param TDefault $defaultValue
      * @return TSource|TDefault
      */
@@ -347,7 +352,7 @@ interface EnumerableInterface extends \Traversable
     public function startWith(...$elements): EnumerableInterface;
 
     /**
-     * @param ?callable(TSource):(int|float) $selector
+     * @param callable(TSource):(int|float)|null $selector
      * @return int|float
      */
     public function sum(?callable $selector = null);
@@ -374,20 +379,18 @@ interface EnumerableInterface extends \Traversable
     public function toArray(): array;
 
     /**
-     * @template TKey
      * @template TElement
-     * @param callable(TSource):TKey $keySelector
-     * @param ?callable(TSource):TElement $elementSelector
-     * @return array<TKey,TElement>
+     * @param callable(TSource):array-key $keySelector
+     * @param callable(TSource):TElement|null $elementSelector
+     * @return array<array-key,TElement>
      */
     public function toDictionary(callable $keySelector, ?callable $elementSelector = null): array;
 
     /**
-     * @template TKey
      * @template TElement
-     * @param callable(TSource):TKey $keySelector
-     * @param ?callable(TSource):TElement $elementSelector
-     * @return array<TKey,TElement[]>
+     * @param callable(TSource):array-key $keySelector
+     * @param callable(TSource):TElement|null $elementSelector
+     * @return array<array-key,TElement[]>
      */
     public function toLookup(callable $keySelector, ?callable $elementSelector = null): array;
 
@@ -410,7 +413,7 @@ interface EnumerableInterface extends \Traversable
     public function where(callable $predicate): EnumerableInterface;
 
     /**
-     * @param callable(TSource):bool $condition
+     * @param callable():bool $condition
      * @return EnumerableInterface<TSource>
      */
     public function while(callable $condition): EnumerableInterface;

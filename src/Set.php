@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable;
 
 /**
- * @template TSource
- * @implements EnumerableInterface<TSource>
+ * @template T
+ * @implements \IteratorAggregate<T>
+ * @implements EnumerableInterface<T>
+ * @use EnumerableExtensions<T>
  */
 class Set implements \IteratorAggregate, EnumerableInterface
 {
     use EnumerableExtensions;
 
     /**
-     * @var EqualityComparerInterface<TSource>
+     * @var EqualityComparerInterface<T>
      */
     private $comparer;
 
     /**
-     * @var array<string,TSource>
+     * @var array<string,T>
      */
     private $hashTable = [];
 
     /**
-     * @template TSource
-     * @return self<TSource>
+     * @return self<T>
      */
     public static function create(): self
     {
@@ -32,13 +33,16 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param EqualityComparerInterface<TSource> $comparer
+     * @param EqualityComparerInterface<T> $comparer
      */
     public function __construct(EqualityComparerInterface $comparer)
     {
         $this->comparer = $comparer;
     }
 
+    /**
+     * @return \Traversable<T>
+     */
     public function getIterator(): \Traversable
     {
         foreach ($this->hashTable as $entry) {
@@ -47,15 +51,15 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return iterable<string,TSource>
+     * @return iterable<T>
      */
     public function getSource(): iterable
     {
-        return $this->hashTable;
+        return array_values($this->hashTable);
     }
 
     /**
-     * @param TSource $value
+     * @param T $value
      */
     public function add($value): bool
     {
@@ -76,7 +80,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param TSource $value
+     * @param T $value
      */
     public function contains($value): bool
     {
@@ -85,7 +89,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param TSource $value
+     * @param T $value
      */
     public function remove($value): bool
     {
@@ -98,7 +102,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return TSource[]
+     * @return T[]
      */
     public function toArray(): array
     {

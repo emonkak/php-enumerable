@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -34,6 +37,9 @@ class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
         $this->count = $count;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         $queue = new \SplQueue();

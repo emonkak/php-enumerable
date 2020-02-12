@@ -13,6 +13,9 @@ use Emonkak\Enumerable\EqualityComparerInterface;
  * @template TInner
  * @template TKey
  * @template TResult
+ * @implements \IteratorAggregate<TResult>
+ * @implements EnumerableInterface<TResult>
+ * @use EnumerableExtensions<TResult>
  */
 class OuterJoinIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -39,7 +42,7 @@ class OuterJoinIterator implements \IteratorAggregate, EnumerableInterface
     private $innerKeySelector;
 
     /**
-     * @var callable(TOuter,TInner):TResult
+     * @var callable(TOuter,?TInner):TResult
      */
     private $resultSelector;
 
@@ -53,7 +56,7 @@ class OuterJoinIterator implements \IteratorAggregate, EnumerableInterface
      * @param iterable<TInner> $inner
      * @param callable(TOuter):TKey $outerKeySelector
      * @param callable(TInner):TKey $innerKeySelector
-     * @param callable(TOuter,TInner):TResult $resultSelector
+     * @param callable(TOuter,?TInner):TResult $resultSelector
      * @param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(iterable $outer, iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, EqualityComparerInterface $comparer)
@@ -66,6 +69,9 @@ class OuterJoinIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
+    /**
+     * @return \Traversable<TResult>
+     */
     public function getIterator(): \Traversable
     {
         $outerKeySelector = $this->outerKeySelector;

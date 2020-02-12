@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\Enumerable;
-use PHPUnit\Framework\TestCase;
+use Emonkak\Enumerable\EnumerableInterface;
 use PHPUnit\Exception as PHPUnitException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers Emonkak\Enumerable\Enumerable
@@ -62,15 +64,15 @@ use PHPUnit\Exception as PHPUnitException;
  */
 class EnumerableTest extends TestCase
 {
-    public function testStaticFrom()
+    public function testStaticFrom(): void
     {
         $xs = [1, 2, 3];
         $this->assertEquals($xs, Enumerable::from($xs)->toArray());
     }
 
-    public function testStaticCatch()
+    public function testStaticCatch(): void
     {
-        $xs = Enumerable::defer(function() {
+        $xs = Enumerable::defer(function(): iterable {
             yield 1;
             yield 2;
             yield 3;
@@ -80,7 +82,7 @@ class EnumerableTest extends TestCase
         $zs = [7, 8, 9];
         $this->assertEquals([1, 2, 3, 4, 5, 6], Enumerable::catch($xs, $ys, $zs)->toArray());
 
-        $xs = Enumerable::defer(function() {
+        $xs = Enumerable::defer(function(): iterable {
             yield 1;
             yield 2;
             yield 3;
@@ -89,41 +91,43 @@ class EnumerableTest extends TestCase
         $this->assertThrows(function() use ($xs) { Enumerable::catch($xs, $xs)->toArray(); });
     }
 
-    public function testStaticConcat()
+    public function testStaticConcat(): void
     {
-        $this->assertEquals([], Enumerable::concat([], [])->toArray());
+        /** @var mixed[] */
+        $xs = [];
+        $this->assertEquals([], Enumerable::concat($xs, $xs)->toArray());
         $this->assertEquals([1, 2, 3, 4, 5, 6], Enumerable::concat([1, 2, 3], [4, 5, 6])->toArray());
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], Enumerable::concat([1, 2, 3], [4, 5, 6], [7, 8, 9])->toArray());
     }
 
-    public function testStaticDefer()
+    public function testStaticDefer(): void
     {
-        $this->assertEquals([1, 2, 3], Enumerable::defer(function() {
+        $this->assertEquals([1, 2, 3], Enumerable::defer(function(): iterable {
             yield 1;
             yield 2;
             yield 3;
         })->toArray());
     }
 
-    public function testStaticGenerate()
+    public function testStaticGenerate(): void
     {
         $this->assertEquals([0, 1, 4, 9, 16], Enumerable::generate(0, function($x) { return $x < 5; }, function($x) { return $x + 1; }, function($x) { return $x * $x; })->toArray());
     }
 
-    public function testStaticIf()
+    public function testStaticIf(): void
     {
         $this->assertEquals([1, 2, 3], Enumerable::if(function() { return true; }, [1, 2, 3], [4, 5, 6])->toArray());
         $this->assertEquals([4, 5, 6], Enumerable::if(function() { return false; }, [1, 2, 3], [4, 5, 6])->toArray());
     }
 
-    public function testStaticOnErrorResumeNext()
+    public function testStaticOnErrorResumeNext(): void
     {
-        $xs = Enumerable::defer(function() {
+        $xs = Enumerable::defer(function(): iterable {
             yield 1;
             yield 2;
             throw new \Exception();
         });
-        $ys = Enumerable::defer(function() {
+        $ys = Enumerable::defer(function(): iterable {
             yield 3;
             yield 4;
             throw new \Exception();
@@ -131,12 +135,12 @@ class EnumerableTest extends TestCase
         $this->assertEquals([1, 2, 3, 4], Enumerable::onErrorResumeNext($xs, $ys)->toArray());
     }
 
-    public function testStaticRange()
+    public function testStaticRange(): void
     {
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], Enumerable::range(1, 10)->toArray());
     }
 
-    public function testStaticRepeat()
+    public function testStaticRepeat(): void
     {
         $this->assertIterator([123, 123, 123, 123], Enumerable::repeat(123)->toIterator());
         $this->assertEquals([], Enumerable::repeat(123, 0)->toArray());
@@ -144,12 +148,12 @@ class EnumerableTest extends TestCase
         $this->assertThrows(function() { Enumerable::repeat(123, -1); });
     }
 
-    public function testStaticReturn()
+    public function testStaticReturn(): void
     {
         $this->assertEquals([123], Enumerable::return(123)->toArray());
     }
 
-    public function testStaticZip()
+    public function testStaticZip(): void
     {
         $this->assertEquals([[1, 2], [3, 4], [5, 6], [7, 8]], Enumerable::zip([1, 3, 5, 7], [2, 4, 6, 8], function($x, $y) { return [$x, $y]; })->toArray());
         $this->assertEquals([[1, 2], [3, 4], [5, 6], [7, 8]], Enumerable::zip([1, 3, 5, 7, 9], [2, 4, 6, 8], function($x, $y) { return [$x, $y]; })->toArray());
@@ -157,75 +161,77 @@ class EnumerableTest extends TestCase
         $this->assertEquals([], Enumerable::zip([], [], function($x, $y) { return [$x, $y]; })->toArray());
     }
 
-    public function testStaticEmpty()
+    public function testStaticEmpty(): void
     {
         $this->assertEquals([], Enumerable::empty()->toArray());
     }
 
-    public function testAggregate()
+    public function testAggregate(): void
     {
         $this->assertSame(10, Enumerable::from([1, 2, 3, 4])->aggregate(0, function($total, $n) { return $total + $n; }));
-        $this->assertSame(2, Enumerable::from([])->aggregate(2, function($total, $n) { return $total + $n; }));
+        $this->assertSame(2, $this->getEmpty()->aggregate(2, function($total, $n) { return $total + $n; }));
     }
 
-    public function testAll()
+    public function testAll(): void
     {
         $this->assertTrue(Enumerable::from([1, 2, 3, 4])->all());
         $this->assertTrue(Enumerable::from([2, 4])->all(function($n) { return $n % 2 === 0; }));
         $this->assertFalse(Enumerable::from([0, 1, 2, 3])->all(function($n) { return $n % 2 === 0; }));
         $this->assertFalse(Enumerable::from([0, 1, 2, 3])->all());
-        $this->assertTrue(Enumerable::from([])->all());
-        $this->assertTrue(Enumerable::from([])->all(function($n) { return $n % 2 === 0; }));
+        $this->assertTrue($this->getEmpty()->all());
+        $this->assertTrue($this->getEmpty()->all(function($n) { return $n % 2 === 0; }));
     }
 
-    public function testAny()
+    public function testAny(): void
     {
         $this->assertTrue(Enumerable::from([0, 1, 2, 3, 4])->any());
         $this->assertTrue(Enumerable::from([1, 2, 3, 4])->any(function($n) { return $n % 2 === 0; }));
         $this->assertFalse(Enumerable::from([0])->any());
         $this->assertFalse(Enumerable::from([1, 3])->any(function($n) { return $n % 2 === 0; }));
-        $this->assertFalse(Enumerable::from([])->any());
-        $this->assertFalse(Enumerable::from([])->any(function($n) { return $n % 2 === 0; }));
+        $this->assertFalse($this->getEmpty()->any());
+        $this->assertFalse($this->getEmpty()->any(function($n) { return $n % 2 === 0; }));
     }
 
-    public function testAverage()
+    public function testAverage(): void
     {
         $this->assertSame(2, Enumerable::from([0, 1, 2, 3, 4])->average());
         $this->assertSame(4, Enumerable::from([0, 1, 2, 3, 4])->average(function($n) { return $n * 2; }));
 
-        $this->assertThrows(function() { Enumerable::from([])->average(); });
-        $this->assertThrows(function() { Enumerable::from([])->average(function($n) { return $n * 2; }); });
+        $this->assertThrows(function() { $this->getEmpty()->average(); });
+        $this->assertThrows(function() { $this->getEmpty()->average(function($n) { return $n * 2; }); });
     }
 
-    public function testBuffer()
+    public function testBuffer(): void
     {
         $xs = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         $this->assertEquals([[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]], Enumerable::from($xs)->buffer(3)->toArray());
         $this->assertEquals([[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]], Enumerable::from($xs)->buffer(5)->toArray());
-        $this->assertEquals([], Enumerable::from([])->buffer(5)->toArray());
+        $this->assertEquals([], $this->getEmpty()->buffer(5)->toArray());
         $this->assertEquals([[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9]], Enumerable::from($xs)->buffer(3, 2)->toArray());
         $this->assertEquals([[0, 1, 2], [4, 5, 6], [8, 9]], Enumerable::from($xs)->buffer(3, 4)->toArray());
 
-        $this->assertThrows(function() { Enumerable::from([])->buffer(0)->toArray(); }, \OutOfRangeException::class);
-        $this->assertThrows(function() { Enumerable::from([])->buffer(1, 0)->toArray(); }, \OutOfRangeException::class);
-        $this->assertThrows(function() { Enumerable::from([])->buffer(0, 1)->toArray(); }, \OutOfRangeException::class);
-        $this->assertThrows(function() { Enumerable::from([])->buffer(0, 0)->toArray(); }, \OutOfRangeException::class);
+        $this->assertThrows(function() { $this->getEmpty()->buffer(0)->toArray(); }, \OutOfRangeException::class);
+        $this->assertThrows(function() { $this->getEmpty()->buffer(1, 0)->toArray(); }, \OutOfRangeException::class);
+        $this->assertThrows(function() { $this->getEmpty()->buffer(0, 1)->toArray(); }, \OutOfRangeException::class);
+        $this->assertThrows(function() { $this->getEmpty()->buffer(0, 0)->toArray(); }, \OutOfRangeException::class);
     }
 
-    public function testCatch()
+    public function testCatch(): void
     {
+        /** @var MockObject&callable(mixed):mixed */
         $handler = $this->createMock(Spy::class);
         $handler
             ->expects($this->never())
             ->method('__invoke');
         $this->assertEquals([1, 2, 3], Enumerable::from([1, 2, 3])->catch($handler)->toArray());
 
-        $iteratorFn = function() {
+        $iteratorFn = function(): iterable {
             yield 1;
             yield 2;
             yield 3;
             throw new \Exception();
         };
+        /** @var MockObject&callable(mixed):mixed */
         $handler = $this->createMock(Spy::class);
         $handler
             ->expects($this->once())
@@ -235,29 +241,29 @@ class EnumerableTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 5, 6], Enumerable::defer($iteratorFn)->catch($handler)->toArray());
     }
 
-    public function testConcat()
+    public function testConcat(): void
     {
-        $this->assertEquals([], Enumerable::from([])->concat([])->toArray());
+        $this->assertEquals([], $this->getEmpty()->concat([])->toArray());
         $this->assertEquals([1, 2, 3, 4, 5, 6], Enumerable::from([1, 2, 3])->concat([4, 5, 6])->toArray());
         $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9], Enumerable::from([1, 2, 3])->concat([4, 5, 6])->concat([7, 8, 9])->toArray());
     }
 
-    public function testCount()
+    public function testCount(): void
     {
         $this->assertSame(4, Enumerable::from([1, 2, 3, 4])->count());
         $this->assertSame(4, Enumerable::from(new \ArrayIterator([1, 2, 3, 4]))->count());
         $this->assertSame(4, Enumerable::from(new \IteratorIterator(new \ArrayIterator([1, 2, 3, 4])))->count());
-        $this->assertSame(0, Enumerable::from([])->count());
+        $this->assertSame(0, $this->getEmpty()->count());
         $this->assertSame(2, Enumerable::from([1, 2, 3, 4])->count(function($n) { return $n % 2 === 0; }));
     }
 
-    public function testDefaultIfEmpty()
+    public function testDefaultIfEmpty(): void
     {
         $this->assertEquals([1, 2, 3], Enumerable::from([1, 2, 3])->defaultIfEmpty(123)->toArray());
-        $this->assertEquals([123], Enumerable::from([])->defaultIfEmpty(123)->toArray());
+        $this->assertEquals([123], $this->getEmpty()->defaultIfEmpty(123)->toArray());
     }
 
-    public function testDistinct()
+    public function testDistinct(): void
     {
         $this->assertEquals([1, 2], Enumerable::from([1, 2, 1, 2])->distinct()->toArray());
         $this->assertEquals([1, 2], Enumerable::from([1, 1, 2, 2])->distinct()->toArray());
@@ -265,7 +271,7 @@ class EnumerableTest extends TestCase
         $this->assertEquals([1, 2], Enumerable::from([1, 3, 2, 4])->distinct(function($x) { return $x % 2 === 0; })->toArray());
     }
 
-    public function testDistinctUntilChanged()
+    public function testDistinctUntilChanged(): void
     {
         $this->assertEquals([1, 2, 1, 2], Enumerable::from([1, 2, 1, 2])->distinctUntilChanged()->toArray());
         $this->assertEquals([1, 2], Enumerable::from([1, 1, 2, 2])->distinctUntilChanged()->toArray());
@@ -273,14 +279,16 @@ class EnumerableTest extends TestCase
         $this->assertEquals([1, 2], Enumerable::from([1, 3, 2, 4])->distinctUntilChanged(function($x) { return $x % 2 === 0; })->toArray());
     }
 
-    public function testDo()
+    public function testDo(): void
     {
+        /** @var MockObject&callable(mixed):void */
         $action = $this->createMock(Spy::class);
         $action
             ->expects($this->never())
             ->method('__invoke');
         Enumerable::from([1, 2, 3, 4])->do($action);
 
+        /** @var MockObject&callable(mixed):void */
         $action = $this->createMock(Spy::class);
         $action
             ->expects($this->exactly(4))
@@ -294,17 +302,17 @@ class EnumerableTest extends TestCase
         $this->assertEquals([1, 2, 3, 4], Enumerable::from([1, 2, 3, 4])->do($action)->toArray());
     }
 
-    public function testDoWhile()
+    public function testDoWhile(): void
     {
         $x = 0;
-        $iteratorFn = function() use (&$x) {
+        $iteratorFn = function() use (&$x): iterable {
                 yield $x++;
         };
         $this->assertEquals([0, 1, 2, 3, 4], Enumerable::defer($iteratorFn)->doWhile(function() use (&$x) { return $x < 5; })->toArray());
         $this->assertEquals([5], Enumerable::defer($iteratorFn)->doWhile(function() use(&$x) { return $x < 5; })->toArray());
     }
 
-    public function testElementAt()
+    public function testElementAt(): void
     {
         $xs = [1, 2, 3, 4];
         $this->assertSame(1, Enumerable::from($xs)->elementAt(0));
@@ -320,7 +328,7 @@ class EnumerableTest extends TestCase
         $this->assertThrows(function() use ($xs) { Enumerable::from($xs)->elementAt(4); });
     }
 
-    public function testElementAtOrDefault()
+    public function testElementAtOrDefault(): void
     {
         $xs = [1, 2, 3, 4];
         $this->assertSame(1, Enumerable::from($xs)->elementAtOrDefault(0));
@@ -337,28 +345,30 @@ class EnumerableTest extends TestCase
         $this->assertNull(Enumerable::from($xs)->elementAtOrDefault(4));
     }
 
-    public function testExcept()
+    public function testExcept(): void
     {
-        $this->assertEquals([], Enumerable::from([])->except([])->toArray());
+        $this->assertEquals([], $this->getEmpty()->except([])->toArray());
         $this->assertEquals([1, 5, 6], Enumerable::from([1, 2, 3, 4, 5, 6])->except([2, 3, 4])->toArray());
         $this->assertEquals([1, 5, 6], Enumerable::from([1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6])->except([2, 3, 4])->toArray());
         $this->assertEquals([], Enumerable::from([2, 3, 4])->except([1, 2, 3, 4, 5, 6])->toArray());
     }
 
-    public function testFinally()
+    public function testFinally(): void
     {
+        /** @var MockObject&callable():void */
         $finallyAction = $this->createMock(Spy::class);
         $finallyAction
             ->expects($this->once())
             ->method('__invoke');
         $this->assertEquals([1, 2, 3], Enumerable::from([1, 2, 3])->finally($finallyAction)->toArray());
 
-        $iteratorFn = function() {
+        $iteratorFn = function(): iterable {
             yield 1;
             yield 2;
             yield 3;
             throw new \Exception();
         };
+        /** @var MockObject&callable():void */
         $finallyAction = $this->createMock(Spy::class);
         $finallyAction
             ->expects($this->once())
@@ -366,35 +376,36 @@ class EnumerableTest extends TestCase
         $this->assertThrows(function() use ($iteratorFn, $finallyAction) { Enumerable::defer($iteratorFn)->finally($finallyAction)->toArray(); });
     }
 
-    public function testFirst()
+    public function testFirst(): void
     {
         $xs = [1, 2, 3, 4];
         $this->assertSame(1, Enumerable::from($xs)->first());
         $this->assertSame(2, Enumerable::from($xs)->first(function($x) { return $x % 2 === 0; }));
         $this->assertSame(1, Enumerable::from(new \ArrayIterator($xs))->first());
 
-        $this->assertThrows(function() { Enumerable::from([])->first(); });
+        $this->assertThrows(function() { $this->getEmpty()->first(); });
         $this->assertThrows(function() { Enumerable::from(new \EmptyIterator())->first(); });
         $this->assertThrows(function() { Enumerable::from([1, 2, 3, 4])->first(function($x) { return $x > 10; }); });
     }
 
-    public function testFirstOrDefault()
+    public function testFirstOrDefault(): void
     {
         $xs = [1, 2, 3, 4];
         $this->assertSame(1, Enumerable::from($xs)->firstOrDefault());
         $this->assertSame(2, Enumerable::from($xs)->firstOrDefault(function($x) { return $x % 2 === 0; }));
         $this->assertSame(1, Enumerable::from(new \ArrayIterator($xs))->firstOrDefault());
 
-        $this->assertNull(Enumerable::from([])->firstOrDefault());
-        $this->assertSame(123, Enumerable::from([])->firstOrDefault(null, 123));
+        $this->assertNull($this->getEmpty()->firstOrDefault());
+        $this->assertSame(123, $this->getEmpty()->firstOrDefault(null, 123));
         $this->assertNull(Enumerable::from(new \EmptyIterator())->firstOrDefault());
         $this->assertSame(123, Enumerable::from(new \EmptyIterator())->firstOrDefault(null, 123));
         $this->assertNull(Enumerable::from([1, 2, 3, 4])->firstOrDefault(function($x) { return $x > 10; }));
         $this->assertSame(123, Enumerable::from([1, 2, 3, 4])->firstOrDefault(function($x) { return $x > 10; }, 123));
     }
 
-    public function testForEach()
+    public function testForEach(): void
     {
+        /** @var MockObject&callable(mixed):void */
         $action = $this->createMock(Spy::class);
         $action
             ->expects($this->exactly(4))
@@ -408,14 +419,14 @@ class EnumerableTest extends TestCase
         Enumerable::from([1, 2, 3, 4])->forEach($action);
     }
 
-    public function testGroupBy()
+    public function testGroupBy(): void
     {
         $this->assertEquals([['odd', [1, 3]], ['even', [2, 4]]], Enumerable::from([1, 2, 3, 4])->groupBy(function($x) { return $x % 2 === 0 ? 'even' : 'odd'; })->toArray());
         $this->assertEquals([['odd', [2, 6]], ['even', [4, 8]]], Enumerable::from([1, 2, 3, 4])->groupBy(function($x) { return $x % 2 === 0 ? 'even' : 'odd'; }, function($x) { return $x * 2; })->toArray());
         $this->assertEquals([[2, 6], [4, 8]], Enumerable::from([1, 2, 3, 4])->groupBy(function($x) { return $x % 2 === 0 ? 'even' : 'odd'; }, function($x) { return $x * 2; }, function($k, $vs) { return $vs; })->toArray());
     }
 
-    public function testGroupJoin()
+    public function testGroupJoin(): void
     {
         $xs = [0, 1, 2];
         $ys = [4, 7, 6, 2, 3, 4, 8, 9];
@@ -442,8 +453,9 @@ class EnumerableTest extends TestCase
         $this->assertEquals(['0-36', '1-4', '2-'], $result);
     }
 
-    public function testIgnoreElements()
+    public function testIgnoreElements(): void
     {
+        /** @var MockObject&iterable<mixed> */
         $iterator = $this->createMock(\IteratorAggregate::class);
         $iterator
             ->expects($this->never())
@@ -451,20 +463,20 @@ class EnumerableTest extends TestCase
         $this->assertEquals([], Enumerable::from($iterator)->ignoreElements()->toArray());
     }
 
-    public function testIntersect()
+    public function testIntersect(): void
     {
         $xs = [44, 26, 92, 30, 71, 38];
         $ys = [39, 59, 83, 47, 26, 4, 30];
         $this->assertEquals([26, 30], Enumerable::from($xs)->intersect($ys)->toArray());
     }
 
-    public function testIsEmpty()
+    public function testIsEmpty(): void
     {
-        $this->assertTrue(Enumerable::from([])->isEmpty());
+        $this->assertTrue($this->getEmpty()->isEmpty());
         $this->assertFalse(Enumerable::from([1, 2, 3])->isEmpty());
     }
 
-    public function testJoin()
+    public function testJoin(): void
     {
         $xs = [0, 1, 2];
         $ys = [3, 6, 4];
@@ -491,49 +503,49 @@ class EnumerableTest extends TestCase
         $this->assertEquals(['3-0', '3-0', '6-0', '6-0', '4-1', '4-1'], $result);
     }
 
-    public function testLast()
+    public function testLast(): void
     {
         $xs = [1, 2, 3, 4];
         $this->assertSame(4, Enumerable::from($xs)->lastOrDefault());
         $this->assertSame(4, Enumerable::from(new \ArrayIterator($xs))->lastOrDefault());
         $this->assertSame(3, Enumerable::from($xs)->lastOrDefault(function($x) { return $x % 2 === 1; }));
 
-        $this->assertNull(Enumerable::from([])->lastOrDefault());
-        $this->assertSame(123, Enumerable::from([])->lastOrDefault(null, 123));
+        $this->assertNull($this->getEmpty()->lastOrDefault());
+        $this->assertSame(123, $this->getEmpty()->lastOrDefault(null, 123));
         $this->assertNull(Enumerable::from(new \EmptyIterator())->lastOrDefault());
         $this->assertSame(123, Enumerable::from(new \EmptyIterator())->lastOrDefault(null, 123));
         $this->assertNull(Enumerable::from([1, 2, 3, 4])->lastOrDefault(function($x) { return $x > 10; }));
         $this->assertSame(123, Enumerable::from([1, 2, 3, 4])->lastOrDefault(function($x) { return $x > 10; }, 123));
     }
 
-    public function testLastOrDefault()
+    public function testLastOrDefault(): void
     {
         $xs = [1, 2, 3, 4];
         $this->assertSame(4, Enumerable::from($xs)->last());
         $this->assertSame(4, Enumerable::from(new \ArrayIterator($xs))->last());
         $this->assertSame(3, Enumerable::from($xs)->last(function($x) { return $x % 2 === 1; }));
 
-        $this->assertThrows(function() { return Enumerable::from([])->last(); });
+        $this->assertThrows(function() { return $this->getEmpty()->last(); });
         $this->assertThrows(function() { return Enumerable::from([1, 2, 3, 4])->last(function($x) { return $x > 10; }); });
     }
 
-    public function testMax()
+    public function testMax(): void
     {
-        $this->assertSame(-INF, Enumerable::from([])->max());
+        $this->assertNull($this->getEmpty()->max());
         $this->assertSame(3, Enumerable::from([1, 2, 3, 2, 1])->max());
         $this->assertSame(3, Enumerable::from(['a', 'ab', 'abc', 'ab', 'a'])->max(function($s) { return strlen($s); }));
     }
 
-    public function testMaxBy()
+    public function testMaxBy(): void
     {
         $this->assertEquals([3, 3], Enumerable::from([3, 2, 1, 2, 3])->maxBy(function($x) { return $x; }));
         $this->assertEquals(['abc', 'abc'], Enumerable::from(['ab', 'abc', 'ab', 'a', 'ab', 'abc', 'ab'])->maxBy(function($s) { return strlen($s); }));
     }
 
-    public function testMemoize()
+    public function testMemoize(): void
     {
         $n = 0;
-        $iteratorFn = function() use (&$n) {
+        $iteratorFn = function() use (&$n): iterable {
             for ($i = 0; $i < 10; $i++) {
                 yield $n++;
             }
@@ -544,7 +556,7 @@ class EnumerableTest extends TestCase
         $this->assertEquals(iterator_to_array($memoized), $expected);
 
         $n = 0;
-        $iteratorFn = function() use (&$n) {
+        $iteratorFn = function() use (&$n): iterable {
             for ($i = 0; $i < 10; $i++) {
                 yield $n++;
             }
@@ -557,27 +569,27 @@ class EnumerableTest extends TestCase
         $this->assertEquals($expected, iterator_to_array($memoized));
     }
 
-    public function testMin()
+    public function testMin(): void
     {
-        $this->assertSame(INF, Enumerable::from([])->min());
+        $this->assertNull($this->getEmpty()->min());
         $this->assertSame(1, Enumerable::from([1, 2, 3, 2, 1])->min());
         $this->assertSame(1, Enumerable::from(['a', 'ab', 'abc', 'ab', 'a'])->min(function($s) { return strlen($s); }));
     }
 
-    public function testMinBy()
+    public function testMinBy(): void
     {
         $this->assertEquals([1, 1], Enumerable::from([1, 2, 3, 2, 1])->minBy(function($x) { return $x; }));
         $this->assertEquals(['a', 'a'], Enumerable::from(['ab', 'a', 'ab', 'abc', 'ab', 'a', 'ab'])->minBy(function($s) { return strlen($s); }));
     }
 
-    public function testOnErrorResumeNext()
+    public function testOnErrorResumeNext(): void
     {
-        $xs = function() {
+        $xs = function(): iterable {
             yield 1;
             yield 2;
             throw new \Exception();
         };
-        $ys = function() {
+        $ys = function(): iterable {
             yield 3;
             yield 4;
             throw new \Exception();
@@ -585,7 +597,7 @@ class EnumerableTest extends TestCase
         $this->assertEquals(Enumerable::from($xs())->onErrorResumeNext($ys())->toArray(), [1, 2, 3, 4]);
     }
 
-    public function testOuterJoin()
+    public function testOuterJoin(): void
     {
         $xs = [0, 1, 2];
         $ys = [3, 6, 4];
@@ -612,7 +624,7 @@ class EnumerableTest extends TestCase
         $this->assertEquals(['3-0', '3-0', '6-0', '6-0', '4-1', '4-1'], $result);
     }
 
-    public function testOrderBy()
+    public function testOrderBy(): void
     {
         $xs = [3, 2, 4, 1, 1];
         $this->assertEquals([1, 1, 2, 3, 4], Enumerable::from($xs)->orderBy()->toArray());
@@ -621,25 +633,25 @@ class EnumerableTest extends TestCase
         $this->assertEquals([2, 4, 1, 1, 3], Enumerable::from($xs)->orderBy(function($n) { return $n % 2; })->thenByDescending(function($n) { return -$n; })->toArray());
     }
 
-    public function testOrderByDescending()
+    public function testOrderByDescending(): void
     {
         $xs = [3, 2, 4, 1];
         $this->assertEquals([4, 3, 2, 1], Enumerable::from($xs)->orderByDescending()->toArray());
         $this->assertEquals([3, 1, 4, 2], Enumerable::from($xs)->orderByDescending(function($n) { return $n % 2; })->thenByDescending(function($n) { return $n; })->toArray());
     }
 
-    public function testRepeat()
+    public function testRepeat(): void
     {
         $this->assertIterator([1, 2, 3, 1, 2, 3, 1, 2, 3, 1], Enumerable::from([1, 2, 3])->repeat()->toIterator());
         $this->assertEquals([1, 2, 3, 1, 2, 3], Enumerable::from([1, 2, 3])->repeat(2)->toArray());
     }
 
-    public function testRetry()
+    public function testRetry(): void
     {
         $this->assertEquals([1, 2, 3], Enumerable::from([1, 2, 3])->retry()->toArray());
         $this->assertEquals([1, 2, 3], Enumerable::from([1, 2, 3])->retry(2)->toArray());
 
-        $iteratorFn = function() {
+        $iteratorFn = function(): iterable {
             yield 1;
             yield 2;
             yield 3;
@@ -650,38 +662,38 @@ class EnumerableTest extends TestCase
         $this->assertThrows(function() use ($iterator) { $iterator->next(); });
     }
 
-    public function testReverse()
+    public function testReverse(): void
     {
-        $this->assertEquals([], Enumerable::from([])->reverse()->toArray());
+        $this->assertEquals([], $this->getEmpty()->reverse()->toArray());
         $this->assertEquals([1, 4, 2, 3], Enumerable::from([3, 2, 4, 1])->reverse()->toArray());
         $this->assertEquals([1, 4, 2, 3], Enumerable::from(new \ArrayIterator([3, 2, 4, 1]))->reverse()->toArray());
     }
 
-    public function testScan()
+    public function testScan(): void
     {
         $this->assertEquals([1, 3, 6, 10, 15], Enumerable::from([1, 2, 3, 4, 5])->scan(0, function($total, $n) { return $total + $n; })->toArray());
-        $this->assertEquals([], Enumerable::from([])->scan(0, function($total, $n) { return $total + $n; })->toArray());
+        $this->assertEquals([], $this->getEmpty()->scan(0, function($total, $n) { return $total + $n; })->toArray());
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         $this->assertEquals([2, 4, 6, 8], Enumerable::from([1, 2, 3, 4])->select(function($x) { return $x * 2; })->toArray());
-        $this->assertEquals([], Enumerable::from([])->select(function($x) { return $x * 2; })->toArray());
+        $this->assertEquals([], $this->getEmpty()->select(function($x) { return $x * 2; })->toArray());
     }
 
-    public function testSelectMany()
+    public function testSelectMany(): void
     {
-        $this->assertEquals([1, 2, 2, 4, 3, 6, 4, 8], Enumerable::from([1, 2, 3, 4])->selectMany(function($x) { return [$x, $x * 2]; })->toArray());
-        $this->assertEquals([], Enumerable::from([])->selectMany(function($x) { return [$x, $x * 2]; })->toArray());
+        $this->assertEquals([1, 2, 2, 4, 3, 6, 4, 8], Enumerable::from([1, 2, 3, 4])->selectMany(function($x): array { return [$x, $x * 2]; })->toArray());
+        $this->assertEquals([], $this->getEmpty()->selectMany(function($x): array { return [$x, $x * 2]; })->toArray());
     }
 
-    public function testSingle()
+    public function testSingle(): void
     {
         $this->assertSame(1, Enumerable::from([1])->single());
         $this->assertSame(1, Enumerable::from(new \ArrayIterator([1]))->single());
         $this->assertSame(2, Enumerable::from([1, 2])->single(function($x) { return $x % 2 === 0; }));
 
-        $this->assertThrows(function() { Enumerable::from([])->single(); });
+        $this->assertThrows(function() { $this->getEmpty()->single(); });
         $this->assertThrows(function() { Enumerable::from(new \EmptyIterator())->single(); });
         $this->assertThrows(function() { Enumerable::from([1, 2])->single(); });
         $this->assertThrows(function() { Enumerable::from(new \ArrayIterator([1, 2]))->single(); });
@@ -689,14 +701,14 @@ class EnumerableTest extends TestCase
         $this->assertThrows(function() { Enumerable::from([1, 2, 3, 4])->single(function($x) { return $x > 10; }); });
     }
 
-    public function testSingleOrDefault()
+    public function testSingleOrDefault(): void
     {
         $this->assertSame(1, Enumerable::from([1])->singleOrDefault());
         $this->assertSame(1, Enumerable::from(new \ArrayIterator([1]))->singleOrDefault());
         $this->assertSame(2, Enumerable::from([1, 2])->singleOrDefault(function($x) { return $x % 2 === 0; }));
 
-        $this->assertNull(Enumerable::from([])->singleOrDefault());
-        $this->assertSame(123, Enumerable::from([])->singleOrDefault(null, 123));
+        $this->assertNull($this->getEmpty()->singleOrDefault());
+        $this->assertSame(123, $this->getEmpty()->singleOrDefault(null, 123));
         $this->assertNull(Enumerable::from(new \EmptyIterator())->singleOrDefault());
         $this->assertSame(123, Enumerable::from(new \EmptyIterator())->singleOrDefault(null, 123));
         $this->assertNull(Enumerable::from([1, 2])->singleOrDefault());
@@ -709,45 +721,45 @@ class EnumerableTest extends TestCase
         $this->assertSame(123, Enumerable::from([1, 2, 3, 4])->singleOrDefault(function($x) { return $x > 10; }, 123));
     }
 
-    public function testSkip()
+    public function testSkip(): void
     {
-        $this->assertEquals([], Enumerable::from([])->skip(1)->toArray());
+        $this->assertEquals([], $this->getEmpty()->skip(1)->toArray());
         $this->assertEquals([0, 1, 2, 3, 4], Enumerable::from([0, 1, 2, 3, 4])->skip(0)->toArray());
         $this->assertEquals([3, 4], Enumerable::from([0, 1, 2, 3, 4])->skip(3)->toArray());
         $this->assertEquals([3, 4], Enumerable::from(new \ArrayIterator([0, 1, 2, 3, 4]))->skip(3)->toArray());
     }
 
-    public function testSkipLast()
+    public function testSkipLast(): void
     {
-        $this->assertEquals([], Enumerable::from([])->skipLast(1)->toArray());
+        $this->assertEquals([], $this->getEmpty()->skipLast(1)->toArray());
         $this->assertEquals([0, 1, 2, 3, 4], Enumerable::from([0, 1, 2, 3, 4])->skipLast(0)->toArray());
         $this->assertEquals([0, 1], Enumerable::from([0, 1, 2, 3, 4])->skipLast(3)->toArray());
     }
 
-    public function testSkipWhile()
+    public function testSkipWhile(): void
     {
         $this->assertEquals([1, 2, 3, 4], Enumerable::from([1, 2, 3, 4])->skipWhile(function($x) { return $x % 2 === 0; })->toArray());
         $this->assertEquals([3, 2, 1], Enumerable::from([4, 3, 2, 1])->skipWhile(function($x) { return $x % 2 === 0; })->toArray());
     }
 
-    public function testStartWith()
+    public function testStartWith(): void
     {
         $this->assertEquals([0, 0, 1, 2, 3, 4], Enumerable::from([0, 1, 2, 3, 4])->startWith(0)->toArray());
     }
 
-    public function testSum()
+    public function testSum(): void
     {
         $this->assertSame(6, Enumerable::from([1, 2, 3])->sum());
         $this->assertSame(12, Enumerable::from([1, 2, 3])->sum(function($x) { return $x * 2; }));
     }
 
-    public function testTake()
+    public function testTake(): void
     {
         $this->assertEquals([1, 2], Enumerable::from([1, 2, 3, 4])->take(2)->toArray());
         $this->assertEquals([], Enumerable::from([1, 2, 3, 4])->take(0)->toArray());
     }
 
-    public function testTakeLast()
+    public function testTakeLast(): void
     {
         $xs = [1, 2, 3, 4, 5];
         $this->assertEquals([], Enumerable::from($xs)->takeLast(0)->toArray());
@@ -755,69 +767,72 @@ class EnumerableTest extends TestCase
         $this->assertEquals([3, 4, 5], Enumerable::from($xs)->takeLast(3)->toArray());
     }
 
-    public function testTakeWhile()
+    public function testTakeWhile(): void
     {
         $this->assertEquals([], Enumerable::from([1, 2, 3, 4])->takeWhile(function($x) { return $x % 2 === 0; })->toArray());
         $this->assertEquals([4], Enumerable::from([4, 3, 2, 1])->takeWhile(function($x) { return $x % 2 === 0; })->toArray());
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
-        $this->assertEquals([], Enumerable::from([])->toArray());
+        $this->assertEquals([], $this->getEmpty()->toArray());
         $this->assertEquals([1, 2, 3], Enumerable::from([1, 2, 3])->toArray());
         $this->assertEquals([1, 2, 3], Enumerable::from(new \ArrayIterator([1, 2, 3]))->toArray());
     }
 
-    public function testToDictionary()
+    public function testToDictionary(): void
     {
         $this->assertEquals([1 => 'i', 2 => 'gh', 3 => 'def'], Enumerable::from(['a', 'bc', 'def', 'gh', 'i'])->toDictionary(function($x) { return strlen($x); }));
         $this->assertEquals(['a' => 1, 'bc' => 2, 'def' => 3, 'gh' => 2, 'i' => 1], Enumerable::from(['a', 'bc', 'def', 'gh', 'i'])->toDictionary(function($x) { return $x; }, function($x) { return strlen($x); }));
     }
 
-    public function testToLookup()
+    public function testToLookup(): void
     {
         $this->assertEquals([1 => ['a', 'i'], 2 => ['bc', 'gh'], 3 => ['def']], Enumerable::from(['a', 'bc', 'def', 'gh', 'i'])->toLookup(function($x) { return strlen($x); }));
         $this->assertEquals([1 => ['aa', 'ii'], 2 => ['bcbc', 'ghgh'], 3 => ['defdef']], Enumerable::from(['a', 'bc', 'def', 'gh', 'i'])->toLookup(function($x) { return strlen($x); }, function($x) { return $x . $x; }));
     }
 
-    public function testToIterator()
+    public function testToIterator(): void
     {
-        $this->assertInstanceOf(\Iterator::class, Enumerable::from([])->toIterator());
-        $this->assertInstanceOf(\Iterator::class, Enumerable::from(Enumerable::from([]))->toIterator());
+        $this->assertInstanceOf(\Iterator::class, $this->getEmpty()->toIterator());
+        $this->assertInstanceOf(\Iterator::class, Enumerable::from($this->getEmpty())->toIterator());
         $this->assertInstanceOf(\Iterator::class, Enumerable::from(new \ArrayIterator([]))->toIterator());
     }
 
-    public function testUnion()
+    public function testUnion(): void
     {
         $this->assertEquals([2, 3], Enumerable::from([1, 2, 3])->union([2, 3, 4])->toArray());
         $this->assertEquals([], Enumerable::from([1, 2, 3])->union([])->toArray());
-        $this->assertEquals([], Enumerable::from([])->union([2, 3, 4])->toArray());
-        $this->assertEquals([], Enumerable::from([])->union([])->toArray());
+        $this->assertEquals([], $this->getEmpty()->union([2, 3, 4])->toArray());
+        $this->assertEquals([], $this->getEmpty()->union([])->toArray());
     }
 
-    public function testWhere()
+    public function testWhere(): void
     {
         $this->assertEquals([2, 4], Enumerable::from([1, 2, 3, 4])->where(function($x) { return $x % 2 == 0; })->toArray());
     }
 
-    public function testWhile()
+    public function testWhile(): void
     {
         $x = 5;
-        $iteratorFn = function() use (&$x) {
+        $iteratorFn = function() use (&$x): iterable {
             yield $x--;
         };
         $this->assertEquals([5, 4, 3, 2, 1], Enumerable::defer($iteratorFn)->while(function() use (&$x) { return $x > 0; })->toArray());
     }
 
-    public function testZip()
+    public function testZip(): void
     {
         $this->assertEquals([[1, 2], [3, 4], [5, 6], [7, 8]], Enumerable::from([1, 3, 5, 7])->zip([2, 4, 6, 8], function($x, $y) { return [$x, $y]; })->toArray());
         $this->assertEquals([[1, 2], [3, 4], [5, 6], [7, 8]], Enumerable::from([1, 3, 5, 7, 9])->zip([2, 4, 6, 8], function($x, $y) { return [$x, $y]; })->toArray());
         $this->assertEquals([[1, 2], [3, 4], [5, 6], [7, 8]], Enumerable::from([1, 3, 5, 7])->zip([2, 4, 6, 8, 10], function($x, $y) { return [$x, $y]; })->toArray());
-        $this->assertEquals([], Enumerable::from([])->zip([], function($x, $y) { return [$x, $y]; })->toArray());
+        $this->assertEquals([], $this->getEmpty()->zip([], function($x, $y) { return [$x, $y]; })->toArray());
     }
 
-    protected function assertThrows(callable $action, $expectedException = 'Exception')
+    /**
+     * @param class-string $expectedException
+     */
+    protected function assertThrows(callable $action, string $expectedException = 'Exception'): void
     {
         try {
             $action();
@@ -830,7 +845,12 @@ class EnumerableTest extends TestCase
         $this->fail("Failed asserting that the action throws '$expectedException'.");
     }
 
-    protected function assertIterator(array $expectedValues, \Iterator $iterator)
+    /**
+     * @template T
+     * @param T[] $expectedValues
+     * @param \Iterator<T> $iterator
+     */
+    protected function assertIterator(array $expectedValues, \Iterator $iterator): void
     {
         $firstLoop = true;
         foreach ($expectedValues as $key => $value) {
@@ -844,5 +864,15 @@ class EnumerableTest extends TestCase
             $this->assertSame($key, $iterator->key());
             $this->assertSame($value, $iterator->current());
         }
+    }
+
+    /**
+     * @return EnumerableInterface<mixed>
+     */
+    private function getEmpty(): EnumerableInterface
+    {
+        /** @var mixed[] */
+        $xs = [];
+        return Enumerable::from($xs);
     }
 }

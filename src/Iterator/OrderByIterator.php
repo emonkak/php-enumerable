@@ -12,6 +12,9 @@ use Emonkak\Enumerable\OrderedEnumerableInterface;
 /**
  * @template TElement
  * @template TKey
+ * @implements \IteratorAggregate<TElement>
+ * @implements OrderedEnumerableInterface<TElement,TKey>
+ * @use EnumerableExtensions<TElement>
  */
 class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
 {
@@ -40,7 +43,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     /**
      * @param iterable<TElement> $source
      * @param callable(TElement):TKey $keySelector
-     * @param ?callable(TElement,TElement):int $parentComparer
+     * @param callable(TElement,TElement):int|null $parentComparer
      */
     public function __construct(iterable $source, callable $keySelector, bool $descending, ?callable $parentComparer = null)
     {
@@ -52,6 +55,9 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
         };
     }
 
+    /**
+     * @return \Traversable<TElement>
+     */
     public function getIterator(): \Traversable
     {
         $array = Converters::toArray($this->source);
@@ -60,15 +66,27 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
         return new \ArrayIterator($array);
     }
 
+    /**
+     * @template TNextKey
+     * @param callable(TElement):TNextKey|null $keySelector
+     * @return OrderedEnumerableInterface<TElement,TNextKey>
+     */
     public function thenBy(callable $keySelector = null): OrderedEnumerableInterface
     {
+        /** @var callable(TElement):TNextKey */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, false, $comparer);
     }
 
+    /**
+     * @template TNextKey
+     * @param callable(TElement):TNextKey|null $keySelector
+     * @return OrderedEnumerableInterface<TElement,TNextKey>
+     */
     public function thenByDescending(callable $keySelector = null): OrderedEnumerableInterface
     {
+        /** @var callable(TElement):TNextKey */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, true, $comparer);

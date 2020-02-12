@@ -10,6 +10,9 @@ use Emonkak\Enumerable\Internal\Converters;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class ReverseIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -28,6 +31,9 @@ class ReverseIterator implements \IteratorAggregate, EnumerableInterface
         $this->source = $source;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         $array = Converters::toArray($this->source);

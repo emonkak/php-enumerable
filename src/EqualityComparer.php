@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Emonkak\Enumerable;
 
+/**
+ * @implements EqualityComparerInterface<mixed>
+ */
 class EqualityComparer implements EqualityComparerInterface
 {
     /**
      * @codeCoverageIgnore
-     * @return self
      */
     public static function getInstance(): self
     {
@@ -22,7 +24,6 @@ class EqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * @suppress PhanGenericConstructorTypes
      * @codeCoverageIgnore
      */
     private function __construct()

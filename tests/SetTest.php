@@ -13,10 +13,11 @@ use PHPUnit\Framework\TestCase;
  */
 class SetTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $longString = str_repeat('abracadabra', 100);
 
+        /** @var Set<mixed> */
         $set = Set::create();
 
         $this->assertTrue($set->add('foo'));
@@ -99,16 +100,15 @@ class SetTest extends TestCase
         $this->assertEquals([], $set->toArray());
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testAddWithHashCollision()
+    public function testAddWithHashCollision(): void
     {
+        $this->expectException(\RuntimeException::class);
+
         $comparer = $this->createMock(EqualityComparerInterface::class);
         $comparer
             ->expects($this->any())
             ->method('hash')
-            ->willReturn(0);
+            ->willReturn('0');
         $comparer
             ->expects($this->any())
             ->method('equals')

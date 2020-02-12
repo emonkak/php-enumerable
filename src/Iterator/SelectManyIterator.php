@@ -10,6 +10,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 /**
  * @template TSource
  * @template TResult
+ * @implements \IteratorAggregate<TResult>
+ * @implements EnumerableInterface<TResult>
+ * @use EnumerableExtensions<TResult>
  */
 class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -35,6 +38,9 @@ class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
         $this->collectionSelector = $collectionSelector;
     }
 
+    /**
+     * @return \Traversable<TResult>
+     */
     public function getIterator(): \Traversable
     {
         $collectionSelector = $this->collectionSelector;

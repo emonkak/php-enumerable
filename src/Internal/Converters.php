@@ -13,7 +13,6 @@ final class Converters
      */
     public static function toArray(iterable $source): array
     {
-        // @phan-suppress-next-line PhanTypeMismatchArgumentInternal
         return is_array($source) ? $source : iterator_to_array($source, false);
     }
 
@@ -21,9 +20,9 @@ final class Converters
      * @template TSource
      * @template TElement
      * @param iterable<TSource> $source
-     * @param callable(TSource):string $keySelector
+     * @param callable(TSource):array-key $keySelector
      * @param callable(TSource):TElement $elementSelector
-     * @return array<TKey,TElement>
+     * @return array<array-key,TElement>
      */
     public static function toDictionary(iterable $source, callable $keySelector, callable $elementSelector): array
     {
@@ -38,9 +37,9 @@ final class Converters
      * @template TSource
      * @template TElement
      * @param iterable<TSource> $source
-     * @param callable(TSource):string $keySelector
+     * @param callable(TSource):array-key $keySelector
      * @param callable(TSource):TElement $elementSelector
-     * @return array<TKey,TElement[]>
+     * @return array<array-key,TElement[]>
      */
     public static function toLookup(iterable $source, callable $keySelector, callable $elementSelector): array
     {
@@ -68,7 +67,6 @@ final class Converters
         if (is_array($source)) {
             return new \ArrayIterator($source);
         }
-        // @phan-suppress-next-line PhanTypeMismatchArgumentInternal
         return new \IteratorIterator($source);
     }
 

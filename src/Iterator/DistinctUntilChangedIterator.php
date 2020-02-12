@@ -11,6 +11,9 @@ use Emonkak\Enumerable\EqualityComparerInterface;
 /**
  * @template TSource
  * @template TKey
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -43,6 +46,9 @@ class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInte
         $this->comparer = $comparer;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         $hasCurrentHash = false;

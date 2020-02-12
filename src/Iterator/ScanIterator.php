@@ -10,6 +10,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 /**
  * @template TSource
  * @template TAccumulate
+ * @implements \IteratorAggregate<TAccumulate[]>
+ * @implements EnumerableInterface<TAccumulate[]>
+ * @use EnumerableExtensions<TAccumulate[]>
  */
 class ScanIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -42,6 +45,9 @@ class ScanIterator implements \IteratorAggregate, EnumerableInterface
         $this->func = $func;
     }
 
+    /**
+     * @return \Traversable<TAccumulate[]>
+     */
     public function getIterator(): \Traversable
     {
         $result = $this->seed;

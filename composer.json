@@ -12,9 +12,9 @@
         "php": ">=7.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0",
+        "phpunit/phpunit": "^8.0",
         "satooshi/php-coveralls": "^2.0",
-        "phan/phan": "^2.4"
+        "phpstan/phpstan": "^0.12.9"
     },
     "autoload": {
         "psr-4": {

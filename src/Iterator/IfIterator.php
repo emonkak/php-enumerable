@@ -9,6 +9,9 @@ use Emonkak\Enumerable\EnumerableInterface;
 
 /**
  * @template TResult
+ * @implements \IteratorAggregate<TResult>
+ * @implements EnumerableInterface<TResult>
+ * @use EnumerableExtensions<TResult>
  */
 class IfIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -41,6 +44,9 @@ class IfIterator implements \IteratorAggregate, EnumerableInterface
         $this->elseSource = $elseSource;
     }
 
+    /**
+     * @return \Traversable<TResult>
+     */
     public function getIterator(): \Traversable
     {
         $condition = $this->condition;

@@ -11,6 +11,9 @@ use Emonkak\Enumerable\Set;
 
 /**
  * @template TSource
+ * @implements \IteratorAggregate<TSource>
+ * @implements EnumerableInterface<TSource>
+ * @use EnumerableExtensions<TSource>
  */
 class UnionIterator implements \IteratorAggregate, EnumerableInterface
 {
@@ -43,6 +46,9 @@ class UnionIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
+    /**
+     * @return \Traversable<TSource>
+     */
     public function getIterator(): \Traversable
     {
         $set = new Set($this->comparer);

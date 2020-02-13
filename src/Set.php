@@ -25,7 +25,8 @@ class Set implements \IteratorAggregate, EnumerableInterface
     private $hashTable = [];
 
     /**
-     * @return self<T>
+     * @template TCreate
+     * @return self<TCreate>
      */
     public static function create(): self
     {
@@ -51,7 +52,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return iterable<T>
+     * {@inheritDoc}
      */
     public function getSource(): iterable
     {

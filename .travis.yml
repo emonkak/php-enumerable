@@ -13,7 +13,7 @@ cache:
 install:
   - pecl install ast
   - composer install
-  - php ./vendor/bin/phpstan analyze --memory-limit 1G --level max
+  - php ./vendor/bin/psalm
 
 script:
   - mkdir -p build/logs

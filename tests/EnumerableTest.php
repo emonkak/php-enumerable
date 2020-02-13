@@ -93,7 +93,6 @@ class EnumerableTest extends TestCase
 
     public function testStaticConcat(): void
     {
-        /** @var mixed[] */
         $xs = [];
         $this->assertEquals([], Enumerable::concat($xs, $xs)->toArray());
         $this->assertEquals([1, 2, 3, 4, 5, 6], Enumerable::concat([1, 2, 3], [4, 5, 6])->toArray());
@@ -218,7 +217,6 @@ class EnumerableTest extends TestCase
 
     public function testCatch(): void
     {
-        /** @var MockObject&callable(mixed):mixed */
         $handler = $this->createMock(Spy::class);
         $handler
             ->expects($this->never())
@@ -231,7 +229,6 @@ class EnumerableTest extends TestCase
             yield 3;
             throw new \Exception();
         };
-        /** @var MockObject&callable(mixed):mixed */
         $handler = $this->createMock(Spy::class);
         $handler
             ->expects($this->once())
@@ -281,14 +278,12 @@ class EnumerableTest extends TestCase
 
     public function testDo(): void
     {
-        /** @var MockObject&callable(mixed):void */
         $action = $this->createMock(Spy::class);
         $action
             ->expects($this->never())
             ->method('__invoke');
         Enumerable::from([1, 2, 3, 4])->do($action);
 
-        /** @var MockObject&callable(mixed):void */
         $action = $this->createMock(Spy::class);
         $action
             ->expects($this->exactly(4))
@@ -323,6 +318,10 @@ class EnumerableTest extends TestCase
         $this->assertSame(2, Enumerable::from(new \ArrayIterator($xs))->elementAt(1));
         $this->assertSame(3, Enumerable::from(new \ArrayIterator($xs))->elementAt(2));
         $this->assertSame(4, Enumerable::from(new \ArrayIterator($xs))->elementAt(3));
+        $this->assertSame(1, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAt(0));
+        $this->assertSame(2, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAt(1));
+        $this->assertSame(3, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAt(2));
+        $this->assertSame(4, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAt(3));
 
         $xs = [1, 2, 3, 4];
         $this->assertThrows(function() use ($xs) { Enumerable::from($xs)->elementAt(4); });
@@ -339,6 +338,10 @@ class EnumerableTest extends TestCase
         $this->assertSame(2, Enumerable::from(new \ArrayIterator($xs))->elementAtOrDefault(1));
         $this->assertSame(3, Enumerable::from(new \ArrayIterator($xs))->elementAtOrDefault(2));
         $this->assertSame(4, Enumerable::from(new \ArrayIterator($xs))->elementAtOrDefault(3));
+        $this->assertSame(1, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAtOrDefault(0));
+        $this->assertSame(2, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAtOrDefault(1));
+        $this->assertSame(3, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAtOrDefault(2));
+        $this->assertSame(4, Enumerable::from(new \IteratorIterator(new \ArrayIterator($xs)))->elementAtOrDefault(3));
 
         $xs = [1, 2, 3, 4];
         $this->assertNull(Enumerable::from($xs)->elementAtOrDefault(4, null));
@@ -355,7 +358,6 @@ class EnumerableTest extends TestCase
 
     public function testFinally(): void
     {
-        /** @var MockObject&callable():void */
         $finallyAction = $this->createMock(Spy::class);
         $finallyAction
             ->expects($this->once())
@@ -368,7 +370,6 @@ class EnumerableTest extends TestCase
             yield 3;
             throw new \Exception();
         };
-        /** @var MockObject&callable():void */
         $finallyAction = $this->createMock(Spy::class);
         $finallyAction
             ->expects($this->once())
@@ -405,7 +406,6 @@ class EnumerableTest extends TestCase
 
     public function testForEach(): void
     {
-        /** @var MockObject&callable(mixed):void */
         $action = $this->createMock(Spy::class);
         $action
             ->expects($this->exactly(4))
@@ -455,7 +455,6 @@ class EnumerableTest extends TestCase
 
     public function testIgnoreElements(): void
     {
-        /** @var MockObject&iterable<mixed> */
         $iterator = $this->createMock(\IteratorAggregate::class);
         $iterator
             ->expects($this->never())
@@ -871,7 +870,6 @@ class EnumerableTest extends TestCase
      */
     private function getEmpty(): EnumerableInterface
     {
-        /** @var mixed[] */
         $xs = [];
         return Enumerable::from($xs);
     }

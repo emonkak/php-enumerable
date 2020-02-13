@@ -46,12 +46,16 @@ use Emonkak\Enumerable\Iterator\WhereIterator;
 use Emonkak\Enumerable\Iterator\WhileIterator;
 use Emonkak\Enumerable\Iterator\ZipIterator;
 
+/**
+ * @template TSource
+ */
 trait EnumerableExtensions
 {
     /**
-     * @param mixed $seed
-     * @param callable(mixed,mixed):mixed $func
-     * @return mixed
+     * @template TResult
+     * @param TResult $seed
+     * @param callable(TResult,TSource):TResult $func
+     * @return TResult
      */
     public function aggregate($seed, callable $func)
     {
@@ -63,7 +67,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool $predicate
+     * @param callable(TSource):bool|null $predicate
      */
     public function all(?callable $predicate = null): bool
     {
@@ -77,7 +81,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
+     * @param callable(TSource):bool|null $predicate
      * @return bool
      */
     public function any(?callable $predicate = null): bool
@@ -92,7 +96,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):(int|float)|null $selector
+     * @param callable(TSource):(int|float)|null $selector
      * @return int|float
      * @throws NoSuchElementException
      */
@@ -112,7 +116,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource[]>
      */
     public function buffer(int $count, ?int $skip = null): EnumerableInterface
     {
@@ -129,8 +133,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(\Exception):(iterable<mixed>) $handler
-     * @return EnumerableInterface<mixed>
+     * @param callable(\Exception):(iterable<TSource>) $handler
+     * @return EnumerableInterface<TSource>
      */
     public function catch(callable $handler): EnumerableInterface
     {
@@ -138,8 +142,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable<mixed> ...$sources
-     * @return EnumerableInterface<mixed>
+     * @param iterable<TSource> ...$sources
+     * @return EnumerableInterface<TSource>
      */
     public function concat(iterable ...$sources): EnumerableInterface
     {
@@ -147,7 +151,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
+     * @param callable(TSource):bool|null $predicate
      * @return int
      */
     public function count(?callable $predicate = null): int
@@ -170,8 +174,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param mixed $defaultValue
-     * @return EnumerableInterface<mixed>
+     * @param TSource $defaultValue
+     * @return EnumerableInterface<TSource>
      */
     public function defaultIfEmpty($defaultValue): EnumerableInterface
     {
@@ -179,9 +183,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed|null $keySelector
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @template TKey
+     * @param callable(TSource):TKey|null $keySelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TSource>
      */
     public function distinct(?callable $keySelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -191,9 +196,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed|null $keySelector
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @template TKey
+     * @param callable(TSource):TKey|null $keySelector
+     * @return EnumerableInterface<TSource>
      */
     public function distinctUntilChanged(?callable $keySelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -203,8 +208,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):void $action
-     * @return EnumerableInterface<mixed>
+     * @param callable(TSource):void $action
+     * @return EnumerableInterface<TSource>
      */
     public function do(callable $action): EnumerableInterface
     {
@@ -213,7 +218,7 @@ trait EnumerableExtensions
 
     /**
      * @param callable():bool $condition
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function doWhile(callable $condition): EnumerableInterface
     {
@@ -221,55 +226,72 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return mixed
+     * @return TSource
      * @throws NoSuchElementException
      */
     public function elementAt(int $index)
     {
         $source = $this->getSource();
-        if (is_array($source) || $source instanceof \ArrayAccess) {
-            // @var array|\ArrayAccess $source
+        if (is_array($source)) {
             if (isset($source[$index])) {
-                return $source[$index];
+                /** @var TSource */
+                $element = $source[$index];
+                return $element;
+            }
+        } elseif ($source instanceof \SeekableIterator) {
+            $source->seek($index);
+            if ($source->valid()) {
+                /** @var TSource */
+                $element = $source->current();
+                return $element;
             }
         } else {
-            foreach ($source as $element) {
-                if ($index === 0) {
+            /** @var iterable<TSource> $source */
+            foreach ($source as $i => $element) {
+                if ($index === $i) {
                     return $element;
                 }
-                $index--;
             }
         }
         throw Errors::noElements();
     }
 
     /**
-     * @param mixed $defaultValue
-     * @return mixed
+     * @template TDefault
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
     public function elementAtOrDefault(int $index, $defaultValue = null)
     {
         $source = $this->getSource();
-        if (is_array($source) || $source instanceof \ArrayAccess) {
-            // @var array|\ArrayAccess $source
+        if (is_array($source)) {
             if (isset($source[$index])) {
-                return $source[$index];
+                /** @var TSource */
+                $element = $source[$index];
+                return $element;
+            }
+        } elseif ($source instanceof \SeekableIterator) {
+            $source->seek($index);
+            if ($source->valid()) {
+                /** @var TSource */
+                $element = $source->current();
+                return $element;
             }
         } else {
-            foreach ($source as $element) {
-                if ($index === 0) {
+            /** @var iterable<TSource> $source */
+            foreach ($source as $i => $element) {
+                if ($index === $i) {
                     return $element;
                 }
-                $index--;
             }
         }
         return $defaultValue;
     }
 
     /**
-     * @param iterable<mixed> $second
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @param iterable<TSource> $second
+     * @param ?EqualityComparerInterface<TSource> $comparer
+     * @return EnumerableInterface<TSource>
      */
     public function except(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -279,7 +301,7 @@ trait EnumerableExtensions
 
     /**
      * @param callable():void $finallyAction
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function finally(callable $finallyAction): EnumerableInterface
     {
@@ -287,8 +309,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
-     * @return mixed
+     * @param callable(TSource):bool|null $predicate
+     * @return TSource
      * @throws NoSuchElementException
      */
     public function first(?callable $predicate = null)
@@ -308,9 +330,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
-     * @param mixed $defaultValue
-     * @return mixed
+     * @template TDefault
+     * @param callable(TSource):bool|null $predicate
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
     public function firstOrDefault(?callable $predicate = null, $defaultValue = null)
     {
@@ -329,7 +352,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):void $action
+     * @param callable(TSource):void $action
      */
     public function forEach(callable $action): void
     {
@@ -339,29 +362,41 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed $keySelector
-     * @param callable(mixed):mixed|null $elementSelector
-     * @param callable(mixed,mixed[]):mixed|null $resultSelector
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @template TKey
+     * @template TElement
+     * @template TResult
+     * @param callable(TSource):TKey $keySelector
+     * @param callable(TSource):TElement|null $elementSelector
+     * @param callable(TKey,TElement[]):TResult|null $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
     public function groupBy(callable $keySelector, ?callable $elementSelector = null, ?callable $resultSelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
         $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
-        $resultSelector = $resultSelector ?: function($k, $vs) {
-            return [$k, $vs];
-        };
+        $resultSelector = $resultSelector ?:
+            /**
+             * @param mixed $key
+             * @param mixed[] $values
+             * @return array{0:mixed,1:mixed[]}
+             */
+            static function($key, array $values): array {
+                return [$key, $values];
+            };
         $comparer = $comparer ?: EqualityComparer::getInstance();
         return new GroupByIterator($this->getSource(), $keySelector, $elementSelector, $resultSelector, $comparer);
     }
 
     /**
-     * @param iterable<mixed> $inner
-     * @param callable(mixed):mixed $outerKeySelector
-     * @param callable(mixed):mixed $innerKeySelector
-     * @param callable(mixed,mixed[]):mixed $resultSelector
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @template TInner
+     * @template TKey
+     * @template TResult
+     * @param iterable<TInner> $inner
+     * @param callable(TSource):TKey $outerKeySelector
+     * @param callable(TInner):TKey $innerKeySelector
+     * @param callable(TSource,TInner[]):TResult $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
     public function groupJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -370,7 +405,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function ignoreElements(): EnumerableInterface
     {
@@ -378,9 +413,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable<mixed> $second
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @param iterable<TSource> $second
+     * @param ?EqualityComparerInterface<TSource> $comparer
+     * @return EnumerableInterface<TSource>
      */
     public function intersect(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -397,12 +432,15 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable<mixed> $inner
-     * @param callable(mixed):mixed $outerKeySelector
-     * @param callable(mixed):mixed $innerKeySelector
-     * @param callable(mixed,mixed):mixed $resultSelector
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @template TInner
+     * @template TKey
+     * @template TResult
+     * @param iterable<TInner> $inner
+     * @param callable(TSource):TKey $outerKeySelector
+     * @param callable(TInner):TKey $innerKeySelector
+     * @param callable(TSource,TInner):TResult $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
     public function join(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -411,8 +449,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
-     * @return mixed
+     * @param callable(TSource):bool|null $predicate
+     * @return TSource
      * @throws NoSuchElementException
      */
     public function last(?callable $predicate = null)
@@ -444,9 +482,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
-     * @param mixed $defaultValue
-     * @return mixed|mixed
+     * @template TDefault
+     * @param callable(TSource):bool|null $predicate
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
     public function lastOrDefault(?callable $predicate = null, $defaultValue = null)
     {
@@ -477,8 +516,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed|null $selector
-     * @return mixed
+     * @template TKey
+     * @param callable(TSource):TKey $selector
+     * @return TKey|null
      */
     public function max(?callable $selector = null)
     {
@@ -494,8 +534,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed $keySelector
-     * @return mixed[]
+     * @template TKey
+     * @param callable(TSource):TKey $keySelector
+     * @return TSource[]
      */
     public function maxBy(callable $keySelector): array
     {
@@ -527,7 +568,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function memoize(): EnumerableInterface
     {
@@ -535,8 +576,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed|null $selector
-     * @return mixed
+     * @template TKey
+     * @param callable(TSource):TKey|null $selector
+     * @return TKey|null
      */
     public function min(?callable $selector = null)
     {
@@ -552,8 +594,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed $keySelector
-     * @return mixed[]
+     * @template TKey
+     * @param callable(TSource):TKey $keySelector
+     * @return TSource[]
      */
     public function minBy(callable $keySelector): array
     {
@@ -585,8 +628,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable<mixed> ...$sources
-     * @return EnumerableInterface<mixed>
+     * @param iterable<TSource> ...$sources
+     * @return EnumerableInterface<TSource>
      */
     public function onErrorResumeNext(iterable ...$sources): EnumerableInterface
     {
@@ -594,12 +637,15 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable<mixed> $inner
-     * @param callable(mixed):mixed $outerKeySelector
-     * @param callable(mixed):mixed $innerKeySelector
-     * @param callable(mixed,mixed|null):mixed $resultSelector
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @template TInner
+     * @template TKey
+     * @template TResult
+     * @param iterable<TInner> $inner
+     * @param callable(TSource):TKey $outerKeySelector
+     * @param callable(TInner):TKey $innerKeySelector
+     * @param callable(TSource,TInner|null):TResult $resultSelector
+     * @param ?EqualityComparerInterface<TKey> $comparer
+     * @return EnumerableInterface<TResult>
      */
     public function outerJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -608,8 +654,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed|null $keySelector
-     * @return OrderedEnumerableInterface<mixed,mixed>
+     * @template TKey
+     * @param callable(TSource):TKey|null $keySelector
+     * @return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderBy(?callable $keySelector = null): OrderedEnumerableInterface
     {
@@ -618,8 +665,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed|null $keySelector
-     * @return OrderedEnumerableInterface<mixed,mixed>
+     * @template TKey
+     * @param callable(TSource):TKey|null $keySelector
+     * @return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderByDescending(?callable $keySelector = null): OrderedEnumerableInterface
     {
@@ -629,7 +677,7 @@ trait EnumerableExtensions
 
     /**
      * @param ?int $count
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function repeat(?int $count = null): EnumerableInterface
     {
@@ -638,7 +686,7 @@ trait EnumerableExtensions
 
     /**
      * @param ?int $retryCount
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function retry(?int $retryCount = null): EnumerableInterface
     {
@@ -646,7 +694,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function reverse(): EnumerableInterface
     {
@@ -654,9 +702,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param mixed $seed
-     * @param callable(mixed,mixed):mixed $func
-     * @return EnumerableInterface<mixed>
+     * @template TAccumulate
+     * @param TAccumulate $seed
+     * @param callable(TAccumulate,TSource):TAccumulate $func
+     * @return EnumerableInterface<TAccumulate>
      */
     public function scan($seed, callable $func): EnumerableInterface
     {
@@ -664,8 +713,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):mixed $selector
-     * @return EnumerableInterface<mixed>
+     * @template TResult
+     * @param callable(TSource):TResult $selector
+     * @return EnumerableInterface<TResult>
      */
     public function select(callable $selector): EnumerableInterface
     {
@@ -673,8 +723,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):(iterable<mixed>) $collectionSelector
-     * @return EnumerableInterface<mixed>
+     * @template TResult
+     * @param callable(TSource):(iterable<TResult>) $collectionSelector
+     * @return EnumerableInterface<TResult>
      */
     public function selectMany(callable $collectionSelector): EnumerableInterface
     {
@@ -682,8 +733,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
-     * @return mixed
+     * @param callable(TSource):bool|null $predicate
+     * @return TSource
      * @throws NoSuchElementException
      * @throws MoreThanOneElementException
      */
@@ -738,9 +789,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool|null $predicate
-     * @param mixed $defaultValue
-     * @return mixed
+     * @template TDefault
+     * @param callable(TSource):bool|null $predicate
+     * @param TDefault $defaultValue
+     * @return TSource|TDefault
      */
     public function singleOrDefault(?callable $predicate = null, $defaultValue = null)
     {
@@ -793,7 +845,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function skip(int $count): EnumerableInterface
     {
@@ -804,7 +856,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function skipLast(int $count): EnumerableInterface
     {
@@ -815,8 +867,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool $predicate
-     * @return EnumerableInterface<mixed>
+     * @param callable(TSource):bool $predicate
+     * @return EnumerableInterface<TSource>
      */
     public function skipWhile(callable $predicate): EnumerableInterface
     {
@@ -824,8 +876,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param mixed ...$elements
-     * @return EnumerableInterface<mixed>
+     * @param TSource ...$elements
+     * @return EnumerableInterface<TSource>
      */
     public function startWith(...$elements): EnumerableInterface
     {
@@ -833,7 +885,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):(int|float)|null $selector
+     * @param callable(TSource):(int|float)|null $selector
      * @return int|float
      */
     public function sum(?callable $selector = null)
@@ -847,7 +899,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function take(int $count): EnumerableInterface
     {
@@ -855,7 +907,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function takeLast(int $count): EnumerableInterface
     {
@@ -863,8 +915,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool $predicate
-     * @return EnumerableInterface<mixed>
+     * @param callable(TSource):bool $predicate
+     * @return EnumerableInterface<TSource>
      */
     public function takeWhile(callable $predicate): EnumerableInterface
     {
@@ -872,7 +924,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return mixed[]
+     * @return TSource[]
      */
     public function toArray(): array
     {
@@ -880,9 +932,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):array-key $keySelector
-     * @param callable(mixed):mixed|null $elementSelector
-     * @return array<array-key,mixed>
+     * @template TElement
+     * @param callable(TSource):array-key $keySelector
+     * @param callable(TSource):TElement|null $elementSelector
+     * @return array<array-key,TElement>
      */
     public function toDictionary(callable $keySelector, ?callable $elementSelector = null): array
     {
@@ -891,9 +944,10 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):array-key $keySelector
-     * @param callable(mixed):mixed|null $elementSelector
-     * @return array<array-key,mixed[]>
+     * @template TElement
+     * @param callable(TSource):array-key $keySelector
+     * @param callable(TSource):TElement|null $elementSelector
+     * @return array<array-key,TElement[]>
      */
     public function toLookup(callable $keySelector, ?callable $elementSelector = null): array
     {
@@ -902,7 +956,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @return \Iterator<mixed>
+     * @return \Iterator<TSource>
      */
     public function toIterator(): \Iterator
     {
@@ -910,9 +964,9 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable<mixed> $second
-     * @param ?EqualityComparerInterface<mixed> $comparer
-     * @return EnumerableInterface<mixed>
+     * @param iterable<TSource> $second
+     * @param ?EqualityComparerInterface<TSource> $comparer
+     * @return EnumerableInterface<TSource>
      */
     public function union(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
@@ -921,8 +975,8 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param callable(mixed):bool $predicate
-     * @return EnumerableInterface<mixed>
+     * @param callable(TSource):bool $predicate
+     * @return EnumerableInterface<TSource>
      */
     public function where(callable $predicate): EnumerableInterface
     {
@@ -931,7 +985,7 @@ trait EnumerableExtensions
 
     /**
      * @param callable():bool $condition
-     * @return EnumerableInterface<mixed>
+     * @return EnumerableInterface<TSource>
      */
     public function while(callable $condition): EnumerableInterface
     {
@@ -939,9 +993,11 @@ trait EnumerableExtensions
     }
 
     /**
-     * @param iterable<mixed> $second
-     * @param callable(mixed,mixed):mixed $resultSelector
-     * @return EnumerableInterface<mixed>
+     * @template TSecond
+     * @template TResult
+     * @param iterable<TSecond> $second
+     * @param callable(TSource,TSecond):TResult $resultSelector
+     * @return EnumerableInterface<TResult>
      */
     public function zip(iterable $second, callable $resultSelector): EnumerableInterface
     {

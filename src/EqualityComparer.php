@@ -31,8 +31,7 @@ class EqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * @param mixed $first
-     * @param mixed $second
+     * {@inheritDoc}
      */
     public function equals($first, $second): bool
     {
@@ -40,7 +39,7 @@ class EqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * @param mixed $value
+     * {@inheritDoc}
      */
     public function hash($value): string
     {

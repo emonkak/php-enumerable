@@ -38,7 +38,7 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return iterable<T>
+     * {@inheritDoc}
      */
     public function getSource(): iterable
     {

@@ -29,7 +29,9 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     private $hashTable = [];
 
     /**
-     * @return self<TKey,TValue>
+     * @template TCreateKey
+     * @template TCreateValue
+     * @return self<TCreateKey,TCreateValue>
      */
     public static function create(): self
     {
@@ -55,7 +57,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return iterable<array{0:TKey,1:TValue}>
+     * {@inheritDoc}
      */
     public function getSource(): iterable
     {

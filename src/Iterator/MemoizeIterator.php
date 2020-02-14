@@ -18,17 +18,19 @@ class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var ?\Iterator<TSource>
+     * @psalm-var ?\Iterator<TSource>
+     * @var ?\Iterator
      */
     private $iterator;
 
     /**
-     * @var TSource[]
+     * @psalm-var TSource[]
+     * @var mixed[]
      */
     private $cachedElements = [];
 
     /**
-     * @param \Iterator<TSource> $iterator
+     * @psalm-param \Iterator<TSource> $iterator
      */
     public function __construct(\Iterator $iterator)
     {
@@ -36,7 +38,7 @@ class MemoizeIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

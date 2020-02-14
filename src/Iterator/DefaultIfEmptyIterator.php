@@ -18,18 +18,20 @@ class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var TSource
+     * @psalm-var TSource
+     * @var mixed
      */
     private $defaultValue;
 
     /**
-     * @param iterable<TSource> $source
-     * @param TSource $defaultValue
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param TSource $defaultValue
      */
     public function __construct(iterable $source, $defaultValue)
     {
@@ -38,7 +40,7 @@ class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

@@ -19,12 +19,13 @@ class ReverseIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @param iterable<TSource> $source
+     * @psalm-param iterable<TSource> $source
      */
     public function __construct(iterable $source)
     {
@@ -32,7 +33,7 @@ class ReverseIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

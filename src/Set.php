@@ -15,18 +15,20 @@ class Set implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var EqualityComparerInterface<T>
+     * @psalm-var EqualityComparerInterface<T>
+     * @var EqualityComparerInterface
      */
     private $comparer;
 
     /**
-     * @var array<string,T>
+     * @psalm-var array<string,T>
+     * @var array<string,mixed>
      */
     private $hashTable = [];
 
     /**
      * @template TCreate
-     * @return self<TCreate>
+     * @psalm-return self<TCreate>
      */
     public static function create(): self
     {
@@ -34,7 +36,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param EqualityComparerInterface<T> $comparer
+     * @psalm-param EqualityComparerInterface<T> $comparer
      */
     public function __construct(EqualityComparerInterface $comparer)
     {
@@ -42,7 +44,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<T>
+     * @psalm-return \Traversable<T>
      */
     public function getIterator(): \Traversable
     {
@@ -60,7 +62,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param T $value
+     * @psalm-param T $value
      */
     public function add($value): bool
     {
@@ -81,7 +83,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param T $value
+     * @psalm-param T $value
      */
     public function contains($value): bool
     {
@@ -90,7 +92,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param T $value
+     * @psalm-param T $value
      */
     public function remove($value): bool
     {
@@ -103,7 +105,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return T[]
+     * @psalm-return T[]
      */
     public function toArray(): array
     {

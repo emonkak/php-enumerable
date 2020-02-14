@@ -18,7 +18,8 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var TSource
+     * @psalm-var TSource
+     * @var mixed
      */
     private $element;
 
@@ -28,8 +29,8 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
     private $count;
 
     /**
-     * @param TSource $element
-     * @param ?int $count
+     * @psalm-param TSource $element
+     * @psalm-param ?int $count
      */
     public function __construct($element, ?int $count)
     {
@@ -38,7 +39,7 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

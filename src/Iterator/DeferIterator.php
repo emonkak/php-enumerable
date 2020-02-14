@@ -19,12 +19,13 @@ class DeferIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var callable():(iterable<TSource>)
+     * @psalm-var callable():(iterable<TSource>)
+     * @var callable
      */
     private $iterableFactory;
 
     /**
-     * @param callable():(iterable<TSource>) $iterableFactory
+     * @psalm-param callable():(iterable<TSource>) $iterableFactory
      */
     public function __construct(callable $iterableFactory)
     {
@@ -32,7 +33,7 @@ class DeferIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

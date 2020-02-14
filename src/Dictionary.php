@@ -19,19 +19,21 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     const VALUE = 1;
 
     /**
-     * @var EqualityComparerInterface<TKey>
+     * @psalm-var EqualityComparerInterface<TKey>
+     * @var EqualityComparerInterface
      */
     private $comparer;
 
     /**
-     * @var array{0:TKey,1:TValue}[]
+     * @psalm-var array{0:TKey,1:TValue}[]
+     * @var array
      */
     private $hashTable = [];
 
     /**
      * @template TCreateKey
      * @template TCreateValue
-     * @return self<TCreateKey,TCreateValue>
+     * @psalm-return self<TCreateKey,TCreateValue>
      */
     public static function create(): self
     {
@@ -39,7 +41,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param EqualityComparerInterface<TKey> $comparer
+     * @psalm-param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(EqualityComparerInterface $comparer)
     {
@@ -47,7 +49,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<array{0:TKey,1:TValue}>
+     * @psalm-return \Traversable<array{0:TKey,1:TValue}>
      */
     public function getIterator(): \Traversable
     {
@@ -65,8 +67,8 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param TKey $key
-     * @param TValue $value
+     * @psalm-param TKey $key
+     * @psalm-param TValue $value
      */
     public function set($key, $value): bool
     {
@@ -87,7 +89,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param TKey $key
+     * @psalm-param TKey $key
      */
     public function has($key): bool
     {
@@ -96,9 +98,9 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param TKey $key
-     * @param TValue $value
-     * @return bool
+     * @psalm-param TKey $key
+     * @psalm-param TValue $value
+     * @psalm-return bool
      */
     public function tryGet($key, &$value): bool
     {
@@ -111,7 +113,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @param TKey $key
+     * @psalm-param TKey $key
      */
     public function remove($key): bool
     {
@@ -124,7 +126,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return array{0:TKey,1:TValue}[]
+     * @psalm-return array{0:TKey,1:TValue}[]
      */
     public function toArray(): array
     {

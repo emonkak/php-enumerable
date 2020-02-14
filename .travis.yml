@@ -13,9 +13,10 @@ cache:
 install:
   - pecl install ast
   - composer install
-  - php ./vendor/bin/psalm
 
 script:
+  - php ./vendor/bin/phan
+  - php ./vendor/bin/psalm
   - mkdir -p build/logs
   - php ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 

@@ -20,24 +20,27 @@ class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInte
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var callable(TSource):TKey
+     * @psalm-var callable(TSource):TKey
+     * @var callable
      */
     private $keySelector;
 
     /**
-     * @var EqualityComparerInterface<TKey>
+     * @psalm-var EqualityComparerInterface<TKey>
+     * @var EqualityComparerInterface
      */
     private $comparer;
 
     /**
-     * @param iterable<TSource> $source
-     * @param callable(TSource):TKey $keySelector
-     * @param EqualityComparerInterface<TKey> $comparer
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param callable(TSource):TKey $keySelector
+     * @psalm-param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(iterable $source, callable $keySelector, EqualityComparerInterface $comparer)
     {
@@ -47,7 +50,7 @@ class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInte
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

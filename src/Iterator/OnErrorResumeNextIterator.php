@@ -18,12 +18,13 @@ class OnErrorResumeNextIterator implements \IteratorAggregate, EnumerableInterfa
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>[]
+     * @psalm-var iterable<TSource>[]
+     * @var iterable
      */
     private $sources;
 
     /**
-     * @param iterable<TSource>[] $sources
+     * @psalm-param iterable<TSource>[] $sources
      */
     public function __construct(array $sources)
     {
@@ -31,7 +32,7 @@ class OnErrorResumeNextIterator implements \IteratorAggregate, EnumerableInterfa
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

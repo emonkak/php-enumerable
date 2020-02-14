@@ -22,36 +22,41 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var callable(TSource):TKey
+     * @psalm-var callable(TSource):TKey
+     * @var callable
      */
     private $keySelector;
 
     /**
-     * @var callable(TSource):TElement
+     * @psalm-var callable(TSource):TElement
+     * @var callable
      */
     private $elementSelector;
 
     /**
-     * @var callable(TKey,TElement[]):TResult
+     * @psalm-var callable(TKey,TElement[]):TResult
+     * @var callable
      */
     private $resultSelector;
 
     /**
-     * @var EqualityComparerInterface<TKey>
+     * @psalm-var EqualityComparerInterface<TKey>
+     * @var EqualityComparerInterface
      */
     private $comparer;
 
     /**
-     * @param iterable<TSource> $source
-     * @param callable(TSource):TKey $keySelector
-     * @param callable(TSource):TElement $elementSelector
-     * @param callable(TKey,TElement[]):TResult $resultSelector
-     * @param EqualityComparerInterface<TKey> $comparer
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param callable(TSource):TKey $keySelector
+     * @psalm-param callable(TSource):TElement $elementSelector
+     * @psalm-param callable(TKey,TElement[]):TResult $resultSelector
+     * @psalm-param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(iterable $source, callable $keySelector, callable $elementSelector, callable $resultSelector, EqualityComparerInterface $comparer)
     {
@@ -63,7 +68,7 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TResult>
+     * @psalm-return \Traversable<TResult>
      */
     public function getIterator(): \Traversable
     {

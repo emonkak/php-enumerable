@@ -18,18 +18,20 @@ class DoIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var callable(TSource):void
+     * @psalm-var callable(TSource):void
+     * @var callable
      */
     private $action;
 
     /**
-     * @param iterable<TSource> $source
-     * @param callable(TSource):void $action
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param callable(TSource):void $action
      */
     public function __construct(iterable $source, callable $action)
     {
@@ -38,7 +40,7 @@ class DoIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

@@ -21,24 +21,27 @@ class ZipIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TFirst>
+     * @psalm-var iterable<TFirst>
+     * @var iterable
      */
     private $first;
 
     /**
-     * @var iterable<TSecond>
+     * @psalm-var iterable<TSecond>
+     * @var iterable
      */
     private $second;
 
     /**
-     * @var callable(TFirst,TSecond):TResult
+     * @psalm-var callable(TFirst,TSecond):TResult
+     * @var callable
      */
     private $resultSelector;
 
     /**
-     * @param iterable<TFirst> $first
-     * @param iterable<TSecond> $second
-     * @param callable(TFirst,TSecond):TResult $resultSelector
+     * @psalm-param iterable<TFirst> $first
+     * @psalm-param iterable<TSecond> $second
+     * @psalm-param callable(TFirst,TSecond):TResult $resultSelector
      */
     public function __construct(iterable $first, iterable $second, callable $resultSelector)
     {
@@ -48,7 +51,7 @@ class ZipIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TResult>
+     * @psalm-return \Traversable<TResult>
      */
     public function getIterator(): \Traversable
     {

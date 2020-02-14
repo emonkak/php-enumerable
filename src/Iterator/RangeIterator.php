@@ -27,8 +27,8 @@ class RangeIterator implements \IteratorAggregate, EnumerableInterface
     private $count;
 
     /**
-     * @param int $start
-     * @param int $count
+     * @psalm-param int $start
+     * @psalm-param int $count
      */
     public function __construct(int $start, int $count)
     {
@@ -37,7 +37,7 @@ class RangeIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<int>
+     * @psalm-return \Traversable<int>
      */
     public function getIterator(): \Traversable
     {

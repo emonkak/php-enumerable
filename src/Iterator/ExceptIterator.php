@@ -20,24 +20,27 @@ class ExceptIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $first;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $second;
 
     /**
-     * @var EqualityComparerInterface<TSource>
+     * @psalm-var EqualityComparerInterface<TSource>
+     * @var EqualityComparerInterface
      */
     private $comparer;
 
     /**
-     * @param iterable<TSource> $first
-     * @param iterable<TSource> $second
-     * @param EqualityComparerInterface<TSource> $comparer
+     * @psalm-param iterable<TSource> $first
+     * @psalm-param iterable<TSource> $second
+     * @psalm-param EqualityComparerInterface<TSource> $comparer
      */
     public function __construct(iterable $first, iterable $second, EqualityComparerInterface $comparer)
     {
@@ -47,7 +50,7 @@ class ExceptIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

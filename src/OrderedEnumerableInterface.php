@@ -13,15 +13,15 @@ interface OrderedEnumerableInterface extends EnumerableInterface
 {
     /**
      * @template TNextKey
-     * @param callable(TElement):TNextKey|null $keySelector
-     * @return OrderedEnumerableInterface<TElement,TNextKey>
+     * @psalm-param callable(TElement):TNextKey|null $keySelector
+     * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
      */
     public function thenBy(?callable $keySelector = null): OrderedEnumerableInterface;
 
     /**
      * @template TNextKey
-     * @param callable(TElement):TNextKey|null $keySelector
-     * @return OrderedEnumerableInterface<TElement,TNextKey>
+     * @psalm-param callable(TElement):TNextKey|null $keySelector
+     * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
      */
     public function thenByDescending(?callable $keySelector = null): OrderedEnumerableInterface;
 }

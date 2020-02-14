@@ -21,12 +21,14 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TElement>
+     * @psalm-var iterable<TElement>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var callable(TElement):TKey
+     * @psalm-var callable(TElement):TKey
+     * @var callable
      */
     private $keySelector;
 
@@ -36,27 +38,33 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     private $descending;
 
     /**
-     * @var callable(TElement,TElement):int
+     * @psalm-var callable(TElement,TElement):int
+     * @var callable
      */
     private $parentComparer;
 
     /**
-     * @param iterable<TElement> $source
-     * @param callable(TElement):TKey $keySelector
-     * @param callable(TElement,TElement):int|null $parentComparer
+     * @psalm-param iterable<TElement> $source
+     * @psalm-param callable(TElement):TKey $keySelector
+     * @psalm-param callable(TElement,TElement):int|null $parentComparer
      */
     public function __construct(iterable $source, callable $keySelector, bool $descending, ?callable $parentComparer = null)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
         $this->descending = $descending;
-        $this->parentComparer = $parentComparer ?: static function($first, $second) {
-            return 0;
-        };
+        $this->parentComparer = $parentComparer ?:
+            /**
+             * @psalm-param TElement $first
+             * @psalm-param TElement $second
+             */
+            static function($first, $second): int {
+                return 0;
+            };
     }
 
     /**
-     * @return \Traversable<TElement>
+     * @psalm-return \Traversable<TElement>
      */
     public function getIterator(): \Traversable
     {
@@ -67,64 +75,68 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     }
 
     /**
-     * @template TNextKey
-     * @param callable(TElement):TNextKey|null $keySelector
-     * @return OrderedEnumerableInterface<TElement,TNextKey>
+     * {@inheritDoc}
      */
     public function thenBy(callable $keySelector = null): OrderedEnumerableInterface
     {
-        /** @var callable(TElement):TNextKey */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, false, $comparer);
     }
 
     /**
-     * @template TNextKey
-     * @param callable(TElement):TNextKey|null $keySelector
-     * @return OrderedEnumerableInterface<TElement,TNextKey>
+     * {@inheritDoc}
      */
     public function thenByDescending(callable $keySelector = null): OrderedEnumerableInterface
     {
-        /** @var callable(TElement):TNextKey */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, true, $comparer);
     }
 
     /**
-     * @return callable(TElement,TElement):int
+     * @psalm-return callable(TElement,TElement):int
      */
     private function getComparer(): callable
     {
         $keySelector = $this->keySelector;
         $parentComparer = $this->parentComparer;
         if ($this->descending) {
-            return static function($first, $second) use ($keySelector, $parentComparer) {
-                $ordering = $parentComparer($first, $second);
-                if ($ordering != 0) {
-                    return $ordering;
-                }
-                $firstKey = $keySelector($first);
-                $secondKey = $keySelector($second);
-                if ($firstKey == $secondKey) {
-                    return 0;
-                }
-                return $firstKey < $secondKey ? 1 : -1;
-            };
+            return
+                /**
+                 * @psalm-param TElement $first
+                 * @psalm-param TElement $second
+                 */
+                static function($first, $second) use ($keySelector, $parentComparer): int {
+                    $ordering = $parentComparer($first, $second);
+                    if ($ordering != 0) {
+                        return $ordering;
+                    }
+                    $firstKey = $keySelector($first);
+                    $secondKey = $keySelector($second);
+                    if ($firstKey == $secondKey) {
+                        return 0;
+                    }
+                    return $firstKey < $secondKey ? 1 : -1;
+                };
         } else {
-            return static function($first, $second) use ($keySelector, $parentComparer) {
-                $ordering = $parentComparer($first, $second);
-                if ($ordering != 0) {
-                    return $ordering;
-                }
-                $firstKey = $keySelector($first);
-                $secondKey = $keySelector($second);
-                if ($firstKey == $secondKey) {
-                    return 0;
-                }
-                return $firstKey < $secondKey ? -1 : 1;
-            };
+            return
+                /**
+                 * @psalm-param TElement $first
+                 * @psalm-param TElement $second
+                 */
+                static function($first, $second) use ($keySelector, $parentComparer): int {
+                    $ordering = $parentComparer($first, $second);
+                    if ($ordering != 0) {
+                        return $ordering;
+                    }
+                    $firstKey = $keySelector($first);
+                    $secondKey = $keySelector($second);
+                    if ($firstKey == $secondKey) {
+                        return 0;
+                    }
+                    return $firstKey < $secondKey ? -1 : 1;
+                };
         }
     }
 }

@@ -18,7 +18,8 @@ class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
@@ -28,8 +29,8 @@ class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
     private $count;
 
     /**
-     * @param iterable<TSource> $source
-     * @param int $count
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param int $count
      */
     public function __construct(iterable $source, int $count)
     {
@@ -38,7 +39,7 @@ class TakeLastIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

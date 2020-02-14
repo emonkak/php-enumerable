@@ -22,42 +22,48 @@ class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TOuter>
+     * @psalm-var iterable<TOuter>
+     * @var iterable
      */
     private $outer;
 
     /**
-     * @var iterable<TInner>
+     * @psalm-var iterable<TInner>
+     * @var iterable
      */
     private $inner;
 
     /**
-     * @var callable(TOuter):TKey
+     * @psalm-var callable(TOuter):TKey
+     * @var callable
      */
     private $outerKeySelector;
 
     /**
-     * @var callable(TInner):TKey
+     * @psalm-var callable(TInner):TKey
+     * @var callable
      */
     private $innerKeySelector;
 
     /**
-     * @var callable(TOuter,TInner[]):TResult
+     * @psalm-var callable(TOuter,TInner[]):TResult
+     * @var callable
      */
     private $resultSelector;
 
     /**
-     * @var EqualityComparerInterface<TKey>
+     * @psalm-var EqualityComparerInterface<TKey>
+     * @var EqualityComparerInterface
      */
     private $comparer;
 
     /**
-     * @param iterable<TOuter> $outer
-     * @param iterable<TInner> $inner
-     * @param callable(TOuter):TKey $outerKeySelector
-     * @param callable(TInner):TKey $innerKeySelector
-     * @param callable(TOuter,TInner[]):TResult $resultSelector
-     * @param EqualityComparerInterface<TKey> $comparer
+     * @psalm-param iterable<TOuter> $outer
+     * @psalm-param iterable<TInner> $inner
+     * @psalm-param callable(TOuter):TKey $outerKeySelector
+     * @psalm-param callable(TInner):TKey $innerKeySelector
+     * @psalm-param callable(TOuter,TInner[]):TResult $resultSelector
+     * @psalm-param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(iterable $outer, iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, EqualityComparerInterface $comparer)
     {
@@ -70,7 +76,7 @@ class GroupJoinIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TResult>
+     * @psalm-return \Traversable<TResult>
      */
     public function getIterator(): \Traversable
     {

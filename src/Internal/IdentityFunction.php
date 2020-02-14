@@ -8,8 +8,8 @@ final class IdentityFunction
 {
     /**
      * @template T
-     * @param T $x
-     * @return T
+     * @psalm-param T $x
+     * @psalm-return T
      */
     public static function apply($x)
     {

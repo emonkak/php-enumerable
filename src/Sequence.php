@@ -15,12 +15,13 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<T>
+     * @psalm-var iterable<T>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @param iterable<T> $source
+     * @psalm-param iterable<T> $source
      */
     public function __construct(iterable $source)
     {
@@ -28,7 +29,7 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<T>
+     * @psalm-return \Traversable<T>
      */
     public function getIterator(): \Traversable
     {
@@ -38,7 +39,7 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return iterable<T>
+     * {@inheritDoc}
      */
     public function getSource(): iterable
     {

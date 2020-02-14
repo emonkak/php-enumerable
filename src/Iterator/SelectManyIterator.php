@@ -19,18 +19,20 @@ class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var callable(TSource):(iterable<TResult>)
+     * @psalm-var callable(TSource):(iterable<TResult>)
+     * @var callable
      */
     private $collectionSelector;
 
     /**
-     * @param iterable<TSource> $source
-     * @param callable(TSource):(iterable<TResult>) $collectionSelector
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param callable(TSource):(iterable<TResult>) $collectionSelector
      */
     public function __construct(iterable $source, callable $collectionSelector)
     {
@@ -39,7 +41,7 @@ class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TResult>
+     * @psalm-return \Traversable<TResult>
      */
     public function getIterator(): \Traversable
     {

@@ -18,18 +18,20 @@ class DoWhileIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var callable():bool
+     * @psalm-var callable():bool
+     * @var callable
      */
     private $condition;
 
     /**
-     * @param iterable<TSource> $source
-     * @param callable():bool $condition
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param callable():bool $condition
      */
     public function __construct(iterable $source, callable $condition)
     {
@@ -38,7 +40,7 @@ class DoWhileIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

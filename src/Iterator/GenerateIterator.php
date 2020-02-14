@@ -19,30 +19,34 @@ class GenerateIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var TState
+     * @psalm-var TState
+     * @var mixed
      */
     private $initialState;
 
     /**
-     * @var callable(TState):bool
+     * @psalm-var callable(TState):bool
+     * @var callable
      */
     private $condition;
 
     /**
-     * @var callable(TState):TState
+     * @psalm-var callable(TState):TState
+     * @var callable
      */
     private $iterate;
 
     /**
-     * @var callable(TState):TResult
+     * @psalm-var callable(TState):TResult
+     * @var callable
      */
     private $resultSelector;
 
     /**
-     * @param TState $initialState
-     * @param callable(TState):bool $condition
-     * @param callable(TState):TState $iterate
-     * @param callable(TState):TResult $resultSelector
+     * @psalm-param TState $initialState
+     * @psalm-param callable(TState):bool $condition
+     * @psalm-param callable(TState):TState $iterate
+     * @psalm-param callable(TState):TResult $resultSelector
      */
     public function __construct($initialState, callable $condition, callable $iterate, callable $resultSelector)
     {
@@ -53,7 +57,7 @@ class GenerateIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TResult>
+     * @psalm-return \Traversable<TResult>
      */
     public function getIterator(): \Traversable
     {

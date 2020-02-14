@@ -18,18 +18,20 @@ class SkipWhileIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @var iterable<TSource>
+     * @psalm-var iterable<TSource>
+     * @var iterable
      */
     private $source;
 
     /**
-     * @var callable(TSource):bool
+     * @psalm-var callable(TSource):bool
+     * @var callable
      */
     private $predicate;
 
     /**
-     * @param iterable<TSource> $source
-     * @param callable(TSource):bool $predicate
+     * @psalm-param iterable<TSource> $source
+     * @psalm-param callable(TSource):bool $predicate
      */
     public function __construct(iterable $source, callable $predicate)
     {
@@ -38,7 +40,7 @@ class SkipWhileIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @return \Traversable<TSource>
+     * @psalm-return \Traversable<TSource>
      */
     public function getIterator(): \Traversable
     {

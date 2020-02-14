@@ -17,7 +17,6 @@ class DictionaryTest extends TestCase
     {
         $obj = new \stdClass();
 
-        /** @var Dictionary<mixed,mixed> */
         $dict = Dictionary::create();
 
         $this->assertTrue($dict->set('foo', 123));

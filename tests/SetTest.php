@@ -17,7 +17,6 @@ class SetTest extends TestCase
     {
         $longString = str_repeat('abracadabra', 100);
 
-        /** @var Set<mixed> */
         $set = Set::create();
 
         $this->assertTrue($set->add('foo'));

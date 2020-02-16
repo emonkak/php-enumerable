@@ -32,7 +32,7 @@ class OnErrorResumeNextIterator implements \IteratorAggregate, EnumerableInterfa
     }
 
     /**
-     * @psalm-return \Traversable<TSource>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

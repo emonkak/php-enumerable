@@ -29,7 +29,7 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return \Traversable<T>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

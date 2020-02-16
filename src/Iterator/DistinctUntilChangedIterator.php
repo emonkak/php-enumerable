@@ -50,7 +50,7 @@ class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInte
     }
 
     /**
-     * @psalm-return \Traversable<TSource>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

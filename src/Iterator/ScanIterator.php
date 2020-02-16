@@ -49,7 +49,7 @@ class ScanIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return \Traversable<TAccumulate[]>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

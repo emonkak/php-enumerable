@@ -64,7 +64,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     }
 
     /**
-     * @psalm-return \Traversable<TElement>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

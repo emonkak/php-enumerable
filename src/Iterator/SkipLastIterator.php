@@ -39,7 +39,7 @@ class SkipLastIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return \Traversable<TSource>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

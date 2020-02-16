@@ -49,7 +49,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return \Traversable<array{0:TKey,1:TValue}>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

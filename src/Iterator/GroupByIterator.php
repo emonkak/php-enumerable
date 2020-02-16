@@ -68,7 +68,7 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return \Traversable<TResult>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

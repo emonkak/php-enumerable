@@ -37,7 +37,7 @@ class RangeIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return \Traversable<int>
+     * {@inheritDoc}
      */
     public function getIterator(): \Traversable
     {

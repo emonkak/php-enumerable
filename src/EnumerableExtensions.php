@@ -536,9 +536,9 @@ trait EnumerableExtensions
     /**
      * @template TKey
      * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-return TSource[]
+     * @psalm-return EnumerableInterface<TSource>
      */
-    public function maxBy(callable $keySelector): array
+    public function maxBy(callable $keySelector): EnumerableInterface
     {
         $result = [];
 
@@ -564,7 +564,7 @@ trait EnumerableExtensions
             }
         }
 
-        return $result;
+        return new Sequence($result);
     }
 
     /**
@@ -596,9 +596,9 @@ trait EnumerableExtensions
     /**
      * @template TKey
      * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-return TSource[]
+     * @psalm-return EnumerableInterface<TSource>
      */
-    public function minBy(callable $keySelector): array
+    public function minBy(callable $keySelector): EnumerableInterface
     {
         $result = [];
 
@@ -624,7 +624,7 @@ trait EnumerableExtensions
             }
         }
 
-        return $result;
+        return new Sequence($result);
     }
 
     /**

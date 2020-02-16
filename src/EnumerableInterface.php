@@ -218,9 +218,9 @@ interface EnumerableInterface extends \Traversable
     /**
      * @template TKey
      * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-return TSource[]
+     * @psalm-return EnumerableInterface<TSource>
      */
-    public function maxBy(callable $keySelector): array;
+    public function maxBy(callable $keySelector): EnumerableInterface;
 
     /**
      * @psalm-return EnumerableInterface<TSource>
@@ -237,9 +237,9 @@ interface EnumerableInterface extends \Traversable
     /**
      * @template TKey
      * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-return TSource[]
+     * @psalm-return EnumerableInterface<TSource>
      */
-    public function minBy(callable $keySelector): array;
+    public function minBy(callable $keySelector): EnumerableInterface;
 
     /**
      * @psalm-param iterable<TSource> ...$sources

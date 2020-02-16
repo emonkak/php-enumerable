@@ -537,8 +537,8 @@ class EnumerableTest extends TestCase
 
     public function testMaxBy(): void
     {
-        $this->assertEquals([3, 3], Enumerable::from([3, 2, 1, 2, 3])->maxBy(function($x) { return $x; }));
-        $this->assertEquals(['abc', 'abc'], Enumerable::from(['ab', 'abc', 'ab', 'a', 'ab', 'abc', 'ab'])->maxBy(function($s) { return strlen($s); }));
+        $this->assertEquals([3, 3], Enumerable::from([3, 2, 1, 2, 3])->maxBy(function($x) { return $x; })->toArray());
+        $this->assertEquals(['abc', 'abc'], Enumerable::from(['ab', 'abc', 'ab', 'a', 'ab', 'abc', 'ab'])->maxBy(function($s) { return strlen($s); })->toArray());
     }
 
     public function testMemoize(): void
@@ -577,8 +577,8 @@ class EnumerableTest extends TestCase
 
     public function testMinBy(): void
     {
-        $this->assertEquals([1, 1], Enumerable::from([1, 2, 3, 2, 1])->minBy(function($x) { return $x; }));
-        $this->assertEquals(['a', 'a'], Enumerable::from(['ab', 'a', 'ab', 'abc', 'ab', 'a', 'ab'])->minBy(function($s) { return strlen($s); }));
+        $this->assertEquals([1, 1], Enumerable::from([1, 2, 3, 2, 1])->minBy(function($x) { return $x; })->toArray());
+        $this->assertEquals(['a', 'a'], Enumerable::from(['ab', 'a', 'ab', 'abc', 'ab', 'a', 'ab'])->minBy(function($s) { return strlen($s); })->toArray());
     }
 
     public function testOnErrorResumeNext(): void

@@ -7,17 +7,20 @@ namespace Emonkak\Enumerable\Tests;
 use Emonkak\Enumerable\EqualityComparer;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers Emonkak\Enumerable\EqualityComparer
+ */
 class EqualityComparerTest extends TestCase
 {
     /**
      * @dataProvider providerEquals
      * @param mixed $first
      * @param mixed $second
-     * @param mixed $expected
+     * @param bool $expectedResult
      */
-    public function testEquals($first, $second, $expected): void
+    public function testEquals($first, $second, bool $expectedResult): void
     {
-        $this->assertSame($expected, EqualityComparer::getInstance()->equals($first, $second));
+        $this->assertSame($expectedResult, EqualityComparer::getInstance()->equals($first, $second));
     }
 
     /**
@@ -26,12 +29,16 @@ class EqualityComparerTest extends TestCase
     public function providerEquals(): array
     {
         return [
+            ['', null, false],
+            [0, false, false],
+            [1, true, false],
             ['foo', 'foo', true],
             ['foo', 'bar', false],
             [123, 123, true],
             [123, '123', false],
             [new \stdClass(), new \stdClass(), true],
             [['foo' => 123], ['foo' => 123], true],
+            [['foo' => 123], ['foo' => '123'], false],
         ];
     }
 
@@ -46,8 +53,10 @@ class EqualityComparerTest extends TestCase
             $comparer->hash(123.0),
             $comparer->hash(true),
             $comparer->hash(null),
-            $comparer->hash(new \stdClass()),
-            $comparer->hash(['foo' => 'bar']),
+            $comparer->hash((object) ['foo' => 123]),
+            $comparer->hash((object) ['foo' => '123']),
+            $comparer->hash(['foo' => 123]),
+            $comparer->hash(['foo' => '123']),
             $comparer->hash(str_repeat('abracadabra', 100)),
         ];
 

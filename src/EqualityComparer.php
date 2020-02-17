@@ -17,7 +17,7 @@ class EqualityComparer implements EqualityComparerInterface
         static $instance;
 
         if (!isset($instance)) {
-            $instance = new EqualityComparer();
+            $instance = new self();
         }
 
         return $instance;
@@ -35,7 +35,7 @@ class EqualityComparer implements EqualityComparerInterface
      */
     public function equals($first, $second): bool
     {
-        return is_scalar($first) ? $first === $second : $first == $second;
+        return is_scalar($first) || is_array($first) ? $first === $second : $first == $second;
     }
 
     /**

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable;
 
 /**
- * @template T of ?scalar
  * @implements EqualityComparerInterface<?scalar>
  */
 class LooseEqualityComparer implements EqualityComparerInterface

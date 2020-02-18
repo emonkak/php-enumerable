@@ -36,9 +36,22 @@ class EqualityComparerTest extends TestCase
             ['foo', 'bar', false],
             [123, 123, true],
             [123, '123', false],
-            [new \stdClass(), new \stdClass(), true],
+            [(object) [], (object) [], true],
+            [(object) ['foo' => 123], (object) ['foo' => 123], true],
+            [(object) ['foo' => 123], (object) ['foo' => '123'], false],
+            [(object) [], (object) ['foo' => 123], false],
+            [(object) ['foo' => 123], (object) [], false],
+            [(object) ['foo' => 123, 'bar' => (object) ['baz' => 456]], (object) ['foo' => 123, 'bar' => (object) ['baz' => 456]], true],
+            [(object) ['foo' => 123, 'bar' => (object) ['baz' => 456]], (object) ['foo' => 123, 'bar' => (object) ['baz' => '456']], false],
+            [new \DateTime('2000-01-02 03:04:05'), new \DateTime('2000-01-02 03:04:05'), true],
+            [new \DateTime('2000-01-02 03:04:05'), new \DateTimeImmutable('2000-01-02 03:04:05'), false],
+            [[], [], true],
             [['foo' => 123], ['foo' => 123], true],
             [['foo' => 123], ['foo' => '123'], false],
+            [['foo' => 123, 'bar' => ['baz' => 456]], ['foo' => 123, 'bar' => ['baz' => 456]], true],
+            [['foo' => 123, 'bar' => ['baz' => 456]], ['foo' => 123, 'bar' => ['baz' => '456']], false],
+            [[], ['foo' => '123'], false],
+            [['foo' => 123], [], false],
         ];
     }
 

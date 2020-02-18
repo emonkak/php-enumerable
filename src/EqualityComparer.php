@@ -36,7 +36,39 @@ class EqualityComparer implements EqualityComparerInterface
      */
     public function equals($first, $second): bool
     {
-        return is_scalar($first) || is_array($first) ? $first === $second : $first == $second;
+        if ($first === $second) {
+            return true;
+        }
+        $firstType = gettype($first);
+        $secondType = gettype($second);
+        if ($firstType !== $secondType) {
+            return false;
+        }
+        if ($firstType === 'array') {
+            return $this->arrayEquals($first, $second);
+        }
+        if ($firstType === 'object') {
+            if (get_class($first) !== get_class($second)) {
+                return false;
+            }
+            return $this->arrayEquals((array) $first, (array) $second);
+        }
+        return false;
+    }
+
+    private function arrayEquals(array $first, array $second): bool
+    {
+        foreach ($first as $key => $value) {
+            if (!isset($second[$key]) || !$this->equals($value, $second[$key])) {
+                return false;
+            }
+        }
+        foreach ($second as $key => $value) {
+            if (!isset($first[$key]) || !$this->equals($value, $first[$key])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

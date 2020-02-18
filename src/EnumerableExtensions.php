@@ -256,7 +256,6 @@ trait EnumerableExtensions
                 return $element;
             }
         } else {
-            /** @psalm-var iterable<TSource> $source */
             foreach ($source as $i => $element) {
                 if ($index === $i) {
                     return $element;

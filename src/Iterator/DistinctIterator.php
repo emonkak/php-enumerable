@@ -14,10 +14,12 @@ use Emonkak\Enumerable\Set;
  * @template TKey
  * @implements \IteratorAggregate<TSource>
  * @implements EnumerableInterface<TSource>
- * @use EnumerableExtensions<TSource>
  */
 class DistinctIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TSource>
+     */
     use EnumerableExtensions;
 
     /**

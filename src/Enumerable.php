@@ -140,7 +140,8 @@ final class Enumerable
     }
 
     /**
-     * @psalm-return EnumerableInterface<mixed>
+     * @template TSource
+     * @psalm-return EnumerableInterface<TSource>
      */
     public static function empty(): EnumerableInterface
     {

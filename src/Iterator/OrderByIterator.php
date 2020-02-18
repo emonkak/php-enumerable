@@ -14,10 +14,12 @@ use Emonkak\Enumerable\OrderedEnumerableInterface;
  * @template TKey
  * @implements \IteratorAggregate<TElement>
  * @implements OrderedEnumerableInterface<TElement,TKey>
- * @use EnumerableExtensions<TElement>
  */
 class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TElement>
+     */
     use EnumerableExtensions;
 
     /**

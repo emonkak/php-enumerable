@@ -12,10 +12,12 @@ use Emonkak\Enumerable\EnumerableInterface;
  * @template TResult
  * @implements \IteratorAggregate<TResult>
  * @implements EnumerableInterface<TResult>
- * @use EnumerableExtensions<TResult>
  */
 class SelectManyIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TResult>
+     */
     use EnumerableExtensions;
 
     /**

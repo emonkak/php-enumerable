@@ -13,10 +13,12 @@ use Emonkak\Enumerable\Set;
  * @template TSource
  * @implements \IteratorAggregate<TSource>
  * @implements EnumerableInterface<TSource>
- * @use EnumerableExtensions<TSource>
  */
 class ExceptIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TSource>
+     */
     use EnumerableExtensions;
 
     /**

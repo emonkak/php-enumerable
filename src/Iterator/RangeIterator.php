@@ -10,10 +10,12 @@ use Emonkak\Enumerable\EnumerableInterface;
 /**
  * @implements \IteratorAggregate<int>
  * @implements EnumerableInterface<int>
- * @use EnumerableExtensions<int>
  */
 class RangeIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<int>
+     */
     use EnumerableExtensions;
 
     /**

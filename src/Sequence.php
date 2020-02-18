@@ -8,10 +8,12 @@ namespace Emonkak\Enumerable;
  * @template T
  * @implements \IteratorAggregate<T>
  * @implements EnumerableInterface<T>
- * @use EnumerableExtensions<T>
  */
 class Sequence implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<T>
+     */
     use EnumerableExtensions;
 
     /**
@@ -39,7 +41,7 @@ class Sequence implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @psalm-return iterable<T>
      */
     public function getSource(): iterable
     {

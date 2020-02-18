@@ -14,9 +14,10 @@ class EqualityComparer implements EqualityComparerInterface
      */
     public static function getInstance(): self
     {
+        /** @var ?self */
         static $instance;
 
-        if (!isset($instance)) {
+        if ($instance === null) {
             $instance = new self();
         }
 

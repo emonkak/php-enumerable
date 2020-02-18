@@ -9,10 +9,12 @@ namespace Emonkak\Enumerable;
  * @template TValue
  * @implements \IteratorAggregate<array{0:TKey,1:TValue}>
  * @implements EnumerableInterface<array{0:TKey,1:TValue}>
- * @use EnumerableExtensions<array{0:TKey,1:TValue}>
  */
 class Dictionary implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<array{0:TKey,1:TValue}>
+     */
     use EnumerableExtensions;
 
     const KEY = 0;
@@ -59,7 +61,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @psalm-return iterable<array{0:TKey,1:TValue}>
      */
     public function getSource(): iterable
     {

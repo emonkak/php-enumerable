@@ -12,10 +12,12 @@ use Emonkak\Enumerable\Internal\Converters;
  * @template TSource
  * @implements \IteratorAggregate<TSource>
  * @implements EnumerableInterface<TSource>
- * @use EnumerableExtensions<TSource>
  */
 class ReverseIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TSource>
+     */
     use EnumerableExtensions;
 
     /**

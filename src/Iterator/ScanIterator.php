@@ -12,10 +12,12 @@ use Emonkak\Enumerable\EnumerableInterface;
  * @template TAccumulate
  * @implements \IteratorAggregate<TAccumulate[]>
  * @implements EnumerableInterface<TAccumulate[]>
- * @use EnumerableExtensions<TAccumulate[]>
  */
 class ScanIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TAccumulate[]>
+     */
     use EnumerableExtensions;
 
     /**

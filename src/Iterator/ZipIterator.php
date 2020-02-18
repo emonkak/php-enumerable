@@ -14,10 +14,12 @@ use Emonkak\Enumerable\Internal\Converters;
  * @template TResult
  * @implements \IteratorAggregate<TResult>
  * @implements EnumerableInterface<TResult>
- * @use EnumerableExtensions<TResult>
  */
 class ZipIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TResult>
+     */
     use EnumerableExtensions;
 
     /**

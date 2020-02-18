@@ -60,7 +60,9 @@ trait EnumerableExtensions
     public function aggregate($seed, callable $func)
     {
         $result = $seed;
-        foreach ($this->getSource() as $element) {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
+        foreach ($source as $element) {
             $result = $func($result, $element);
         }
         return $result;
@@ -72,7 +74,9 @@ trait EnumerableExtensions
     public function all(?callable $predicate = null): bool
     {
         $predicate = $predicate ?: [IdentityFunction::class, 'apply'];
-        foreach ($this->getSource() as $element) {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
+        foreach ($source as $element) {
             if (!$predicate($element)) {
                 return false;
             }
@@ -87,7 +91,9 @@ trait EnumerableExtensions
     public function any(?callable $predicate = null): bool
     {
         $predicate = $predicate ?: [IdentityFunction::class, 'apply'];
-        foreach ($this->getSource() as $element) {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
+        foreach ($source as $element) {
             if ($predicate($element)) {
                 return true;
             }
@@ -103,9 +109,11 @@ trait EnumerableExtensions
     public function average(?callable $selector = null)
     {
         $selector = $selector ?: [IdentityFunction::class, 'apply'];
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         $sum = 0;
         $count = 0;
-        foreach ($this->getSource() as $element) {
+        foreach ($source as $element) {
             $sum += $selector($element);
             $count++;
         }
@@ -156,6 +164,7 @@ trait EnumerableExtensions
      */
     public function count(?callable $predicate = null): int
     {
+        /** @psalm-var iterable<TSource> */
         $source = $this->getSource();
         if ($predicate !== null) {
             $count = 0;
@@ -231,6 +240,7 @@ trait EnumerableExtensions
      */
     public function elementAt(int $index)
     {
+        /** @psalm-var iterable<TSource> */
         $source = $this->getSource();
         if (is_array($source)) {
             if (isset($source[$index])) {
@@ -263,6 +273,7 @@ trait EnumerableExtensions
      */
     public function elementAtOrDefault(int $index, $defaultValue = null)
     {
+        /** @psalm-var iterable<TSource> */
         $source = $this->getSource();
         if (is_array($source)) {
             if (isset($source[$index])) {
@@ -278,7 +289,6 @@ trait EnumerableExtensions
                 return $element;
             }
         } else {
-            /** @psalm-var iterable<TSource> $source */
             foreach ($source as $i => $element) {
                 if ($index === $i) {
                     return $element;
@@ -315,14 +325,16 @@ trait EnumerableExtensions
      */
     public function first(?callable $predicate = null)
     {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         if ($predicate) {
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 if ($predicate($element)) {
                     return $element;
                 }
             }
         } else {
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 return $element;
             }
         }
@@ -337,14 +349,16 @@ trait EnumerableExtensions
      */
     public function firstOrDefault(?callable $predicate = null, $defaultValue = null)
     {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         if ($predicate) {
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 if ($predicate($element)) {
                     return $element;
                 }
             }
         } else {
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 return $element;
             }
         }
@@ -356,7 +370,9 @@ trait EnumerableExtensions
      */
     public function forEach(callable $action): void
     {
-        foreach ($this->getSource() as $element) {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
+        foreach ($source as $element) {
             $action($element);
         }
     }
@@ -376,9 +392,9 @@ trait EnumerableExtensions
         $elementSelector = $elementSelector ?: [IdentityFunction::class, 'apply'];
         $resultSelector = $resultSelector ?:
             /**
-             * @psalm-param mixed $key
-             * @psalm-param mixed[] $values
-             * @psalm-return array{0:mixed,1:mixed[]}
+             * @psalm-param TKey $key
+             * @psalm-param TElement[] $values
+             * @psalm-return array{0:TKey,1:TElement[]}
              */
             static function($key, array $values): array {
                 return [$key, $values];
@@ -455,26 +471,30 @@ trait EnumerableExtensions
      */
     public function last(?callable $predicate = null)
     {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         if ($predicate) {
             $hasValue = false;
             $value = null;
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 if ($predicate($element)) {
                     $value = $element;
                     $hasValue = true;
                 }
             }
             if ($hasValue) {
+                /** @psalm-var TSource $value */
                 return $value;
             }
         } else {
             $hasValue = false;
             $value = null;
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 $hasValue = true;
                 $value = $element;
             }
             if ($hasValue) {
+                /** @psalm-var TSource $value */
                 return $value;
             }
         }
@@ -489,10 +509,12 @@ trait EnumerableExtensions
      */
     public function lastOrDefault(?callable $predicate = null, $defaultValue = null)
     {
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         if ($predicate) {
             $hasValue = false;
             $value = null;
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 if ($predicate($element)) {
                     $value = $element;
                     $hasValue = true;
@@ -504,7 +526,7 @@ trait EnumerableExtensions
         } else {
             $hasValue = false;
             $value = null;
-            foreach ($this->getSource() as $element) {
+            foreach ($source as $element) {
                 $hasValue = true;
                 $value = $element;
             }
@@ -523,8 +545,10 @@ trait EnumerableExtensions
     public function max(?callable $selector = null)
     {
         $selector = $selector ?: [IdentityFunction::class, 'apply'];
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         $max = null;
-        foreach ($this->getSource() as $element) {
+        foreach ($source as $element) {
             $value = $selector($element);
             if ($max === null || $max < $value) {
                 $max = $value;
@@ -540,10 +564,11 @@ trait EnumerableExtensions
      */
     public function maxBy(callable $keySelector): EnumerableInterface
     {
-        $result = [];
-
+        /** @psalm-var \Iterator<TSource> */
         $iterator = $this->toIterator();
         $iterator->rewind();
+
+        $result = [];
 
         if ($iterator->valid()) {
             $element = $iterator->current();
@@ -583,8 +608,10 @@ trait EnumerableExtensions
     public function min(?callable $selector = null)
     {
         $selector = $selector ?: [IdentityFunction::class, 'apply'];
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         $min = null;
-        foreach ($this->getSource() as $element) {
+        foreach ($source as $element) {
             $value = $selector($element);
             if ($min === null || $min > $value) {
                 $min = $value;
@@ -600,10 +627,11 @@ trait EnumerableExtensions
      */
     public function minBy(callable $keySelector): EnumerableInterface
     {
-        $result = [];
-
+        /** @psalm-var \Iterator<TSource> */
         $iterator = $this->toIterator();
         $iterator->rewind();
+
+        $result = [];
 
         if ($iterator->valid()) {
             $element = $iterator->current();
@@ -733,13 +761,14 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param (callable(TSource):bool)|null $predicate
      * @psalm-return TSource
      * @throws NoSuchElementException
      * @throws MoreThanOneElementException
      */
     public function single(?callable $predicate = null)
     {
+        /** @psalm-var iterable<TSource> */
         $source = $this->getSource();
         if ($predicate !== null) {
             $value = null;
@@ -756,6 +785,7 @@ trait EnumerableExtensions
             }
 
             if ($hasValue) {
+                /** @psalm-var TSource $value */
                 return $value;
             }
         } else {
@@ -781,6 +811,7 @@ trait EnumerableExtensions
                 }
 
                 if ($hasValue) {
+                    /** @psalm-var TSource $value */
                     return $value;
                 }
             }
@@ -796,6 +827,7 @@ trait EnumerableExtensions
      */
     public function singleOrDefault(?callable $predicate = null, $defaultValue = null)
     {
+        /** @psalm-var iterable<TSource> */
         $source = $this->getSource();
         if ($predicate !== null) {
             $value = null;
@@ -893,8 +925,10 @@ trait EnumerableExtensions
     public function sum(?callable $selector = null)
     {
         $selector = $selector ?: [IdentityFunction::class, 'apply'];
+        /** @psalm-var iterable<TSource> */
+        $source = $this->getSource();
         $sum = 0;
-        foreach ($this->getSource() as $element) {
+        foreach ($source as $element) {
             $sum += $selector($element);
         }
         return $sum;
@@ -1007,7 +1041,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-return iterable<mixed>
+     * @psalm-return iterable<TSource>
      */
     public function getSource(): iterable
     {

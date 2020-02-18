@@ -11,10 +11,12 @@ use Emonkak\Enumerable\EnumerableInterface;
  * @template TResult
  * @implements \IteratorAggregate<TResult>
  * @implements EnumerableInterface<TResult>
- * @use EnumerableExtensions<TResult>
  */
 class IfIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TResult>
+     */
     use EnumerableExtensions;
 
     /**

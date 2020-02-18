@@ -15,9 +15,10 @@ class LooseEqualityComparer implements EqualityComparerInterface
      */
     public static function getInstance(): self
     {
+        /** @var ?self */
         static $instance;
 
-        if (!isset($instance)) {
+        if ($instance === null) {
             $instance = new self();
         }
 
@@ -47,7 +48,7 @@ class LooseEqualityComparer implements EqualityComparerInterface
         try {
             return (string) $value;
         } catch (\Throwable $e) {
-            /** @var mixed $value */
+            /** @psalm-var mixed $value */
             $typeOrObject = (is_object($value) ? get_class($value) : gettype($value));
             throw new \UnexpectedValueException("The value does not be hashable. got '$typeOrObject'", 0, $e);
         }

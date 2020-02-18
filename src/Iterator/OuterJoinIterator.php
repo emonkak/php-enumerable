@@ -15,10 +15,12 @@ use Emonkak\Enumerable\EqualityComparerInterface;
  * @template TResult
  * @implements \IteratorAggregate<TResult>
  * @implements EnumerableInterface<TResult>
- * @use EnumerableExtensions<TResult>
  */
 class OuterJoinIterator implements \IteratorAggregate, EnumerableInterface
 {
+    /**
+     * @use EnumerableExtensions<TResult>
+     */
     use EnumerableExtensions;
 
     /**

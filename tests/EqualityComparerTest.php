@@ -20,7 +20,13 @@ class EqualityComparerTest extends TestCase
      */
     public function testEquals($first, $second, bool $expectedResult): void
     {
-        $this->assertSame($expectedResult, EqualityComparer::getInstance()->equals($first, $second));
+        $comparer = EqualityComparer::getInstance();
+        $this->assertSame($expectedResult, $comparer->equals($first, $second));
+        if ($expectedResult) {
+            $this->assertSame($comparer->hash($first), $comparer->hash($second));
+        } else {
+            $this->assertNotSame($comparer->hash($first), $comparer->hash($second));
+        }
     }
 
     /**

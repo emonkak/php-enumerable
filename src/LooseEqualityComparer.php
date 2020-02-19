@@ -36,7 +36,17 @@ class LooseEqualityComparer implements EqualityComparerInterface
      */
     public function equals($first, $second): bool
     {
-        return $first == $second;
+        try {
+            return (string) $first === (string) $second;
+        } catch (\Throwable $e) {
+            /**
+             * @psalm-var mixed $first
+             * @psalm-var mixed $second
+             */
+            $firstType = (is_object($first) ? get_class($first) : gettype($first));
+            $secondType = (is_object($second) ? get_class($second) : gettype($second));
+            throw new \UnexpectedValueException("The value does not be comparable. between '$firstType' and '$secondType'.", 0, $e);
+        }
     }
 
     /**
@@ -49,7 +59,7 @@ class LooseEqualityComparer implements EqualityComparerInterface
         } catch (\Throwable $e) {
             /** @psalm-var mixed $value */
             $typeOrObject = (is_object($value) ? get_class($value) : gettype($value));
-            throw new \UnexpectedValueException("The value does not be hashable. got '$typeOrObject'", 0, $e);
+            throw new \UnexpectedValueException("The value does not be hashable. got '$typeOrObject'.", 0, $e);
         }
     }
 }

@@ -20,7 +20,13 @@ class LooseEqualityComparerTest extends TestCase
      */
     public function testEquals($first, $second, bool $expectedResult): void
     {
-        $this->assertSame($expectedResult, LooseEqualityComparer::getInstance()->equals($first, $second));
+        $comparer = LooseEqualityComparer::getInstance();
+        $this->assertSame($expectedResult, $comparer->equals($first, $second));
+        if ($expectedResult) {
+            $this->assertSame($comparer->hash($first), $comparer->hash($second));
+        } else {
+            $this->assertNotSame($comparer->hash($first), $comparer->hash($second));
+        }
     }
 
     /**
@@ -29,16 +35,59 @@ class LooseEqualityComparerTest extends TestCase
     public function providerEquals(): array
     {
         return [
-            ['', null, true],
-            [0, false, true],
-            [1, true, true],
-            ['foo', 'foo', true],
-            ['foo', 'bar', false],
-            [123, 123, true],
-            [123, '123', true],
-            [new \stdClass(), new \stdClass(), true],
-            [['foo' => 123], ['foo' => 123], true],
-            [['foo' => 123], ['foo' => '123'], true],
+            [null, null, true],
+            [null, true, false],
+            [null, false, true],
+            [null, '', true],
+            [null, '0', false],
+            [null, '1', false],
+            [null, 0, false],
+            [null, 1, false],
+            [true, true, true],
+            [true, false, false],
+            [true, 1, true],
+            [true, '1', true],
+            [true, 0, false],
+            [true, '0', false],
+            [false, 1, false],
+            [false, '1', false],
+            [false, 0, false],
+            [false, '0', false],
+            [0, 0, true],
+            [0, '0', true],
+            [0, '0.0', false],
+            [0, 0.0, true],
+            [0, 1, false],
+            [1, '1', true],
+            [1, '1.0', false],
+            [INF, INF, true],
+            [INF, -INF, false],
+            [-INF, -INF, true],
+            [PHP_INT_MAX, PHP_INT_MAX, true],
+            [PHP_INT_MAX, PHP_INT_MIN, false],
+            [PHP_INT_MIN, PHP_INT_MIN, true],
+        ];
+    }
+
+    /**
+     * @dataProvider providerEqualsThrowsUnexpectedValueException
+     * @param mixed $value
+     */
+    public function testEqualsThrowsUnexpectedValueException($value): void
+    {
+        $this->expectException(\UnexpectedValueException::class);
+
+        LooseEqualityComparer::getInstance()->equals($value, $value);
+    }
+
+    /**
+     * @return array<mixed[]>
+     */
+    public function providerEqualsThrowsUnexpectedValueException(): array
+    {
+        return [
+            [[]],
+            [new \stdClass()]
         ];
     }
 
@@ -59,30 +108,12 @@ class LooseEqualityComparerTest extends TestCase
     public function providerHash(): array
     {
         return [
-            [
-                '123',
-                '123'
-            ],
-            [
-                123.0,
-                '123'
-            ],
-            [
-                123,
-                '123'
-            ],
-            [
-                null,
-                ''
-            ],
-            [
-                false,
-                ''
-            ],
-            [
-                true,
-                '1'
-            ]
+            [null, ''],
+            [false, ''],
+            [true, '1'],
+            [123, '123'],
+            [123.0, '123'],
+            ['123', '123'],
         ];
     }
 

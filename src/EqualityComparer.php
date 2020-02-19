@@ -105,7 +105,7 @@ class EqualityComparer implements EqualityComparerInterface
                 return 'n';
 
             default:
-                throw new \UnexpectedValueException("The value does not be hashable. got '$type'");
+                throw new \UnexpectedValueException("The value does not be hashable. got '$type'.");
         }
     }
 }

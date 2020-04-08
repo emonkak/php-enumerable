@@ -77,20 +77,26 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @template TNextKey
+     * @psalm-param callable(TElement):TNextKey|null $keySelector
+     * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
      */
     public function thenBy(callable $keySelector = null): OrderedEnumerableInterface
     {
+        /** @psalm-var callable(TElement):TNextKey */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, false, $comparer);
     }
 
     /**
-     * {@inheritDoc}
+     * @template TNextKey
+     * @psalm-param callable(TElement):TNextKey|null $keySelector
+     * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
      */
     public function thenByDescending(callable $keySelector = null): OrderedEnumerableInterface
     {
+        /** @psalm-var callable(TElement):TNextKey */
         $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, true, $comparer);

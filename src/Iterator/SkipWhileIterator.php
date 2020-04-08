@@ -26,14 +26,14 @@ class SkipWhileIterator implements \IteratorAggregate, EnumerableInterface
     private $source;
 
     /**
-     * @psalm-var callable(TSource):bool
+     * @psalm-var callable(TSource,array-key):bool
      * @var callable
      */
     private $predicate;
 
     /**
      * @psalm-param iterable<TSource> $source
-     * @psalm-param callable(TSource):bool $predicate
+     * @psalm-param callable(TSource,array-key):bool $predicate
      */
     public function __construct(iterable $source, callable $predicate)
     {
@@ -48,8 +48,8 @@ class SkipWhileIterator implements \IteratorAggregate, EnumerableInterface
     {
         $predicate = $this->predicate;
         $skipped = false;
-        foreach ($this->source as $element) {
-            if ($skipped || !$predicate($element)) {
+        foreach ($this->source as $key => $element) {
+            if ($skipped || !$predicate($element, $key)) {
                 yield $element;
                 $skipped = true;
             }

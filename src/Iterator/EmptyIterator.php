@@ -8,13 +8,12 @@ use Emonkak\Enumerable\EnumerableExtensions;
 use Emonkak\Enumerable\EnumerableInterface;
 
 /**
- * @template TSource
- * @implements EnumerableInterface<TSource>
+ * @implements EnumerableInterface<mixed>
  */
 class EmptyIterator extends \EmptyIterator implements EnumerableInterface
 {
     /**
-     * @use EnumerableExtensions<TSource>
+     * @use EnumerableExtensions<mixed>
      */
     use EnumerableExtensions;
 }

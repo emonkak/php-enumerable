@@ -677,12 +677,14 @@ class EnumerableTest extends TestCase
     public function testSelect(): void
     {
         $this->assertEquals([2, 4, 6, 8], Enumerable::from([1, 2, 3, 4])->select(function($x) { return $x * 2; })->toArray());
+        $this->assertEquals([0, 1, 2, 3], Enumerable::from([1, 2, 3, 4])->select(function($x, $i) { return $i; })->toArray());
         $this->assertEquals([], $this->getEmpty()->select(function($x) { return $x * 2; })->toArray());
     }
 
     public function testSelectMany(): void
     {
         $this->assertEquals([1, 2, 2, 4, 3, 6, 4, 8], Enumerable::from([1, 2, 3, 4])->selectMany(function($x): array { return [$x, $x * 2]; })->toArray());
+        $this->assertEquals([1, 0, 2, 1, 3, 2, 4, 3], Enumerable::from([1, 2, 3, 4])->selectMany(function($x, $i): array { return [$x, $i]; })->toArray());
         $this->assertEquals([], $this->getEmpty()->selectMany(function($x): array { return [$x, $x * 2]; })->toArray());
     }
 
@@ -739,6 +741,7 @@ class EnumerableTest extends TestCase
     {
         $this->assertEquals([1, 2, 3, 4], Enumerable::from([1, 2, 3, 4])->skipWhile(function($x) { return $x % 2 === 0; })->toArray());
         $this->assertEquals([3, 2, 1], Enumerable::from([4, 3, 2, 1])->skipWhile(function($x) { return $x % 2 === 0; })->toArray());
+        $this->assertEquals([2, 1], Enumerable::from([4, 3, 2, 1])->skipWhile(function($x, $i) { return $i < 2; })->toArray());
     }
 
     public function testStartWith(): void
@@ -770,6 +773,7 @@ class EnumerableTest extends TestCase
     {
         $this->assertEquals([], Enumerable::from([1, 2, 3, 4])->takeWhile(function($x) { return $x % 2 === 0; })->toArray());
         $this->assertEquals([4], Enumerable::from([4, 3, 2, 1])->takeWhile(function($x) { return $x % 2 === 0; })->toArray());
+        $this->assertEquals([4, 3], Enumerable::from([4, 3, 2, 1])->takeWhile(function($x, $i) { return $i < 2; })->toArray());
     }
 
     public function testToArray(): void
@@ -809,6 +813,7 @@ class EnumerableTest extends TestCase
     public function testWhere(): void
     {
         $this->assertEquals([2, 4], Enumerable::from([1, 2, 3, 4])->where(function($x) { return $x % 2 == 0; })->toArray());
+        $this->assertEquals([1, 3], Enumerable::from([1, 2, 3, 4])->where(function($x, $i) { return $i % 2 == 0; })->toArray());
     }
 
     public function testWhile(): void

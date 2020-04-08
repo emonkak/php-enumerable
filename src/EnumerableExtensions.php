@@ -741,7 +741,7 @@ trait EnumerableExtensions
 
     /**
      * @template TResult
-     * @psalm-param callable(TSource):TResult $selector
+     * @psalm-param callable(TSource,array-key):TResult $selector
      * @psalm-return EnumerableInterface<TResult>
      */
     public function select(callable $selector): EnumerableInterface
@@ -751,7 +751,7 @@ trait EnumerableExtensions
 
     /**
      * @template TResult
-     * @psalm-param callable(TSource):(iterable<TResult>) $collectionSelector
+     * @psalm-param callable(TSource,array-key):(iterable<TResult>) $collectionSelector
      * @psalm-return EnumerableInterface<TResult>
      */
     public function selectMany(callable $collectionSelector): EnumerableInterface
@@ -900,7 +900,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool $predicate
+     * @psalm-param callable(TSource,array-key):bool $predicate
      * @psalm-return EnumerableInterface<TSource>
      */
     public function skipWhile(callable $predicate): EnumerableInterface
@@ -950,7 +950,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool $predicate
+     * @psalm-param callable(TSource,array-key):bool $predicate
      * @psalm-return EnumerableInterface<TSource>
      */
     public function takeWhile(callable $predicate): EnumerableInterface
@@ -1010,7 +1010,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool $predicate
+     * @psalm-param callable(TSource,array-key):bool $predicate
      * @psalm-return EnumerableInterface<TSource>
      */
     public function where(callable $predicate): EnumerableInterface

@@ -26,14 +26,14 @@ class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
     private $source;
 
     /**
-     * @psalm-var callable(TSource):bool
+     * @psalm-var callable(TSource,array-key):bool
      * @var callable
      */
     private $predicate;
 
     /**
      * @psalm-param iterable<TSource> $source
-     * @psalm-param callable(TSource):bool $predicate
+     * @psalm-param callable(TSource,array-key):bool $predicate
      */
     public function __construct(iterable $source, callable $predicate)
     {
@@ -48,8 +48,8 @@ class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
     {
         $predicate = $this->predicate;
 
-        foreach ($this->source as $element) {
-            if (!$predicate($element)) {
+        foreach ($this->source as $key => $element) {
+            if (!$predicate($element, $key)) {
                 break;
             }
             yield $element;

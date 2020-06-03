@@ -51,7 +51,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {
@@ -78,11 +78,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
         if (array_key_exists($hash, $this->hashTable)) {
             if (!$this->comparer->equals($key, $this->hashTable[$hash][self::KEY])) {
                 $other = $this->hashTable[$hash][self::KEY];
-                throw new \RuntimeException(sprintf(
-                    'Hash collision detected, between "%s" and "%s"',
-                    gettype($value),
-                    gettype($other)
-                ));
+                throw new \RuntimeException(sprintf('Hash collision detected, between "%s" and "%s"', gettype($value), gettype($other)));
             }
             return false;
         }

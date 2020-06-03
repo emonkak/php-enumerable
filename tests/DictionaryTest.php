@@ -9,7 +9,7 @@ use Emonkak\Enumerable\EqualityComparerInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Emonkak\Enumerable\Dictionary
+ * @covers \Emonkak\Enumerable\Dictionary
  */
 class DictionaryTest extends TestCase
 {

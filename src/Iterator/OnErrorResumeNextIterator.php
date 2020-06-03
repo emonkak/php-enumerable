@@ -34,7 +34,7 @@ class OnErrorResumeNextIterator implements \IteratorAggregate, EnumerableInterfa
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {

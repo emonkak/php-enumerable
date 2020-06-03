@@ -8,7 +8,7 @@ use Emonkak\Enumerable\Sequence;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Emonkak\Enumerable\Sequence
+ * @covers \Emonkak\Enumerable\Sequence
  */
 class SequenceTest extends TestCase
 {

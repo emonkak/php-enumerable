@@ -7,60 +7,59 @@ namespace Emonkak\Enumerable\Tests;
 use Emonkak\Enumerable\Enumerable;
 use Emonkak\Enumerable\EnumerableInterface;
 use PHPUnit\Exception as PHPUnitException;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Emonkak\Enumerable\Enumerable
- * @covers Emonkak\Enumerable\EnumerableExtensions
- * @covers Emonkak\Enumerable\Internal\Converters
- * @covers Emonkak\Enumerable\Internal\Errors
- * @covers Emonkak\Enumerable\Iterator\BufferIterator
- * @covers Emonkak\Enumerable\Iterator\CatchIterator
- * @covers Emonkak\Enumerable\Iterator\ConcatIterator
- * @covers Emonkak\Enumerable\Iterator\ConcatIterator
- * @covers Emonkak\Enumerable\Iterator\DefaultIfEmptyIterator
- * @covers Emonkak\Enumerable\Iterator\DeferIterator
- * @covers Emonkak\Enumerable\Iterator\DistinctIterator
- * @covers Emonkak\Enumerable\Iterator\DistinctUntilChangedIterator
- * @covers Emonkak\Enumerable\Iterator\DoIterator
- * @covers Emonkak\Enumerable\Iterator\DoWhileIterator
- * @covers Emonkak\Enumerable\Iterator\EmptyIterator
- * @covers Emonkak\Enumerable\Iterator\EmptyIterator
- * @covers Emonkak\Enumerable\Iterator\ExceptIterator
- * @covers Emonkak\Enumerable\Iterator\FinallyIterator
- * @covers Emonkak\Enumerable\Iterator\GenerateIterator
- * @covers Emonkak\Enumerable\Iterator\GroupByIterator
- * @covers Emonkak\Enumerable\Iterator\GroupJoinIterator
- * @covers Emonkak\Enumerable\Iterator\IfIterator
- * @covers Emonkak\Enumerable\Iterator\IntersectIterator
- * @covers Emonkak\Enumerable\Iterator\JoinIterator
- * @covers Emonkak\Enumerable\Iterator\MemoizeIterator
- * @covers Emonkak\Enumerable\Iterator\OnErrorResumeNextIterator
- * @covers Emonkak\Enumerable\Iterator\OnErrorResumeNextIterator
- * @covers Emonkak\Enumerable\Iterator\OrderByIterator
- * @covers Emonkak\Enumerable\Iterator\OuterJoinIterator
- * @covers Emonkak\Enumerable\Iterator\RangeIterator
- * @covers Emonkak\Enumerable\Iterator\RepeatIterator
- * @covers Emonkak\Enumerable\Iterator\RetryIterator
- * @covers Emonkak\Enumerable\Iterator\ReverseIterator
- * @covers Emonkak\Enumerable\Iterator\ScanIterator
- * @covers Emonkak\Enumerable\Iterator\SelectIterator
- * @covers Emonkak\Enumerable\Iterator\SelectManyIterator
- * @covers Emonkak\Enumerable\Iterator\SkipIterator
- * @covers Emonkak\Enumerable\Iterator\SkipLastIterator
- * @covers Emonkak\Enumerable\Iterator\SkipWhileIterator
- * @covers Emonkak\Enumerable\Iterator\StartWithIterator
- * @covers Emonkak\Enumerable\Iterator\StaticCatchIterator
- * @covers Emonkak\Enumerable\Iterator\StaticRepeatIterator
- * @covers Emonkak\Enumerable\Iterator\TakeIterator
- * @covers Emonkak\Enumerable\Iterator\TakeLastIterator
- * @covers Emonkak\Enumerable\Iterator\TakeWhileIterator
- * @covers Emonkak\Enumerable\Iterator\UnionIterator
- * @covers Emonkak\Enumerable\Iterator\WhereIterator
- * @covers Emonkak\Enumerable\Iterator\WhileIterator
- * @covers Emonkak\Enumerable\Iterator\ZipIterator
- * @covers Emonkak\Enumerable\Iterator\ZipIterator
+ * @covers \Emonkak\Enumerable\Enumerable
+ * @covers \Emonkak\Enumerable\EnumerableExtensions
+ * @covers \Emonkak\Enumerable\Internal\Converters
+ * @covers \Emonkak\Enumerable\Internal\Errors
+ * @covers \Emonkak\Enumerable\Iterator\BufferIterator
+ * @covers \Emonkak\Enumerable\Iterator\CatchIterator
+ * @covers \Emonkak\Enumerable\Iterator\ConcatIterator
+ * @covers \Emonkak\Enumerable\Iterator\ConcatIterator
+ * @covers \Emonkak\Enumerable\Iterator\DefaultIfEmptyIterator
+ * @covers \Emonkak\Enumerable\Iterator\DeferIterator
+ * @covers \Emonkak\Enumerable\Iterator\DistinctIterator
+ * @covers \Emonkak\Enumerable\Iterator\DistinctUntilChangedIterator
+ * @covers \Emonkak\Enumerable\Iterator\DoIterator
+ * @covers \Emonkak\Enumerable\Iterator\DoWhileIterator
+ * @covers \Emonkak\Enumerable\Iterator\EmptyIterator
+ * @covers \Emonkak\Enumerable\Iterator\EmptyIterator
+ * @covers \Emonkak\Enumerable\Iterator\ExceptIterator
+ * @covers \Emonkak\Enumerable\Iterator\FinallyIterator
+ * @covers \Emonkak\Enumerable\Iterator\GenerateIterator
+ * @covers \Emonkak\Enumerable\Iterator\GroupByIterator
+ * @covers \Emonkak\Enumerable\Iterator\GroupJoinIterator
+ * @covers \Emonkak\Enumerable\Iterator\IfIterator
+ * @covers \Emonkak\Enumerable\Iterator\IntersectIterator
+ * @covers \Emonkak\Enumerable\Iterator\JoinIterator
+ * @covers \Emonkak\Enumerable\Iterator\MemoizeIterator
+ * @covers \Emonkak\Enumerable\Iterator\OnErrorResumeNextIterator
+ * @covers \Emonkak\Enumerable\Iterator\OnErrorResumeNextIterator
+ * @covers \Emonkak\Enumerable\Iterator\OrderByIterator
+ * @covers \Emonkak\Enumerable\Iterator\OuterJoinIterator
+ * @covers \Emonkak\Enumerable\Iterator\RangeIterator
+ * @covers \Emonkak\Enumerable\Iterator\RepeatIterator
+ * @covers \Emonkak\Enumerable\Iterator\RetryIterator
+ * @covers \Emonkak\Enumerable\Iterator\ReverseIterator
+ * @covers \Emonkak\Enumerable\Iterator\ScanIterator
+ * @covers \Emonkak\Enumerable\Iterator\SelectIterator
+ * @covers \Emonkak\Enumerable\Iterator\SelectManyIterator
+ * @covers \Emonkak\Enumerable\Iterator\SkipIterator
+ * @covers \Emonkak\Enumerable\Iterator\SkipLastIterator
+ * @covers \Emonkak\Enumerable\Iterator\SkipWhileIterator
+ * @covers \Emonkak\Enumerable\Iterator\StartWithIterator
+ * @covers \Emonkak\Enumerable\Iterator\StaticCatchIterator
+ * @covers \Emonkak\Enumerable\Iterator\StaticRepeatIterator
+ * @covers \Emonkak\Enumerable\Iterator\TakeIterator
+ * @covers \Emonkak\Enumerable\Iterator\TakeLastIterator
+ * @covers \Emonkak\Enumerable\Iterator\TakeWhileIterator
+ * @covers \Emonkak\Enumerable\Iterator\UnionIterator
+ * @covers \Emonkak\Enumerable\Iterator\WhereIterator
+ * @covers \Emonkak\Enumerable\Iterator\WhileIterator
+ * @covers \Emonkak\Enumerable\Iterator\ZipIterator
+ * @covers \Emonkak\Enumerable\Iterator\ZipIterator
  */
 class EnumerableTest extends TestCase
 {
@@ -301,10 +300,10 @@ class EnumerableTest extends TestCase
     {
         $x = 0;
         $iteratorFn = function() use (&$x): iterable {
-                yield $x++;
+            yield $x++;
         };
         $this->assertEquals([0, 1, 2, 3, 4], Enumerable::defer($iteratorFn)->doWhile(function() use (&$x) { return $x < 5; })->toArray());
-        $this->assertEquals([5], Enumerable::defer($iteratorFn)->doWhile(function() use(&$x) { return $x < 5; })->toArray());
+        $this->assertEquals([5], Enumerable::defer($iteratorFn)->doWhile(function() use (&$x) { return $x < 5; })->toArray());
     }
 
     public function testElementAt(): void

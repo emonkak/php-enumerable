@@ -41,11 +41,11 @@ class RepeatIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {
-        if ($this->count === null)  {
+        if ($this->count === null) {
             while (true) {
                 foreach ($this->source as $element) {
                     yield $element;

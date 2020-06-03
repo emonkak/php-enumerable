@@ -52,7 +52,7 @@ class DistinctUntilChangedIterator implements \IteratorAggregate, EnumerableInte
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {

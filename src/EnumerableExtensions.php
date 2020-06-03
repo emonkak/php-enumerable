@@ -69,7 +69,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      */
     public function all(?callable $predicate = null): bool
     {
@@ -85,7 +85,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return bool
      */
     public function any(?callable $predicate = null): bool
@@ -102,7 +102,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):(int|float)|null $selector
+     * @psalm-param ?callable(TSource):(int|float) $selector
      * @psalm-return int|float
      * @throws NoSuchElementException
      */
@@ -159,7 +159,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return int
      */
     public function count(?callable $predicate = null): int
@@ -193,7 +193,7 @@ trait EnumerableExtensions
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-param ?EqualityComparerInterface<TKey> $comparer
      * @psalm-return EnumerableInterface<TSource>
      */
@@ -206,7 +206,7 @@ trait EnumerableExtensions
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-return EnumerableInterface<TSource>
      */
     public function distinctUntilChanged(?callable $keySelector = null, ?EqualityComparerInterface $comparer = null): EnumerableInterface
@@ -318,7 +318,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return TSource
      * @throws NoSuchElementException
      */
@@ -342,7 +342,7 @@ trait EnumerableExtensions
 
     /**
      * @template TDefault
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-param TDefault $defaultValue
      * @psalm-return TSource|TDefault
      */
@@ -381,8 +381,8 @@ trait EnumerableExtensions
      * @template TElement
      * @template TResult
      * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-param callable(TSource):TElement|null $elementSelector
-     * @psalm-param callable(TKey,TElement[]):TResult|null $resultSelector
+     * @psalm-param ?callable(TSource):TElement $elementSelector
+     * @psalm-param ?callable(TKey,TElement[]):TResult $resultSelector
      * @psalm-param ?EqualityComparerInterface<TKey> $comparer
      * @psalm-return EnumerableInterface<TResult>
      */
@@ -464,7 +464,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return TSource
      * @throws NoSuchElementException
      */
@@ -502,7 +502,7 @@ trait EnumerableExtensions
 
     /**
      * @template TDefault
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-param TDefault $defaultValue
      * @psalm-return TSource|TDefault
      */
@@ -539,7 +539,7 @@ trait EnumerableExtensions
     /**
      * @template TKey
      * @psalm-param callable(TSource):TKey $selector
-     * @psalm-return TKey|null
+     * @psalm-return ?TKey
      */
     public function max(?callable $selector = null)
     {
@@ -601,8 +601,8 @@ trait EnumerableExtensions
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $selector
-     * @psalm-return TKey|null
+     * @psalm-param ?callable(TSource):TKey $selector
+     * @psalm-return ?TKey
      */
     public function min(?callable $selector = null)
     {
@@ -670,7 +670,7 @@ trait EnumerableExtensions
      * @psalm-param iterable<TInner> $inner
      * @psalm-param callable(TSource):TKey $outerKeySelector
      * @psalm-param callable(TInner):TKey $innerKeySelector
-     * @psalm-param callable(TSource,TInner|null):TResult $resultSelector
+     * @psalm-param callable(TSource,?TInner):TResult $resultSelector
      * @psalm-param ?EqualityComparerInterface<TKey> $comparer
      * @psalm-return EnumerableInterface<TResult>
      */
@@ -682,7 +682,7 @@ trait EnumerableExtensions
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderBy(?callable $keySelector = null): OrderedEnumerableInterface
@@ -693,7 +693,7 @@ trait EnumerableExtensions
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderByDescending(?callable $keySelector = null): OrderedEnumerableInterface
@@ -760,7 +760,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param (callable(TSource):bool)|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return TSource
      * @throws NoSuchElementException
      * @throws MoreThanOneElementException
@@ -820,7 +820,7 @@ trait EnumerableExtensions
 
     /**
      * @template TDefault
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-param TDefault $defaultValue
      * @psalm-return TSource|TDefault
      */
@@ -881,7 +881,6 @@ trait EnumerableExtensions
     public function skip(int $count): EnumerableInterface
     {
         if ($count <= 0) {
-            '@phan-var EnumerableInterface $this';
             return $this;
         }
         return new SkipIterator($this->getSource(), $count);
@@ -893,7 +892,6 @@ trait EnumerableExtensions
     public function skipLast(int $count): EnumerableInterface
     {
         if ($count <= 0) {
-            '@phan-var EnumerableInterface $this';
             return $this;
         }
         return new SkipLastIterator($this->getSource(), $count);
@@ -918,7 +916,7 @@ trait EnumerableExtensions
     }
 
     /**
-     * @psalm-param callable(TSource):(int|float)|null $selector
+     * @psalm-param ?callable(TSource):(int|float) $selector
      * @psalm-return int|float
      */
     public function sum(?callable $selector = null)
@@ -969,7 +967,7 @@ trait EnumerableExtensions
     /**
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
-     * @psalm-param callable(TSource):TElement|null $elementSelector
+     * @psalm-param ?callable(TSource):TElement $elementSelector
      * @psalm-return array<array-key,TElement>
      */
     public function toDictionary(callable $keySelector, ?callable $elementSelector = null): array
@@ -981,7 +979,7 @@ trait EnumerableExtensions
     /**
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
-     * @psalm-param callable(TSource):TElement|null $elementSelector
+     * @psalm-param ?callable(TSource):TElement $elementSelector
      * @psalm-return array<array-key,TElement[]>
      */
     public function toLookup(callable $keySelector, ?callable $elementSelector = null): array
@@ -1044,7 +1042,6 @@ trait EnumerableExtensions
      */
     public function getSource(): iterable
     {
-        '@phan-var EnumerableInterface $this';
         return $this;
     }
 }

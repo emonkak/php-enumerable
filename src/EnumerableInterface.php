@@ -22,18 +22,18 @@ interface EnumerableInterface extends \Traversable
     public function aggregate($seed, callable $func);
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      */
     public function all(?callable $predicate = null): bool;
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return bool
      */
     public function any(?callable $predicate = null): bool;
 
     /**
-     * @psalm-param callable(TSource):(int|float)|null $selector
+     * @psalm-param ?callable(TSource):(int|float) $selector
      * @psalm-return int|float
      * @throws NoSuchElementException
      */
@@ -57,7 +57,7 @@ interface EnumerableInterface extends \Traversable
     public function concat(iterable ...$sources): EnumerableInterface;
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return int
      */
     public function count(?callable $predicate = null): int;
@@ -70,7 +70,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-param ?EqualityComparerInterface<TKey> $comparer
      * @psalm-return EnumerableInterface<TSource>
      */
@@ -78,7 +78,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-return EnumerableInterface<TSource>
      */
     public function distinctUntilChanged(?callable $keySelector = null): EnumerableInterface;
@@ -122,7 +122,7 @@ interface EnumerableInterface extends \Traversable
     public function finally(callable $finallyAction): EnumerableInterface;
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return TSource
      * @throws NoSuchElementException
      */
@@ -130,7 +130,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TDefault
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-param TDefault $defaultValue
      * @psalm-return TSource|TDefault
      */
@@ -146,8 +146,8 @@ interface EnumerableInterface extends \Traversable
      * @template TElement
      * @template TResult
      * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-param callable(TSource):TElement|null $elementSelector
-     * @psalm-param callable(TKey,TElement[]):TResult|null $resultSelector
+     * @psalm-param ?callable(TSource):TElement $elementSelector
+     * @psalm-param ?callable(TKey,TElement[]):TResult $resultSelector
      * @psalm-param ?EqualityComparerInterface<TKey> $comparer
      * @psalm-return EnumerableInterface<TResult>
      */
@@ -194,7 +194,7 @@ interface EnumerableInterface extends \Traversable
     public function join(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface;
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return TSource
      * @throws NoSuchElementException
      */
@@ -202,7 +202,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TDefault
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-param TDefault $defaultValue
      * @psalm-return TSource|TDefault
      */
@@ -211,7 +211,7 @@ interface EnumerableInterface extends \Traversable
     /**
      * @template TKey
      * @psalm-param callable(TSource):TKey $selector
-     * @psalm-return TKey|null
+     * @psalm-return ?TKey
      */
     public function max(?callable $selector = null);
 
@@ -229,8 +229,8 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $selector
-     * @psalm-return TKey|null
+     * @psalm-param ?callable(TSource):TKey $selector
+     * @psalm-return ?TKey
      */
     public function min(?callable $selector = null);
 
@@ -254,7 +254,7 @@ interface EnumerableInterface extends \Traversable
      * @psalm-param iterable<TInner> $inner
      * @psalm-param callable(TSource):TKey $outerKeySelector
      * @psalm-param callable(TInner):TKey $innerKeySelector
-     * @psalm-param callable(TSource,TInner|null):TResult $resultSelector
+     * @psalm-param callable(TSource,TInner):TResult $resultSelector
      * @psalm-param ?EqualityComparerInterface<TKey> $comparer
      * @psalm-return EnumerableInterface<TResult>
      */
@@ -262,14 +262,14 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderBy(?callable $keySelector = null): OrderedEnumerableInterface;
 
     /**
      * @template TKey
-     * @psalm-param callable(TSource):TKey|null $keySelector
+     * @psalm-param ?callable(TSource):TKey $keySelector
      * @psalm-return OrderedEnumerableInterface<TSource,TKey>
      */
     public function orderByDescending(?callable $keySelector = null): OrderedEnumerableInterface;
@@ -314,7 +314,7 @@ interface EnumerableInterface extends \Traversable
     public function selectMany(callable $collectionSelector): EnumerableInterface;
 
     /**
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-return TSource
      * @throws NoSuchElementException
      * @throws MoreThanOneElementException
@@ -323,7 +323,7 @@ interface EnumerableInterface extends \Traversable
 
     /**
      * @template TDefault
-     * @psalm-param callable(TSource):bool|null $predicate
+     * @psalm-param ?callable(TSource):bool $predicate
      * @psalm-param TDefault $defaultValue
      * @psalm-return TSource|TDefault
      */
@@ -352,7 +352,7 @@ interface EnumerableInterface extends \Traversable
     public function startWith(...$elements): EnumerableInterface;
 
     /**
-     * @psalm-param callable(TSource):(int|float)|null $selector
+     * @psalm-param ?callable(TSource):(int|float) $selector
      * @psalm-return int|float
      */
     public function sum(?callable $selector = null);
@@ -381,7 +381,7 @@ interface EnumerableInterface extends \Traversable
     /**
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
-     * @psalm-param callable(TSource):TElement|null $elementSelector
+     * @psalm-param ?callable(TSource):TElement $elementSelector
      * @psalm-return array<array-key,TElement>
      */
     public function toDictionary(callable $keySelector, ?callable $elementSelector = null): array;
@@ -389,7 +389,7 @@ interface EnumerableInterface extends \Traversable
     /**
      * @template TElement
      * @psalm-param callable(TSource):array-key $keySelector
-     * @psalm-param callable(TSource):TElement|null $elementSelector
+     * @psalm-param ?callable(TSource):TElement $elementSelector
      * @psalm-return array<array-key,TElement[]>
      */
     public function toLookup(callable $keySelector, ?callable $elementSelector = null): array;

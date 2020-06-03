@@ -41,11 +41,11 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {
-        if ($this->count !== null)  {
+        if ($this->count !== null) {
             for ($i = $this->count; $i > 0; $i--) {
                 yield $this->element;
             }

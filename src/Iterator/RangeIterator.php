@@ -39,7 +39,7 @@ class RangeIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {

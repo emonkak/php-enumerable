@@ -48,7 +48,7 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {

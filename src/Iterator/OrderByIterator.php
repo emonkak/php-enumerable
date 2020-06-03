@@ -48,7 +48,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     /**
      * @psalm-param iterable<TElement> $source
      * @psalm-param callable(TElement):TKey $keySelector
-     * @psalm-param callable(TElement,TElement):int|null $parentComparer
+     * @psalm-param ?callable(TElement,TElement):int $parentComparer
      */
     public function __construct(iterable $source, callable $keySelector, bool $descending, ?callable $parentComparer = null)
     {
@@ -66,7 +66,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {
@@ -78,7 +78,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
 
     /**
      * @template TNextKey
-     * @psalm-param callable(TElement):TNextKey|null $keySelector
+     * @psalm-param ?callable(TElement):TNextKey $keySelector
      * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
      */
     public function thenBy(callable $keySelector = null): OrderedEnumerableInterface
@@ -91,7 +91,7 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
 
     /**
      * @template TNextKey
-     * @psalm-param callable(TElement):TNextKey|null $keySelector
+     * @psalm-param ?callable(TElement):TNextKey $keySelector
      * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
      */
     public function thenByDescending(callable $keySelector = null): OrderedEnumerableInterface

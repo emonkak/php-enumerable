@@ -8,7 +8,7 @@ use Emonkak\Enumerable\EqualityComparer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Emonkak\Enumerable\EqualityComparer
+ * @covers \Emonkak\Enumerable\EqualityComparer
  */
 class EqualityComparerTest extends TestCase
 {
@@ -16,7 +16,6 @@ class EqualityComparerTest extends TestCase
      * @dataProvider providerEquals
      * @param mixed $first
      * @param mixed $second
-     * @param bool $expectedResult
      */
     public function testEquals($first, $second, bool $expectedResult): void
     {

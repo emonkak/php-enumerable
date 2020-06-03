@@ -8,7 +8,7 @@ use Emonkak\Enumerable\Internal\IdentityFunction;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Emonkak\Enumerable\Internal\IdentityFunction
+ * @covers \Emonkak\Enumerable\Internal\IdentityFunction
  */
 class IdentityFunctionTest extends TestCase
 {

@@ -35,7 +35,7 @@ class DeferIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {

@@ -32,7 +32,7 @@ class LooseEqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function equals($first, $second): bool
     {
@@ -50,7 +50,7 @@ class LooseEqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hash($value): string
     {

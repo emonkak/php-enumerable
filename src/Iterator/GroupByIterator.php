@@ -70,7 +70,7 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {
@@ -78,6 +78,7 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
         $elementSelector = $this->elementSelector;
         $resultSelector = $this->resultSelector;
 
+        /** @psalm-var array<string,array{0:TKey,1:TElement[]}> */
         $lookup = [];
 
         foreach ($this->source as $element) {

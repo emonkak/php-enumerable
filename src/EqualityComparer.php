@@ -32,7 +32,7 @@ class EqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function equals($first, $second): bool
     {
@@ -72,7 +72,7 @@ class EqualityComparer implements EqualityComparerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hash($value): string
     {
@@ -94,6 +94,7 @@ class EqualityComparer implements EqualityComparerInterface
                     return 'h' . sha1($value);
                 }
 
+                // no break
             case 'array':
                 // XXX: A different hash is calculated if the order of the keys is different.
                 return 'a' . sha1(serialize($value));

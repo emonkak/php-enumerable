@@ -46,7 +46,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Traversable
     {
@@ -72,11 +72,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
         if (array_key_exists($hash, $this->hashTable)) {
             $other = $this->hashTable[$hash];
             if (!$this->comparer->equals($value, $other)) {
-                throw new \RuntimeException(sprintf(
-                    'Hash collision detected, between "%s" and "%s"',
-                    gettype($value),
-                    gettype($other)
-                ));
+                throw new \RuntimeException(sprintf('Hash collision detected, between "%s" and "%s"', gettype($value), gettype($other)));
             }
             return false;
         }

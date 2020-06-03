@@ -8,7 +8,7 @@ use Emonkak\Enumerable\LooseEqualityComparer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Emonkak\Enumerable\LooseEqualityComparer
+ * @covers \Emonkak\Enumerable\LooseEqualityComparer
  */
 class LooseEqualityComparerTest extends TestCase
 {
@@ -16,7 +16,6 @@ class LooseEqualityComparerTest extends TestCase
      * @dataProvider providerEquals
      * @param mixed $first
      * @param mixed $second
-     * @param bool $expectedResult
      */
     public function testEquals($first, $second, bool $expectedResult): void
     {
@@ -87,7 +86,7 @@ class LooseEqualityComparerTest extends TestCase
     {
         return [
             [[]],
-            [new \stdClass()]
+            [new \stdClass()],
         ];
     }
 
@@ -150,7 +149,7 @@ class LooseEqualityComparerTest extends TestCase
     {
         return [
             [[]],
-            [new \stdClass()]
+            [new \stdClass()],
         ];
     }
 }

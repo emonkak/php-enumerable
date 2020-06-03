@@ -9,7 +9,7 @@ use Emonkak\Enumerable\Set;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Emonkak\Enumerable\Set
+ * @covers \Emonkak\Enumerable\Set
  */
 class SetTest extends TestCase
 {

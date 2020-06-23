@@ -53,23 +53,31 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
     public function getIterator(): \Traversable
     {
         $buffer = [];
-        $skipped = 0;
+        $skips = 0;
+        $size = 0;
 
         foreach ($this->source as $element) {
-            if (count($buffer) < $this->count) {
+            if ($size < $this->count) {
                 $buffer[] = $element;
+                $size++;
             } else {
-                if ($skipped >= $this->skip) {
+                if ($skips >= $this->skip) {
                     yield $buffer;
-                    $buffer = array_slice($buffer, $this->skip);
-                    $buffer[] = $element;
-                    $skipped = 0;
+                    if ($size > $this->skip) {
+                        $buffer = array_slice($buffer, $this->skip);
+                        $buffer[] = $element;
+                        $size = $size - $this->skip + 1;
+                    } else {
+                        $buffer = [$element];
+                        $size = 1;
+                    }
+                    $skips = 0;
                 }
             }
-            $skipped++;
+            $skips++;
         }
 
-        if (count($buffer) > 0) {
+        if ($size > 0) {
             yield $buffer;
         }
     }

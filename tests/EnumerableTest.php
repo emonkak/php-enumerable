@@ -207,6 +207,7 @@ class EnumerableTest extends TestCase
         $this->assertEquals([], $this->getEmpty()->buffer(5)->toArray());
         $this->assertEquals([[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9]], Enumerable::from($xs)->buffer(3, 2)->toArray());
         $this->assertEquals([[0, 1, 2], [4, 5, 6], [8, 9]], Enumerable::from($xs)->buffer(3, 4)->toArray());
+        $this->assertEquals([[0, 1, 2], [5, 6, 7]], Enumerable::from($xs)->buffer(3, 5)->toArray());
 
         $this->assertThrows(function() { $this->getEmpty()->buffer(0)->toArray(); }, \OutOfRangeException::class);
         $this->assertThrows(function() { $this->getEmpty()->buffer(1, 0)->toArray(); }, \OutOfRangeException::class);

@@ -21,36 +21,32 @@ class GenerateIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var TState
-     * @var mixed
+     * @var TState
      */
-    private $initialState;
+    private mixed $initialState;
 
     /**
-     * @psalm-var callable(TState):bool
-     * @var callable
+     * @var callable(TState):bool
      */
     private $condition;
 
     /**
-     * @psalm-var callable(TState):TState
-     * @var callable
+     * @var callable(TState):TState
      */
     private $iterate;
 
     /**
-     * @psalm-var callable(TState):TResult
-     * @var callable
+     * @var callable(TState):TResult
      */
     private $resultSelector;
 
     /**
-     * @psalm-param TState $initialState
-     * @psalm-param callable(TState):bool $condition
-     * @psalm-param callable(TState):TState $iterate
-     * @psalm-param callable(TState):TResult $resultSelector
+     * @param TState $initialState
+     * @param callable(TState):bool $condition
+     * @param callable(TState):TState $iterate
+     * @param callable(TState):TResult $resultSelector
      */
-    public function __construct($initialState, callable $condition, callable $iterate, callable $resultSelector)
+    public function __construct(mixed $initialState, callable $condition, callable $iterate, callable $resultSelector)
     {
         $this->initialState = $initialState;
         $this->condition = $condition;
@@ -58,9 +54,6 @@ class GenerateIterator implements \IteratorAggregate, EnumerableInterface
         $this->resultSelector = $resultSelector;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $condition = $this->condition;

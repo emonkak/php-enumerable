@@ -7,19 +7,28 @@ namespace Emonkak\Enumerable\Internal;
 final class IdentityFunction
 {
     /**
+     * @codeCoverageIgnore
+     *
      * @template T
-     * @psalm-param T $x
-     * @psalm-return T
+     * @return callable(T):T
      */
-    public static function apply($x)
+    public static function get(): callable
     {
-        return $x;
+        static $f = null;
+
+        if ($f === null) {
+            $f = static function(mixed $x): mixed {
+                return $x;
+            };
+        }
+
+        return $f;
     }
 
     /**
      * @codeCoverageIgnore
      */
-    public function __construct()
+    private function __construct()
     {
     }
 }

@@ -22,27 +22,24 @@ class UnionIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $first;
+    private iterable $first;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $second;
+    private iterable $second;
 
     /**
-     * @psalm-var EqualityComparerInterface<TSource>
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TSource>
      */
     private $comparer;
 
     /**
-     * @psalm-param iterable<TSource> $first
-     * @psalm-param iterable<TSource> $second
-     * @psalm-param EqualityComparerInterface<TSource> $comparer
+     * @param iterable<TSource> $first
+     * @param iterable<TSource> $second
+     * @param EqualityComparerInterface<TSource> $comparer
      */
     public function __construct(iterable $first, iterable $second, EqualityComparerInterface $comparer)
     {
@@ -51,9 +48,6 @@ class UnionIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $set = new Set($this->comparer);

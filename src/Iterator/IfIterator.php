@@ -20,27 +20,24 @@ class IfIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var callable():bool
-     * @var callable
+     * @var callable():bool
      */
     private $condition;
 
     /**
-     * @psalm-var iterable<TResult>
-     * @var iterable
+     * @var iterable<TResult>
      */
-    private $thenSource;
+    private iterable $thenSource;
 
     /**
-     * @psalm-var iterable<TResult>
-     * @var iterable
+     * @var iterable<TResult>
      */
-    private $elseSource;
+    private iterable $elseSource;
 
     /**
-     * @psalm-param callable():bool $condition
-     * @psalm-param iterable<TResult> $thenSource
-     * @psalm-param iterable<TResult> $elseSource
+     * @param callable():bool $condition
+     * @param iterable<TResult> $thenSource
+     * @param iterable<TResult> $elseSource
      */
     public function __construct(callable $condition, iterable $thenSource, iterable $elseSource)
     {
@@ -49,9 +46,6 @@ class IfIterator implements \IteratorAggregate, EnumerableInterface
         $this->elseSource = $elseSource;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $condition = $this->condition;

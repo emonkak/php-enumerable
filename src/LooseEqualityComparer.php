@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable;
 
 /**
- * @implements EqualityComparerInterface<?scalar>
+ * @template T
+ * @implements EqualityComparerInterface<T>
  */
 class LooseEqualityComparer implements EqualityComparerInterface
 {
     /**
      * @codeCoverageIgnore
+     *
+     * @template TStatic
+     * @return self<TStatic>
      */
     public static function getInstance(): self
     {
-        /** @var ?self */
-        static $instance;
-
-        if ($instance === null) {
-            $instance = new self();
-        }
+        static $instance = new self();
 
         return $instance;
     }
@@ -31,35 +30,24 @@ class LooseEqualityComparer implements EqualityComparerInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function equals($first, $second): bool
+    public function equals(mixed $first, mixed $second): bool
     {
         try {
             return (string) $first === (string) $second;
         } catch (\Throwable $e) {
-            /**
-             * @psalm-var mixed $first
-             * @psalm-var mixed $second
-             */
             $firstType = (is_object($first) ? get_class($first) : gettype($first));
             $secondType = (is_object($second) ? get_class($second) : gettype($second));
-            throw new \UnexpectedValueException("The value does not be comparable. between '$firstType' and '$secondType'.", 0, $e);
+            throw new \UnexpectedValueException("The value is not comparable, got '$firstType' and '$secondType'.", 0, $e);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hash($value): string
+    public function hash(mixed $value): string
     {
         try {
             return (string) $value;
         } catch (\Throwable $e) {
-            /** @psalm-var mixed $value */
-            $typeOrObject = (is_object($value) ? get_class($value) : gettype($value));
-            throw new \UnexpectedValueException("The value does not be hashable. got '$typeOrObject'.", 0, $e);
+            $type = (is_object($value) ? get_class($value) : gettype($value));
+            throw new \UnexpectedValueException("The value is not be hashable, got '$type'.", 0, $e);
         }
     }
 }

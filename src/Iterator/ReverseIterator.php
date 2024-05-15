@@ -21,22 +21,18 @@ class ReverseIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-param iterable<TSource> $source
+     * @param iterable<TSource> $source
      */
     public function __construct(iterable $source)
     {
         $this->source = $source;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $array = Converters::toArray($this->source);

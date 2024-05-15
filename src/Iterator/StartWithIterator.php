@@ -20,20 +20,18 @@ class StartWithIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var TSource[]
-     * @var mixed[]
+     * @var TSource[]
      */
-    private $elements;
+    private array $elements;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param TSource[] $elements
+     * @param iterable<TSource> $source
+     * @param TSource[] $elements
      */
     public function __construct(iterable $source, array $elements)
     {
@@ -41,9 +39,6 @@ class StartWithIterator implements \IteratorAggregate, EnumerableInterface
         $this->elements = $elements;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         foreach ($this->elements as $element) {

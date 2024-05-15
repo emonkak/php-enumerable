@@ -18,29 +18,16 @@ class RangeIterator implements \IteratorAggregate, EnumerableInterface
      */
     use EnumerableExtensions;
 
-    /**
-     * @var int
-     */
-    private $start;
+    private int $start;
 
-    /**
-     * @var int
-     */
-    private $count;
+    private int $count;
 
-    /**
-     * @psalm-param int $start
-     * @psalm-param int $count
-     */
     public function __construct(int $start, int $count)
     {
         $this->start = $start;
         $this->count = $count;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $current = $this->start;

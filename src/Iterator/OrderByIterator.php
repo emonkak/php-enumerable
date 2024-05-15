@@ -23,51 +23,42 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TElement>
-     * @var iterable
+     * @var iterable<TElement>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var callable(TElement):TKey
-     * @var callable
+     * @var callable(TElement):TKey
      */
     private $keySelector;
 
-    /**
-     * @var bool
-     */
-    private $descending;
+    private bool $descending;
 
     /**
-     * @psalm-var callable(TElement,TElement):int
-     * @var callable
+     * @var callable(TElement,TElement):int
      */
     private $parentComparer;
 
     /**
-     * @psalm-param iterable<TElement> $source
-     * @psalm-param callable(TElement):TKey $keySelector
-     * @psalm-param ?callable(TElement,TElement):int $parentComparer
+     * @param iterable<TElement> $source
+     * @param callable(TElement):TKey $keySelector
+     * @param ?callable(TElement,TElement):int $parentComparer
      */
     public function __construct(iterable $source, callable $keySelector, bool $descending, ?callable $parentComparer = null)
     {
         $this->source = $source;
         $this->keySelector = $keySelector;
         $this->descending = $descending;
-        $this->parentComparer = $parentComparer ?:
+        $this->parentComparer = $parentComparer ??
             /**
-             * @psalm-param TElement $first
-             * @psalm-param TElement $second
+             * @param TElement $first
+             * @param TElement $second
              */
             static function($first, $second): int {
                 return 0;
             };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $array = Converters::toArray($this->source);
@@ -78,32 +69,32 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
 
     /**
      * @template TNextKey
-     * @psalm-param ?callable(TElement):TNextKey $keySelector
-     * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
+     * @param ?callable(TElement):TNextKey $keySelector
+     * @return OrderedEnumerableInterface<TElement,TNextKey>
      */
-    public function thenBy(callable $keySelector = null): OrderedEnumerableInterface
+    public function thenBy(?callable $keySelector = null): OrderedEnumerableInterface
     {
-        /** @psalm-var callable(TElement):TNextKey */
-        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
+        /** @var callable(TElement):TNextKey */
+        $keySelector = $keySelector ?? IdentityFunction::get();
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, false, $comparer);
     }
 
     /**
      * @template TNextKey
-     * @psalm-param ?callable(TElement):TNextKey $keySelector
-     * @psalm-return OrderedEnumerableInterface<TElement,TNextKey>
+     * @param ?callable(TElement):TNextKey $keySelector
+     * @return OrderedEnumerableInterface<TElement,TNextKey>
      */
-    public function thenByDescending(callable $keySelector = null): OrderedEnumerableInterface
+    public function thenByDescending(?callable $keySelector = null): OrderedEnumerableInterface
     {
-        /** @psalm-var callable(TElement):TNextKey */
-        $keySelector = $keySelector ?: [IdentityFunction::class, 'apply'];
+        /** @var callable(TElement):TNextKey */
+        $keySelector = $keySelector ?? IdentityFunction::get();
         $comparer = $this->getComparer();
         return new OrderByIterator($this->source, $keySelector, true, $comparer);
     }
 
     /**
-     * @psalm-return callable(TElement,TElement):int
+     * @return callable(TElement,TElement):int
      */
     private function getComparer(): callable
     {
@@ -112,10 +103,10 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
         if ($this->descending) {
             return
                 /**
-                 * @psalm-param TElement $first
-                 * @psalm-param TElement $second
+                 * @param TElement $first
+                 * @param TElement $second
                  */
-                static function($first, $second) use ($keySelector, $parentComparer): int {
+                static function(mixed $first, mixed $second) use ($keySelector, $parentComparer): int {
                     $ordering = $parentComparer($first, $second);
                     if ($ordering != 0) {
                         return $ordering;
@@ -130,10 +121,10 @@ class OrderByIterator implements \IteratorAggregate, OrderedEnumerableInterface
         } else {
             return
                 /**
-                 * @psalm-param TElement $first
-                 * @psalm-param TElement $second
+                 * @param TElement $first
+                 * @param TElement $second
                  */
-                static function($first, $second) use ($keySelector, $parentComparer): int {
+                static function(mixed $first, mixed $second) use ($keySelector, $parentComparer): int {
                     $ordering = $parentComparer($first, $second);
                     if ($ordering != 0) {
                         return $ordering;

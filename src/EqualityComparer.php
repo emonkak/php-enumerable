@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable;
 
 /**
- * @implements EqualityComparerInterface<mixed>
+ * @template T
+ * @implements EqualityComparerInterface<T>
  */
 class EqualityComparer implements EqualityComparerInterface
 {
     /**
      * @codeCoverageIgnore
+     *
+     * @template TStatic
+     * @return self<TStatic>
      */
     public static function getInstance(): self
     {
-        /** @var ?self */
-        static $instance;
-
-        if ($instance === null) {
-            $instance = new self();
-        }
+        static $instance = new self();
 
         return $instance;
     }
@@ -31,9 +30,6 @@ class EqualityComparer implements EqualityComparerInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function equals($first, $second): bool
     {
         if ($first === $second) {
@@ -71,9 +67,6 @@ class EqualityComparer implements EqualityComparerInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hash($value): string
     {
         $type = gettype($value);

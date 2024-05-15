@@ -24,48 +24,42 @@ class JoinIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TOuter>
-     * @var iterable
+     * @var iterable<TOuter>
      */
-    private $outer;
+    private iterable $outer;
 
     /**
-     * @psalm-var iterable<TInner>
-     * @var iterable
+     * @var iterable<TInner>
      */
-    private $inner;
+    private iterable $inner;
 
     /**
-     * @psalm-var callable(TOuter):TKey
-     * @var callable
+     * @var callable(TOuter):TKey
      */
     private $outerKeySelector;
 
     /**
-     * @psalm-var callable(TInner):TKey
-     * @var callable
+     * @var callable(TInner):TKey
      */
     private $innerKeySelector;
 
     /**
-     * @psalm-var callable(TOuter,TInner):TResult
-     * @var callable
+     * @var callable(TOuter,TInner):TResult
      */
     private $resultSelector;
 
     /**
-     * @psalm-var EqualityComparerInterface<TKey>
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TKey>
      */
-    private $comparer;
+    private EqualityComparerInterface $comparer;
 
     /**
-     * @psalm-param iterable<TOuter> $outer
-     * @psalm-param iterable<TInner> $inner
-     * @psalm-param callable(TOuter):TKey $outerKeySelector
-     * @psalm-param callable(TInner):TKey $innerKeySelector
-     * @psalm-param callable(TOuter,TInner):TResult $resultSelector
-     * @psalm-param EqualityComparerInterface<TKey> $comparer
+     * @param iterable<TOuter> $outer
+     * @param iterable<TInner> $inner
+     * @param callable(TOuter):TKey $outerKeySelector
+     * @param callable(TInner):TKey $innerKeySelector
+     * @param callable(TOuter,TInner):TResult $resultSelector
+     * @param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(iterable $outer, iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, EqualityComparerInterface $comparer)
     {
@@ -77,9 +71,6 @@ class JoinIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $outerKeySelector = $this->outerKeySelector;

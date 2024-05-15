@@ -20,20 +20,18 @@ class CatchIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var callable(\Exception):(iterable<TSource>)
-     * @var callable
+     * @var callable(\Exception):(iterable<TSource>)
      */
     private $handler;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param callable(\Exception):(iterable<TSource>) $handler
+     * @param iterable<TSource> $source
+     * @param callable(\Exception):(iterable<TSource>) $handler
      */
     public function __construct(iterable $source, callable $handler)
     {
@@ -41,9 +39,6 @@ class CatchIterator implements \IteratorAggregate, EnumerableInterface
         $this->handler = $handler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         try {

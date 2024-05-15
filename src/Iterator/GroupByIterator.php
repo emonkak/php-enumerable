@@ -24,41 +24,36 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var callable(TSource):TKey
-     * @var callable
+     * @var callable(TSource):TKey
      */
     private $keySelector;
 
     /**
-     * @psalm-var callable(TSource):TElement
-     * @var callable
+     * @var callable(TSource):TElement
      */
     private $elementSelector;
 
     /**
-     * @psalm-var callable(TKey,TElement[]):TResult
-     * @var callable
+     * @var callable(TKey,TElement[]):TResult
      */
     private $resultSelector;
 
     /**
-     * @psalm-var EqualityComparerInterface<TKey>
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TKey>
      */
-    private $comparer;
+    private EqualityComparerInterface $comparer;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-param callable(TSource):TElement $elementSelector
-     * @psalm-param callable(TKey,TElement[]):TResult $resultSelector
-     * @psalm-param EqualityComparerInterface<TKey> $comparer
+     * @param iterable<TSource> $source
+     * @param callable(TSource):TKey $keySelector
+     * @param callable(TSource):TElement $elementSelector
+     * @param callable(TKey,TElement[]):TResult $resultSelector
+     * @param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(iterable $source, callable $keySelector, callable $elementSelector, callable $resultSelector, EqualityComparerInterface $comparer)
     {
@@ -69,16 +64,13 @@ class GroupByIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $keySelector = $this->keySelector;
         $elementSelector = $this->elementSelector;
         $resultSelector = $this->resultSelector;
 
-        /** @psalm-var array<string,array{0:TKey,1:TElement[]}> */
+        /** @var array<string,array{0:TKey,1:TElement[]}> */
         $lookup = [];
 
         foreach ($this->source as $element) {

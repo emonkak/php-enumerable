@@ -20,19 +20,14 @@ class SkipIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
+
+    private int $count;
 
     /**
-     * @var int
-     */
-    private $count;
-
-    /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param int $count
+     * @param iterable<TSource> $source
      */
     public function __construct(iterable $source, int $count)
     {
@@ -40,9 +35,6 @@ class SkipIterator implements \IteratorAggregate, EnumerableInterface
         $this->count = $count;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         if (is_array($this->source)) {

@@ -6,17 +6,17 @@ namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\Dictionary;
 use Emonkak\Enumerable\EqualityComparerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Emonkak\Enumerable\Dictionary
- */
+#[CoversClass(Dictionary::class)]
 class DictionaryTest extends TestCase
 {
     public function testCreate(): void
     {
         $obj = new \stdClass();
 
+        /** @var Dictionary<mixed,mixed> */
         $dict = Dictionary::create();
 
         $this->assertTrue($dict->set('foo', 123));
@@ -73,9 +73,9 @@ class DictionaryTest extends TestCase
         $comparer
             ->expects($this->any())
             ->method('equals')
-            ->will($this->returnCallback(function($first, $second) {
+            ->willReturnCallback(function(mixed $first, mixed $second): bool {
                 return $first === $second;
-            }));
+            });
 
         $dict = new Dictionary($comparer);
         $dict->set('foo', 123);

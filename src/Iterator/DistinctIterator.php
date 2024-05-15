@@ -23,27 +23,24 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var callable(TSource):TKey
-     * @var callable
+     * @var callable(TSource):TKey
      */
     private $keySelector;
 
     /**
-     * @psalm-var EqualityComparerInterface<TKey>
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TKey>
      */
-    private $comparer;
+    private EqualityComparerInterface $comparer;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param callable(TSource):TKey $keySelector
-     * @psalm-param EqualityComparerInterface<TKey> $comparer
+     * @param iterable<TSource> $source
+     * @param callable(TSource):TKey $keySelector
+     * @param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(iterable $source, callable $keySelector, EqualityComparerInterface $comparer)
     {
@@ -52,9 +49,6 @@ class DistinctIterator implements \IteratorAggregate, EnumerableInterface
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $set = new Set($this->comparer);

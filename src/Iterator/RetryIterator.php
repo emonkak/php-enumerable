@@ -20,20 +20,15 @@ class RetryIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
+
+    private ?int $retryCount;
 
     /**
-     * @psalm-var ?int
-     * @var ?int
-     */
-    private $retryCount;
-
-    /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param ?int $retryCount
+     * @param iterable<TSource> $source
+     * @param ?int $retryCount
      */
     public function __construct(iterable $source, ?int $retryCount)
     {
@@ -41,9 +36,6 @@ class RetryIterator implements \IteratorAggregate, EnumerableInterface
         $this->retryCount = $retryCount;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $retryCount = $this->retryCount !== null ? $this->retryCount : INF;

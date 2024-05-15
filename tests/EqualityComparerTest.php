@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\EqualityComparer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Emonkak\Enumerable\EqualityComparer
- */
+#[CoversClass(EqualityComparer::class)]
 class EqualityComparerTest extends TestCase
 {
-    /**
-     * @dataProvider providerEquals
-     * @param mixed $first
-     * @param mixed $second
-     */
-    public function testEquals($first, $second, bool $expectedResult): void
+    #[DataProvider('providerEquals')]
+    public function testEquals(mixed $first, mixed $second, bool $expectedResult): void
     {
         $comparer = EqualityComparer::getInstance();
         $this->assertSame($expectedResult, $comparer->equals($first, $second));
@@ -31,7 +27,7 @@ class EqualityComparerTest extends TestCase
     /**
      * @return array<mixed[]>
      */
-    public function providerEquals(): array
+    public static function providerEquals(): array
     {
         return [
             ['', null, false],
@@ -62,6 +58,7 @@ class EqualityComparerTest extends TestCase
 
     public function testHash(): void
     {
+        /** @var EqualityComparer<mixed> */
         $comparer = EqualityComparer::getInstance();
 
         $hashes = [
@@ -81,11 +78,8 @@ class EqualityComparerTest extends TestCase
         $this->assertEquals($hashes, array_unique($hashes));
     }
 
-    /**
-     * @dataProvider providerHashThrowsUnexpectedValueException
-     * @param mixed $value
-     */
-    public function testHashThrowsUnexpectedValueException($value): void
+    #[DataProvider('providerHashThrowsUnexpectedValueException')]
+    public function testHashThrowsUnexpectedValueException(mixed $value): void
     {
         $this->expectException(\UnexpectedValueException::class);
 
@@ -95,7 +89,7 @@ class EqualityComparerTest extends TestCase
     /**
      * @return array<mixed[]>
      */
-    public function providerHashThrowsUnexpectedValueException(): array
+    public static function providerHashThrowsUnexpectedValueException(): array
     {
         return [
             [STDIN],

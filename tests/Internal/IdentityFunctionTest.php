@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable\Tests\Internal;
 
 use Emonkak\Enumerable\Internal\IdentityFunction;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Emonkak\Enumerable\Internal\IdentityFunction
- */
+#[CoversClass(IdentityFunction::class)]
 class IdentityFunctionTest extends TestCase
 {
-    public function testApply(): void
+    public function testGet(): void
     {
-        $this->assertSame(123, IdentityFunction::apply(123));
+        /** @var callable(mixed):mixed */
+        $f = IdentityFunction::get();
+        $this->assertSame(123, $f(123));
     }
 }

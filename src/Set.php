@@ -17,20 +17,18 @@ class Set implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var EqualityComparerInterface<T>
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<T>
      */
-    private $comparer;
+    private EqualityComparerInterface $comparer;
 
     /**
-     * @psalm-var array<string,T>
-     * @var array<string,mixed>
+     * @var array<string,T>
      */
-    private $hashTable = [];
+    private array $hashTable = [];
 
     /**
-     * @template TCreate
-     * @psalm-return self<TCreate>
+     * @template TStatic
+     * @return self<TStatic>
      */
     public static function create(): self
     {
@@ -38,16 +36,13 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-param EqualityComparerInterface<T> $comparer
+     * @param EqualityComparerInterface<T> $comparer
      */
     public function __construct(EqualityComparerInterface $comparer)
     {
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         foreach ($this->hashTable as $entry) {
@@ -64,9 +59,9 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-param T $value
+     * @param T $value
      */
-    public function add($value): bool
+    public function add(mixed $value): bool
     {
         $hash = $this->comparer->hash($value);
         if (array_key_exists($hash, $this->hashTable)) {
@@ -81,18 +76,18 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-param T $value
+     * @param T $value
      */
-    public function contains($value): bool
+    public function contains(mixed $value): bool
     {
         $hash = $this->comparer->hash($value);
         return array_key_exists($hash, $this->hashTable);
     }
 
     /**
-     * @psalm-param T $value
+     * @param T $value
      */
-    public function remove($value): bool
+    public function remove(mixed $value): bool
     {
         $hash = $this->comparer->hash($value);
         if (!array_key_exists($hash, $this->hashTable)) {
@@ -103,7 +98,7 @@ class Set implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return T[]
+     * @return T[]
      */
     public function toArray(): array
     {

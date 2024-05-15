@@ -20,20 +20,18 @@ class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var callable(TSource,array-key):bool
-     * @var callable
+     * @var callable(TSource,array-key):bool
      */
     private $predicate;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param callable(TSource,array-key):bool $predicate
+     * @param iterable<TSource> $source
+     * @param callable(TSource,array-key):bool $predicate
      */
     public function __construct(iterable $source, callable $predicate)
     {
@@ -41,9 +39,6 @@ class TakeWhileIterator implements \IteratorAggregate, EnumerableInterface
         $this->predicate = $predicate;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $predicate = $this->predicate;

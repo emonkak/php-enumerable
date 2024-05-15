@@ -1,10 +1,12 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
+declare(strict_types=1);
+
+$finder = (new PhpCsFixer\Finder())
     ->in(__DIR__ . '/src')
     ->in(__DIR__ . '/tests');
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR2' => true,
         '@Symfony' => true,
@@ -20,6 +22,3 @@ return PhpCsFixer\Config::create()
         'yoda_style' => false,
     ])
     ->setFinder($finder);
-
-// __END__
-// vim: filetype=php

@@ -20,8 +20,8 @@ final class Enumerable
 {
     /**
      * @template TSource extends object
-     * @psalm-param iterable<TSource> $source
-     * @psalm-return EnumerableInterface<TSource>
+     * @param iterable<TSource> $source
+     * @return EnumerableInterface<TSource>
      */
     public static function from(iterable $source): EnumerableInterface
     {
@@ -30,8 +30,8 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param iterable<TSource> ...$sources
-     * @psalm-return EnumerableInterface<TSource>
+     * @param iterable<TSource> $sources
+     * @return EnumerableInterface<TSource>
      */
     public static function catch(iterable ...$sources): EnumerableInterface
     {
@@ -40,8 +40,8 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param iterable<TSource> ...$sources
-     * @psalm-return EnumerableInterface<TSource>
+     * @param iterable<TSource> $sources
+     * @return EnumerableInterface<TSource>
      */
     public static function concat(iterable ...$sources): EnumerableInterface
     {
@@ -50,8 +50,8 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param callable():(iterable<TSource>) $iterableFactory
-     * @psalm-return EnumerableInterface<TSource>
+     * @param callable():(iterable<TSource>) $iterableFactory
+     * @return EnumerableInterface<TSource>
      */
     public static function defer(callable $iterableFactory): EnumerableInterface
     {
@@ -61,23 +61,23 @@ final class Enumerable
     /**
      * @template TState
      * @template TResult
-     * @psalm-param TState $initialState
-     * @psalm-param callable(TState):bool $condition
-     * @psalm-param callable(TState):TState $iterate
-     * @psalm-param callable(TState):TResult $resultSelector
-     * @psalm-return EnumerableInterface<TResult>
+     * @param TState $initialState
+     * @param callable(TState):bool $condition
+     * @param callable(TState):TState $iterate
+     * @param callable(TState):TResult $resultSelector
+     * @return EnumerableInterface<TResult>
      */
-    public static function generate($initialState, callable $condition, callable $iterate, callable $resultSelector): EnumerableInterface
+    public static function generate(mixed $initialState, callable $condition, callable $iterate, callable $resultSelector): EnumerableInterface
     {
         return new GenerateIterator($initialState, $condition, $iterate, $resultSelector);
     }
 
     /**
      * @template TResult
-     * @psalm-param callable():bool $condition
-     * @psalm-param iterable<TResult> $thenSource
-     * @psalm-param iterable<TResult> $elseSource
-     * @psalm-return EnumerableInterface<TResult>
+     * @param callable():bool $condition
+     * @param iterable<TResult> $thenSource
+     * @param iterable<TResult> $elseSource
+     * @return EnumerableInterface<TResult>
      */
     public static function if(callable $condition, iterable $thenSource, iterable $elseSource): EnumerableInterface
     {
@@ -86,8 +86,8 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param iterable<TSource> ...$sources
-     * @psalm-return EnumerableInterface<TSource>
+     * @param iterable<TSource> $sources
+     * @return EnumerableInterface<TSource>
      */
     public static function onErrorResumeNext(iterable ...$sources): EnumerableInterface
     {
@@ -95,7 +95,7 @@ final class Enumerable
     }
 
     /**
-     * @psalm-return EnumerableInterface<int>
+     * @return EnumerableInterface<int>
      */
     public static function range(int $start, int $count): EnumerableInterface
     {
@@ -104,8 +104,8 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param TSource $element
-     * @psalm-return EnumerableInterface<TSource>
+     * @param TSource $element
+     * @return EnumerableInterface<TSource>
      */
     public static function repeat($element, ?int $count = null): EnumerableInterface
     {
@@ -117,8 +117,8 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-param TSource $element
-     * @psalm-return EnumerableInterface<TSource>
+     * @param TSource $element
+     * @return EnumerableInterface<TSource>
      */
     public static function return($element): EnumerableInterface
     {
@@ -129,10 +129,10 @@ final class Enumerable
      * @template TFirst
      * @template TSecond
      * @template TResult
-     * @psalm-param iterable<TFirst> $first
-     * @psalm-param iterable<TSecond> $second
-     * @psalm-param callable(TFirst,TSecond):TResult $resultSelector
-     * @psalm-return EnumerableInterface<TResult>
+     * @param iterable<TFirst> $first
+     * @param iterable<TSecond> $second
+     * @param callable(TFirst,TSecond):TResult $resultSelector
+     * @return EnumerableInterface<TResult>
      */
     public static function zip(iterable $first, iterable $second, callable $resultSelector): EnumerableInterface
     {
@@ -141,7 +141,7 @@ final class Enumerable
 
     /**
      * @template TSource
-     * @psalm-return EnumerableInterface<TSource>
+     * @return EnumerableInterface<TSource>
      */
     public static function empty(): EnumerableInterface
     {

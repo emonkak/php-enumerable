@@ -10,16 +10,15 @@ namespace Emonkak\Enumerable;
 interface EqualityComparerInterface
 {
     /**
-     * @psalm-param T $first
-     * @psalm-param T $second
-     * @psalm-return bool
+     * @param T $first
+     * @param T $second
      */
-    public function equals($first, $second): bool;
+    public function equals(mixed $first, mixed $second): bool;
 
     /**
      * Calculates a hash for a value.
      *
-     * @psalm-param T $value
+     * @param T $value
      */
-    public function hash($value): string;
+    public function hash(mixed $value): string;
 }

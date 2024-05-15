@@ -6,17 +6,17 @@ namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\EqualityComparerInterface;
 use Emonkak\Enumerable\Set;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Emonkak\Enumerable\Set
- */
+#[CoversClass(Set::class)]
 class SetTest extends TestCase
 {
     public function testCreate(): void
     {
         $longString = str_repeat('abracadabra', 100);
 
+        /** @var Set<mixed> */
         $set = Set::create();
 
         $this->assertTrue($set->add('foo'));
@@ -111,9 +111,9 @@ class SetTest extends TestCase
         $comparer
             ->expects($this->any())
             ->method('equals')
-            ->will($this->returnCallback(function($first, $second) {
+            ->willReturnCallback(function(mixed $first, mixed $second): bool {
                 return $first === $second;
-            }));
+            });
 
         $set = new Set($comparer);
         $set->add('foo');

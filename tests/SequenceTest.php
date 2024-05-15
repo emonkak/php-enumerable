@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\Sequence;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Emonkak\Enumerable\Sequence
- */
+#[CoversClass(Sequence::class)]
 class SequenceTest extends TestCase
 {
     public function testGetIterator(): void

@@ -20,22 +20,18 @@ class StaticCatchIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>[]
-     * @var iterable
+     * @var iterable<TSource>[]
      */
-    private $sources;
+    private array $sources;
 
     /**
-     * @psalm-param iterable<TSource>[] $sources
+     * @param iterable<TSource>[] $sources
      */
     public function __construct(array $sources)
     {
         $this->sources = $sources;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $error = null;

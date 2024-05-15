@@ -20,30 +20,25 @@ class DefaultIfEmptyIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var TSource
-     * @var mixed
+     * @var TSource
      */
-    private $defaultValue;
+    private mixed $defaultValue;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param TSource $defaultValue
+     * @param iterable<TSource> $source
+     * @param TSource $defaultValue
      */
-    public function __construct(iterable $source, $defaultValue)
+    public function __construct(iterable $source, mixed $defaultValue)
     {
         $this->source = $source;
         $this->defaultValue = $defaultValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $hasValue = false;

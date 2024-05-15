@@ -20,20 +20,18 @@ class FinallyIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var callable():void
-     * @var callable
+     * @var callable():void
      */
     private $finallyAction;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param callable():void $finallyAction
+     * @param iterable<TSource> $source
+     * @param callable():void $finallyAction
      */
     public function __construct(iterable $source, callable $finallyAction)
     {
@@ -41,9 +39,6 @@ class FinallyIterator implements \IteratorAggregate, EnumerableInterface
         $this->finallyAction = $finallyAction;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         try {

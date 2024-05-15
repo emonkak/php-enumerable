@@ -19,26 +19,14 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
      */
     use EnumerableExtensions;
 
-    /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
-     */
-    private $source;
+    private iterable $source;
+
+    private int $count;
+
+    private int $skip;
 
     /**
-     * @var int
-     */
-    private $count;
-
-    /**
-     * @var int
-     */
-    private $skip;
-
-    /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param int $count
-     * @psalm-param int $skip
+     * @param iterable<TSource> $source
      */
     public function __construct(iterable $source, int $count, int $skip)
     {
@@ -47,9 +35,6 @@ class BufferIterator implements \IteratorAggregate, EnumerableInterface
         $this->skip = $skip;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $buffer = [];

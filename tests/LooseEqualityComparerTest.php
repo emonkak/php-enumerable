@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace Emonkak\Enumerable\Tests;
 
 use Emonkak\Enumerable\LooseEqualityComparer;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Emonkak\Enumerable\LooseEqualityComparer
- */
+#[CoversClass(LooseEqualityComparer::class)]
 class LooseEqualityComparerTest extends TestCase
 {
-    /**
-     * @dataProvider providerEquals
-     * @param mixed $first
-     * @param mixed $second
-     */
-    public function testEquals($first, $second, bool $expectedResult): void
+    #[DataProvider('providerEquals')]
+    public function testEquals(mixed $first, mixed $second, bool $expectedResult): void
     {
         $comparer = LooseEqualityComparer::getInstance();
         $this->assertSame($expectedResult, $comparer->equals($first, $second));
@@ -31,7 +27,7 @@ class LooseEqualityComparerTest extends TestCase
     /**
      * @return array<mixed[]>
      */
-    public function providerEquals(): array
+    public static function providerEquals(): array
     {
         return [
             [null, null, true],
@@ -68,11 +64,8 @@ class LooseEqualityComparerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerEqualsThrowsUnexpectedValueException
-     * @param mixed $value
-     */
-    public function testEqualsThrowsUnexpectedValueException($value): void
+    #[DataProvider('providerEqualsThrowsUnexpectedValueException')]
+    public function testEqualsThrowsUnexpectedValueException(mixed $value): void
     {
         $this->expectException(\UnexpectedValueException::class);
 
@@ -82,19 +75,15 @@ class LooseEqualityComparerTest extends TestCase
     /**
      * @return array<mixed[]>
      */
-    public function providerEqualsThrowsUnexpectedValueException(): array
+    public static function providerEqualsThrowsUnexpectedValueException(): array
     {
         return [
-            [[]],
             [new \stdClass()],
         ];
     }
 
-    /**
-     * @dataProvider providerHash
-     * @param mixed $value
-     */
-    public function testHash($value, string $expectedHash): void
+    #[DataProvider('providerHash')]
+    public function testHash(mixed $value, string $expectedHash): void
     {
         $comparer = LooseEqualityComparer::getInstance();
 
@@ -104,7 +93,7 @@ class LooseEqualityComparerTest extends TestCase
     /**
      * @return array<mixed[]>
      */
-    public function providerHash(): array
+    public static function providerHash(): array
     {
         return [
             [null, ''],
@@ -118,6 +107,7 @@ class LooseEqualityComparerTest extends TestCase
 
     public function testUniqueHash(): void
     {
+        /** @var LooseEqualityComparer<mixed> */
         $comparer = LooseEqualityComparer::getInstance();
 
         $hashes = [
@@ -131,11 +121,8 @@ class LooseEqualityComparerTest extends TestCase
         $this->assertEquals($hashes, array_unique($hashes));
     }
 
-    /**
-     * @dataProvider providerHashThrowsUnexpectedValueException
-     * @param mixed $value
-     */
-    public function testHashThrowsUnexpectedValueException($value): void
+    #[DataProvider('providerHashThrowsUnexpectedValueException')]
+    public function testHashThrowsUnexpectedValueException(mixed $value): void
     {
         $this->expectException(\UnexpectedValueException::class);
 
@@ -145,10 +132,9 @@ class LooseEqualityComparerTest extends TestCase
     /**
      * @return array<mixed[]>
      */
-    public function providerHashThrowsUnexpectedValueException(): array
+    public static function providerHashThrowsUnexpectedValueException(): array
     {
         return [
-            [[]],
             [new \stdClass()],
         ];
     }

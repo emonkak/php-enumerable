@@ -21,27 +21,24 @@ class ScanIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var iterable<TSource>
-     * @var iterable
+     * @var iterable<TSource>
      */
-    private $source;
+    private iterable $source;
 
     /**
-     * @psalm-var TAccumulate
-     * @var mixed
+     * @var TAccumulate
      */
-    private $seed;
+    private mixed $seed;
 
     /**
-     * @psalm-var callable(TAccumulate,TSource):TAccumulate
-     * @var callable
+     * @var callable(TAccumulate,TSource):TAccumulate
      */
     private $func;
 
     /**
-     * @psalm-param iterable<TSource> $source
-     * @psalm-param TAccumulate $seed
-     * @psalm-param callable(TAccumulate,TSource):TAccumulate $func
+     * @param iterable<TSource> $source
+     * @param TAccumulate $seed
+     * @param callable(TAccumulate,TSource):TAccumulate $func
      */
     public function __construct(iterable $source, $seed, callable $func)
     {
@@ -50,9 +47,6 @@ class ScanIterator implements \IteratorAggregate, EnumerableInterface
         $this->func = $func;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         $result = $this->seed;

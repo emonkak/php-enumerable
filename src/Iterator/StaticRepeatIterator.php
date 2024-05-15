@@ -20,19 +20,17 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
     use EnumerableExtensions;
 
     /**
-     * @psalm-var TSource
-     * @var mixed
+     * @var TSource
      */
-    private $element;
+    private mixed $element;
 
     /**
      * @var ?int
      */
-    private $count;
+    private ?int $count;
 
     /**
-     * @psalm-param TSource $element
-     * @psalm-param ?int $count
+     * @param TSource $element
      */
     public function __construct($element, ?int $count)
     {
@@ -40,9 +38,6 @@ class StaticRepeatIterator implements \IteratorAggregate, EnumerableInterface
         $this->count = $count;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         if ($this->count !== null) {

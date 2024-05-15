@@ -17,25 +17,23 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
      */
     use EnumerableExtensions;
 
-    const KEY = 0;
-    const VALUE = 1;
+    public const KEY = 0;
+    public const VALUE = 1;
 
     /**
-     * @psalm-var EqualityComparerInterface<TKey>
-     * @var EqualityComparerInterface
+     * @var EqualityComparerInterface<TKey>
      */
-    private $comparer;
+    private EqualityComparerInterface $comparer;
 
     /**
-     * @psalm-var array{0:TKey,1:TValue}[]
-     * @var array
+     * @var array{0:TKey,1:TValue}[]
      */
-    private $hashTable = [];
+    private array $hashTable = [];
 
     /**
      * @template TCreateKey
      * @template TCreateValue
-     * @psalm-return self<TCreateKey,TCreateValue>
+     * @return self<TCreateKey,TCreateValue>
      */
     public static function create(): self
     {
@@ -43,16 +41,13 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-param EqualityComparerInterface<TKey> $comparer
+     * @param EqualityComparerInterface<TKey> $comparer
      */
     public function __construct(EqualityComparerInterface $comparer)
     {
         $this->comparer = $comparer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): \Traversable
     {
         foreach ($this->hashTable as $entry) {
@@ -61,7 +56,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return iterable<array{0:TKey,1:TValue}>
+     * @return iterable<array{0:TKey,1:TValue}>
      */
     public function getSource(): iterable
     {
@@ -69,10 +64,10 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-param TKey $key
-     * @psalm-param TValue $value
+     * @param TKey $key
+     * @param TValue $value
      */
-    public function set($key, $value): bool
+    public function set(mixed $key, mixed $value): bool
     {
         $hash = $this->comparer->hash($key);
         if (array_key_exists($hash, $this->hashTable)) {
@@ -87,20 +82,19 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-param TKey $key
+     * @param TKey $key
      */
-    public function has($key): bool
+    public function has(mixed $key): bool
     {
         $hash = $this->comparer->hash($key);
         return array_key_exists($hash, $this->hashTable);
     }
 
     /**
-     * @psalm-param TKey $key
-     * @psalm-param TValue $value
-     * @psalm-return bool
+     * @param TKey $key
+     * @param TValue &$value
      */
-    public function tryGet($key, &$value): bool
+    public function tryGet(mixed $key, mixed &$value): bool
     {
         $hash = $this->comparer->hash($key);
         if (!array_key_exists($hash, $this->hashTable)) {
@@ -111,9 +105,9 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-param TKey $key
+     * @param TKey $key
      */
-    public function remove($key): bool
+    public function remove(mixed $key): bool
     {
         $hash = $this->comparer->hash($key);
         if (!array_key_exists($hash, $this->hashTable)) {
@@ -124,7 +118,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
     }
 
     /**
-     * @psalm-return array{0:TKey,1:TValue}[]
+     * @return array{0:TKey,1:TValue}[]
      */
     public function toArray(): array
     {

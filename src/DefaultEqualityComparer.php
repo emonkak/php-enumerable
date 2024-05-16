@@ -8,7 +8,7 @@ namespace Emonkak\Enumerable;
  * @template T
  * @implements EqualityComparerInterface<T>
  */
-class EqualityComparer implements EqualityComparerInterface
+class DefaultEqualityComparer implements EqualityComparerInterface
 {
     /**
      * @codeCoverageIgnore
@@ -30,7 +30,7 @@ class EqualityComparer implements EqualityComparerInterface
     {
     }
 
-    public function equals($first, $second): bool
+    public function equals(mixed $first, mixed $second): bool
     {
         if ($first === $second) {
             return true;
@@ -41,33 +41,18 @@ class EqualityComparer implements EqualityComparerInterface
             return false;
         }
         if ($firstType === 'array') {
-            return $this->arrayEquals($first, $second);
+            return $this->areArraysEqual($first, $second);
         }
         if ($firstType === 'object') {
             if (get_class($first) !== get_class($second)) {
                 return false;
             }
-            return $this->arrayEquals((array) $first, (array) $second);
+            return $this->areArraysEqual((array) $first, (array) $second);
         }
         return false;
     }
 
-    private function arrayEquals(array $first, array $second): bool
-    {
-        foreach ($first as $key => $value) {
-            if (!isset($second[$key]) || !$this->equals($value, $second[$key])) {
-                return false;
-            }
-        }
-        foreach ($second as $key => $value) {
-            if (!isset($first[$key]) || !$this->equals($value, $first[$key])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public function hash($value): string
+    public function hash(mixed $value): string
     {
         $type = gettype($value);
         switch ($type) {
@@ -99,7 +84,26 @@ class EqualityComparer implements EqualityComparerInterface
                 return 'n';
 
             default:
-                throw new \UnexpectedValueException("The value does not be hashable. got '$type'.");
+                throw new \UnexpectedValueException("The value is not hashable, got '$type'.");
         }
+    }
+
+    /**
+     * @param mixed[] $first
+     * @param mixed[] $second
+     */
+    private function areArraysEqual(array $first, array $second): bool
+    {
+        foreach ($first as $key => $value) {
+            if (!isset($second[$key]) || !$this->equals($value, $second[$key])) {
+                return false;
+            }
+        }
+        foreach ($second as $key => $value) {
+            if (!isset($first[$key]) || !$this->equals($value, $first[$key])) {
+                return false;
+            }
+        }
+        return true;
     }
 }

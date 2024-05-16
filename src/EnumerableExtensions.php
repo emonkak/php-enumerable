@@ -201,8 +201,8 @@ trait EnumerableExtensions
     {
         /** @var callable(TSource):TKey */
         $keySelector = $keySelector ?? IdentityFunction::get();
-        /** @var EqualityComparer<TKey> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var DefaultEqualityComparer<TKey> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new DistinctIterator($source, $keySelector, $comparer);
@@ -217,8 +217,8 @@ trait EnumerableExtensions
     {
         /** @var callable(TSource):TKey */
         $keySelector = $keySelector ?? IdentityFunction::get();
-        /** @var EqualityComparer<TKey> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TKey> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new DistinctUntilChangedIterator($source, $keySelector, $comparer);
@@ -312,8 +312,8 @@ trait EnumerableExtensions
      */
     public function except(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
-        /** @var EqualityComparer<TSource> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TSource> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new ExceptIterator($source, $second, $comparer);
@@ -413,8 +413,8 @@ trait EnumerableExtensions
             static function($key, array $values): array {
                 return [$key, $values];
             };
-        /** @var EqualityComparer<TKey> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TKey> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new GroupByIterator($source, $keySelector, $elementSelector, $resultSelector, $comparer);
@@ -433,8 +433,8 @@ trait EnumerableExtensions
      */
     public function groupJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
-        /** @var EqualityComparer<TKey> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TKey> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new GroupJoinIterator($source, $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
@@ -455,8 +455,8 @@ trait EnumerableExtensions
      */
     public function intersect(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
-        /** @var EqualityComparer<TSource> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TSource> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new IntersectIterator($source, $second, $comparer);
@@ -483,8 +483,8 @@ trait EnumerableExtensions
      */
     public function join(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
-        /** @var EqualityComparer<TKey> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TKey> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new JoinIterator($source, $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
@@ -707,8 +707,8 @@ trait EnumerableExtensions
      */
     public function outerJoin(iterable $inner, callable $outerKeySelector, callable $innerKeySelector, callable $resultSelector, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
-        /** @var EqualityComparer<TKey> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TKey> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new OuterJoinIterator($source, $inner, $outerKeySelector, $innerKeySelector, $resultSelector, $comparer);
@@ -1079,8 +1079,8 @@ trait EnumerableExtensions
      */
     public function union(iterable $second, ?EqualityComparerInterface $comparer = null): EnumerableInterface
     {
-        /** @var EqualityComparer<TSource> */
-        $comparer = $comparer ?? EqualityComparer::getInstance();
+        /** @var EqualityComparerInterface<TSource> */
+        $comparer = $comparer ?? DefaultEqualityComparer::getInstance();
         /** @var iterable<TSource> */
         $source = $this->getSource();
         return new UnionIterator($source, $second, $comparer);

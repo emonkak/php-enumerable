@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Emonkak\Enumerable\Tests;
 
-use Emonkak\Enumerable\EqualityComparer;
+use Emonkak\Enumerable\DefaultEqualityComparer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(EqualityComparer::class)]
-class EqualityComparerTest extends TestCase
+#[CoversClass(DefaultEqualityComparer::class)]
+class DefaultEqualityComparerTest extends TestCase
 {
     #[DataProvider('providerEquals')]
     public function testEquals(mixed $first, mixed $second, bool $expectedResult): void
     {
-        $comparer = EqualityComparer::getInstance();
+        $comparer = DefaultEqualityComparer::getInstance();
         $this->assertSame($expectedResult, $comparer->equals($first, $second));
         if ($expectedResult) {
             $this->assertSame($comparer->hash($first), $comparer->hash($second));
@@ -58,8 +58,8 @@ class EqualityComparerTest extends TestCase
 
     public function testHash(): void
     {
-        /** @var EqualityComparer<mixed> */
-        $comparer = EqualityComparer::getInstance();
+        /** @var DefaultEqualityComparer<mixed> */
+        $comparer = DefaultEqualityComparer::getInstance();
 
         $hashes = [
             $comparer->hash('foo'),
@@ -83,7 +83,7 @@ class EqualityComparerTest extends TestCase
     {
         $this->expectException(\UnexpectedValueException::class);
 
-        EqualityComparer::getInstance()->hash($value);
+        DefaultEqualityComparer::getInstance()->hash($value);
     }
 
     /**

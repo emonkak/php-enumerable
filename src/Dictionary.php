@@ -37,7 +37,7 @@ class Dictionary implements \IteratorAggregate, EnumerableInterface
      */
     public static function create(): self
     {
-        return new self(EqualityComparer::getInstance());
+        return new self(DefaultEqualityComparer::getInstance());
     }
 
     /**
